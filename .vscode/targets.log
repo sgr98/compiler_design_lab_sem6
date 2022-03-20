@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Mar 15 01:52:51 2022
+# Make data base, printed on Sun Mar 20 12:36:29 2022
 
 # Variables
 
@@ -27,7 +27,7 @@ VBOX_MSI_INSTALL_PATH = D:\Program files(for my)\Oracle_Virtual_Box\Oracle_Virtu
 # environment
 LOCALAPPDATA = C:\Users\Sagar Singh\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-af73e93c-ec8f-4283-a13b-cb24b35d0c13-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-3890d158-a68f-4a0a-8e7f-515514e63267-sock
 # environment
 VSCODE_CWD = D:\Program files(for my)\Visual Studio code\Microsoft VS Code
 # environment
@@ -43,7 +43,7 @@ MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_14564_INAIXAALPXRFMVWJ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_10720_AEDAYEIHHNJAFLTO
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -59,7 +59,7 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\Sagar Singh\AppData\Roaming\Code\CachedData\b5205cc8eb4fbaa726835538cd82372cc0222d43
+VSCODE_CODE_CACHE_PATH = C:\Users\Sagar Singh\AppData\Roaming\Code\CachedData\c722ca6c7eed3d7987c0d5c3df5c45f6b15e77d1
 # environment
 LANG = C
 # default
@@ -79,7 +79,7 @@ CURDIR := d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/develop
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 *D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
 # environment
@@ -99,7 +99,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 14564
+VSCODE_PID = 10720
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -168,8 +168,6 @@ USERDOMAIN = LAPTOP-SNORG805
 GNUMAKEFLAGS := 
 # environment
 OS = Windows_NT
-# environment
-__COMPAT_LAYER = DetectorsAppHealth
 # makefile
 .DEFAULT_GOAL := 
 # default
@@ -199,7 +197,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 TEMP = C:\Users\SAGARS~1\AppData\Local\Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\2d1bd7037cd89a30c234f26be1ebfdd2-1.65.0-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\2d1bd7037cd89a30c234f26be1ebfdd2-1.65.2-main-sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -217,7 +215,7 @@ PROCESSOR_REVISION = 9e0a
 # environment
 PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 # variable set hash-table stats:
-# Load=102/1024=10%, Rehash=0, Collisions=10/126=8%
+# Load=101/1024=10%, Rehash=0, Collisions=10/125=8%
 
 # Pattern-specific Variable Values
 
@@ -225,8 +223,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/WORK/IIT TP/6th Sem/Lab 
-/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647237244): 7 files, no impossibilities.
+# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647237244): 7 files, no impossibilities.
 
 # 7 files, no impossibilities in 1 directories.
 
@@ -291,6 +288,6 @@ GNUmakefile:
 # strcache performance: lookups = 17 / hit rate = 17%
 # hash-table stats:
 # Load=14/8192=0%, Rehash=0, Collisions=0/17=0%
-# Finished Make data base on Tue Mar 15 01:52:51 2022
+# Finished Make data base on Sun Mar 20 12:36:29 2022
 
  
