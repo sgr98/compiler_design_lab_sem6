@@ -1,0 +1,16 @@
+main {
+    int a, b = 10;
+    a = 5;
+
+    int sum = a + b;
+    a = a + b;
+
+    int dif = a - b;
+
+    int prod = a * b;
+
+    float c = 20, d = 45;
+    c /= d;
+
+    int x = (a + b * dif - prod) / b
+}
