@@ -722,7 +722,7 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 28 "lexical_analyser.l"
-{printf("NOT_EQUALOP ");}
+{printf("NOT_EQUAL_OP ");}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
@@ -1754,10 +1754,6 @@ int main()
 
 
 int yywrap (void) { return 1; }
-
-// int main() {
-//     yylex();
-// }
 
 // To run using file: ./parser <file_path>
 // e.g) ./parser ./../../example_programs/our_language/arithmetic.xgvs

@@ -25,7 +25,7 @@ identifier          [a-zA-Z][a-zA-Z_0-9]*
 "%="                    {printf("REM_ASSIGN_OP ");}
 
 "=="                    {printf("EQUAL_OP ");}
-"!="                    {printf("NOT_EQUALOP ");}
+"!="                    {printf("NOT_EQUAL_OP ");}
 ">="                    {printf("MRTE ");}
 "<="                    {printf("LSTE ");}
 ">"                     {printf("MRT ");}

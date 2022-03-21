@@ -7,9 +7,8 @@ make: *** No rule to make target 'all'.  Stop.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Mon Mar 21 14:47:12 2022
+# Make data base, printed on Mon Mar 21 20:14:38 2022
 
 # Variables
 
@@ -28,7 +27,7 @@ VBOX_MSI_INSTALL_PATH = D:\Program files(for my)\Oracle_Virtual_Box\Oracle_Virtu
 # environment
 LOCALAPPDATA = C:\Users\Sagar Singh\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-3890d158-a68f-4a0a-8e7f-515514e63267-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-67be5842-0f0a-46b7-b458-7f191d0a1c57-sock
 # environment
 VSCODE_CWD = D:\Program files(for my)\Visual Studio code\Microsoft VS Code
 # environment
@@ -44,7 +43,7 @@ MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_10720_AEDAYEIHHNJAFLTO
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_1252_CXXSBUUOQMLYHXHJ
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -100,10 +99,9 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 10720
+VSCODE_PID = 1252
 # automatic
-?D = $(patsubst %/,%,$(pats 
-ubst %\,%,$(dir $?)))
+?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
 *F = $(notdir $*)
 # automatic
@@ -191,8 +189,7 @@ PROCESSOR_ARCHITECTURE = x86
 # environment
 PYCHARM COMMUNITY EDITION = D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;
 # environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node 
-/extensionHostProcess
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
 # environment
@@ -212,8 +209,7 @@ ALLUSERSPROFILE = C:\ProgramData
 # environment
 SESSIONNAME = Console
 # default
-.FEATURES := target-specific order-only second-expan 
-sion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
 # environment
 PROCESSOR_REVISION = 9e0a
 # environment
@@ -276,8 +272,7 @@ GNUmakefile:
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has been updated.
-#  Failed to be updated 
-.
+#  Failed to be updated.
 
 # files hash-table stats:
 # Load=7/1024=1%, Rehash=0, Collisions=0/16=0%
@@ -293,6 +288,6 @@ GNUmakefile:
 # strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
 # Load=16/8192=0%, Rehash=0, Collisions=0/19=0%
-# Finished Make data base on Mon Mar 21 14:47:12 2022
+# Finished Make data base on Mon Mar 21 20:14:38 2022
 
  

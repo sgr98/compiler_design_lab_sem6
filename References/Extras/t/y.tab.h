@@ -41,21 +41,83 @@
    enum yytokentype {
      MAIN = 258,
      VOID = 259,
-     IDENTIFIER = 260,
+     RETURN = 260,
      INT = 261,
      FLOAT = 262,
      CHAR = 263,
-     BOOLEAN = 264
+     BOOLEAN = 264,
+     IDENTIFIER = 265,
+     BOOLEAN_LIT = 266,
+     FLOAT_LIT = 267,
+     INT_LIT = 268,
+     CHAR_LIT = 269,
+     SEMICOLON = 270,
+     COMMA = 271,
+     LP = 272,
+     RP = 273,
+     LC = 274,
+     RC = 275,
+     ADD_ASSIGN_OP = 276,
+     SUB_ASSIGN_OP = 277,
+     MUL_ASSIGN_OP = 278,
+     DIV_ASSIGN_OP = 279,
+     REM_ASSIGN_OP = 280,
+     EQUAL_OP = 281,
+     NOT_EQUAL_OP = 282,
+     MRTE = 283,
+     LSTE = 284,
+     MRT = 285,
+     LST = 286,
+     LOGICAL_AND_OP = 287,
+     LOGICAL_OR_OP = 288,
+     EXCLAMATION_OP = 289,
+     ASSIGN_OP = 290,
+     ADD_OP = 291,
+     SUB_OP = 292,
+     MUL_OP = 293,
+     DIV_OP = 294,
+     REM_OP = 295
    };
 #endif
 /* Tokens.  */
 #define MAIN 258
 #define VOID 259
-#define IDENTIFIER 260
+#define RETURN 260
 #define INT 261
 #define FLOAT 262
 #define CHAR 263
 #define BOOLEAN 264
+#define IDENTIFIER 265
+#define BOOLEAN_LIT 266
+#define FLOAT_LIT 267
+#define INT_LIT 268
+#define CHAR_LIT 269
+#define SEMICOLON 270
+#define COMMA 271
+#define LP 272
+#define RP 273
+#define LC 274
+#define RC 275
+#define ADD_ASSIGN_OP 276
+#define SUB_ASSIGN_OP 277
+#define MUL_ASSIGN_OP 278
+#define DIV_ASSIGN_OP 279
+#define REM_ASSIGN_OP 280
+#define EQUAL_OP 281
+#define NOT_EQUAL_OP 282
+#define MRTE 283
+#define LSTE 284
+#define MRT 285
+#define LST 286
+#define LOGICAL_AND_OP 287
+#define LOGICAL_OR_OP 288
+#define EXCLAMATION_OP 289
+#define ASSIGN_OP 290
+#define ADD_OP 291
+#define SUB_OP 292
+#define MUL_OP 293
+#define DIV_OP 294
+#define REM_OP 295
 
 
 
