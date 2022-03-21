@@ -76,14 +76,10 @@
 
     int yylex();
     int yyerror();
-    struct ComplexNumber {
-      int real;
-      int comp;
-    };
 
 
 /* Line 189 of yacc.c  */
-#line 87 "y.tab.c"
+#line 83 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -128,16 +124,18 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 14 "complex_number.y"
+#line 10 "complex_number.y"
 
   int num;
-  char id;
-  struct ComplexNumber comp_num;
+  struct ComplexNumber {
+      int real;
+      int img;
+  } comp_num;
 
 
 
 /* Line 214 of yacc.c  */
-#line 141 "y.tab.c"
+#line 139 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -149,7 +147,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 153 "y.tab.c"
+#line 151 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -434,7 +432,7 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    28,    28,    36,    40,    46,    50,    54,    58,    63
+       0,    26,    26,    34,    38,    44,    48,    52,    56,    61
 };
 #endif
 
@@ -1340,86 +1338,86 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 28 "complex_number.y"
+#line 26 "complex_number.y"
     {   
-                                if((yyvsp[(1) - (1)].comp_num).comp >= 0)
-                                  printf("Sum = %d + %di\n", (yyvsp[(1) - (1)].comp_num).real, (yyvsp[(1) - (1)].comp_num).comp);
+                                if((yyvsp[(1) - (1)].comp_num).img >= 0)
+                                  printf("Sum = %d + %di\n", (yyvsp[(1) - (1)].comp_num).real, (yyvsp[(1) - (1)].comp_num).img);
                                 else
-                                  printf("Sum = %d - %di\n", (yyvsp[(1) - (1)].comp_num).real, -1 * (yyvsp[(1) - (1)].comp_num).comp);
+                                  printf("Sum = %d - %di\n", (yyvsp[(1) - (1)].comp_num).real, -1 * (yyvsp[(1) - (1)].comp_num).img);
                             }
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 36 "complex_number.y"
+#line 34 "complex_number.y"
     {
                                 (yyval.comp_num).real = (yyvsp[(1) - (3)].comp_num).real + (yyvsp[(2) - (3)].comp_num).real; 
-                                (yyval.comp_num).comp = (yyvsp[(1) - (3)].comp_num).comp + (yyvsp[(2) - (3)].comp_num).comp;
+                                (yyval.comp_num).img = (yyvsp[(1) - (3)].comp_num).img + (yyvsp[(2) - (3)].comp_num).img;
                             }
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 40 "complex_number.y"
+#line 38 "complex_number.y"
     {
                                 (yyval.comp_num).real = (yyvsp[(1) - (2)].comp_num).real; 
-                                (yyval.comp_num).comp = (yyvsp[(1) - (2)].comp_num).comp;
+                                (yyval.comp_num).img = (yyvsp[(1) - (2)].comp_num).img;
                             }
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 46 "complex_number.y"
+#line 44 "complex_number.y"
     { 
                               (yyval.comp_num).real = (yyvsp[(1) - (4)].num);
-                              (yyval.comp_num).comp = (yyvsp[(3) - (4)].num);
+                              (yyval.comp_num).img = (yyvsp[(3) - (4)].num);
                             }
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 50 "complex_number.y"
+#line 48 "complex_number.y"
     {
                               (yyval.comp_num).real = (yyvsp[(1) - (4)].num);
-                              (yyval.comp_num).comp = -1 * (yyvsp[(3) - (4)].num);
+                              (yyval.comp_num).img = -1 * (yyvsp[(3) - (4)].num);
                             }
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 54 "complex_number.y"
+#line 52 "complex_number.y"
     { 
                               (yyval.comp_num).real = -1 * (yyvsp[(2) - (5)].num);
-                              (yyval.comp_num).comp = (yyvsp[(4) - (5)].num);
+                              (yyval.comp_num).img = (yyvsp[(4) - (5)].num);
                             }
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 58 "complex_number.y"
+#line 56 "complex_number.y"
     { 
                               (yyval.comp_num).real = -1 * (yyvsp[(2) - (5)].num);
-                              (yyval.comp_num).comp = -1 * (yyvsp[(4) - (5)].num);
+                              (yyval.comp_num).img = -1 * (yyvsp[(4) - (5)].num);
                             }
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 63 "complex_number.y"
+#line 61 "complex_number.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); }
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1423 "y.tab.c"
+#line 1421 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1631,7 +1629,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 64 "complex_number.y"
+#line 62 "complex_number.y"
 
 
 int main(int argc, char *argv[]) {

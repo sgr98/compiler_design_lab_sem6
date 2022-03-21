@@ -57,16 +57,18 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 14 "complex_number.y"
+#line 10 "complex_number.y"
 
   int num;
-  char id;
-  struct ComplexNumber comp_num;
+  struct ComplexNumber {
+      int real;
+      int img;
+  } comp_num;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 70 "y.tab.h"
+#line 72 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

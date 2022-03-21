@@ -7,8 +7,9 @@ make: *** No rule to make target 'all'.  Stop.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
+ 
 
-# Make data base, printed on Sun Mar 20 16:51:14 2022
+# Make data base, printed on Mon Mar 21 14:47:12 2022
 
 # Variables
 
@@ -101,7 +102,8 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 VSCODE_PID = 10720
 # automatic
-?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+?D = $(patsubst %/,%,$(pats 
+ubst %\,%,$(dir $?)))
 # automatic
 *F = $(notdir $*)
 # automatic
@@ -131,8 +133,7 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = D:\Program files(for my)\JDK\Java\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows\sqlite-tools-win32-x86-3330000;D:\Python\Scripts;D:\Python;C:\Python38\Scripts\;C:\Python38\;D:\Program files(for my)\Scripts\;D:\Program files(for my)\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;D:\Program files(for my)\brackets\command;D:\Program files(for my)\Matlab r2020a\bin;D:\Program files(for my)\Codeblocks(for MinGW)\CodeBlocks\MinGW\bin;C:\ProgramData\chocolatey\bin;D:\Program files(for my)\Verilog\iverilog\bin;D:\Program files(for my)\NodeJS\;C:\Program Files\Git\cmd;D:\Program files(for my)\MongoDB\Mongodb\bin;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows;D:\Program files(for my)\nasm\nasm-2.14.02;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\GnuWin32\GnuWin32\bin;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;D:\Program files(for my)\Visual Studio code\Microsoft VS Code\bin;C:\Users\Sagar Singh\AppData\Local\GitHubDesktop\bin;C:\Users\Sagar Singh\AppData\Roaming\npm;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;C:\Users\Sagar Singh\AppData\Roaming\Python\ 
-Python38\Scripts;D:\NonSpaceApplication\FGPAModelSim\intelFGPA_pro\21.1\modelsim_ase\win32aloem;D:\Program files(for my)\Miktex\Miktex\miktex\bin\x64\;D:\Program files(for my)\Heroku\Heroku\bin
+PATH = D:\Program files(for my)\JDK\Java\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows\sqlite-tools-win32-x86-3330000;D:\Python\Scripts;D:\Python;C:\Python38\Scripts\;C:\Python38\;D:\Program files(for my)\Scripts\;D:\Program files(for my)\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;D:\Program files(for my)\brackets\command;D:\Program files(for my)\Matlab r2020a\bin;D:\Program files(for my)\Codeblocks(for MinGW)\CodeBlocks\MinGW\bin;C:\ProgramData\chocolatey\bin;D:\Program files(for my)\Verilog\iverilog\bin;D:\Program files(for my)\NodeJS\;C:\Program Files\Git\cmd;D:\Program files(for my)\MongoDB\Mongodb\bin;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows;D:\Program files(for my)\nasm\nasm-2.14.02;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\GnuWin32\GnuWin32\bin;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;D:\Program files(for my)\Visual Studio code\Microsoft VS Code\bin;C:\Users\Sagar Singh\AppData\Local\GitHubDesktop\bin;C:\Users\Sagar Singh\AppData\Roaming\npm;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;C:\Users\Sagar Singh\AppData\Roaming\Python\Python38\Scripts;D:\NonSpaceApplication\FGPAModelSim\intelFGPA_pro\21.1\modelsim_ase\win32aloem;D:\Program files(for my)\Miktex\Miktex\miktex\bin\x64\;D:\Program files(for my)\Heroku\Heroku\bin
 # environment
 COMPUTERNAME = LAPTOP-SNORG805
 # default
@@ -190,7 +191,8 @@ PROCESSOR_ARCHITECTURE = x86
 # environment
 PYCHARM COMMUNITY EDITION = D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;
 # environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node 
+/extensionHostProcess
 # environment
 COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
 # environment
@@ -210,7 +212,8 @@ ALLUSERSPROFILE = C:\ProgramData
 # environment
 SESSIONNAME = Console
 # default
-.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
+.FEATURES := target-specific order-only second-expan 
+sion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
 # environment
 PROCESSOR_REVISION = 9e0a
 # environment
@@ -224,9 +227,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647768818): 8 files, no impossibilities.
+# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647791191): 9 files, no impossibilities.
 
-# 8 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -273,7 +276,8 @@ GNUmakefile:
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has been updated.
-#  Failed to be updated.
+#  Failed to be updated 
+.
 
 # files hash-table stats:
 # Load=7/1024=1%, Rehash=0, Collisions=0/16=0%
@@ -283,12 +287,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 15 / storage = 130 B / avg = 8 B
-# current buf: size = 8174 B / used = 130 B / count = 15 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 16 / storage = 146 B / avg = 9 B
+# current buf: size = 8174 B / used = 146 B / count = 16 / avg = 9 B
 
-# strcache performance: lookups = 18 / hit rate = 16%
+# strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
-# Load=15/8192=0%, Rehash=0, Collisions=0/18=0%
-# Finished Make data base on Sun Mar 20 16:51:14 2022
+# Load=16/8192=0%, Rehash=0, Collisions=0/19=0%
+# Finished Make data base on Mon Mar 21 14:47:12 2022
 
  

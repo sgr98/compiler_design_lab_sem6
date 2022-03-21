@@ -5,15 +5,14 @@
 
     int yylex();
     int yyerror();
-    struct ComplexNumber {
-      int real;
-      int img;
-    };
 %}
-// DOESNT WORK
+
 %union {
   int num;
-  struct ComplexNumber comp_num;
+  struct ComplexNumber {
+      int real;
+      int img;
+  } comp_num;
 }
 %start S
 %token IOTA SCOL
