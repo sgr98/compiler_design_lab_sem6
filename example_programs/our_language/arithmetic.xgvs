@@ -12,5 +12,5 @@ main {
     float c = 20, d = 45;
     c /= d;
 
-    int x = (a + b * dif - prod) / b
+    int x = (a + b * dif - prod) / b;
 }
