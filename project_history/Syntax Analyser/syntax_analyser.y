@@ -125,7 +125,7 @@ data_type:		INT		{printf("data_type 1 ");}
 			;
 %%
 
-// ./t ./../../../example_programs/our_language/arithmetic.xgvs
+// ./parser arithmetic.xgvs
 int main(int argc, char *argv[]) {
     if(argc > 1) {
         FILE *fp = fopen(argv[1], "r");
