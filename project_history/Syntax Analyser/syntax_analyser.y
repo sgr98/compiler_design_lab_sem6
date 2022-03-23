@@ -21,7 +21,7 @@ extern FILE *yyin;
 program_start:  program	{printf("program_start\n");}
             	;
 
-program:		functions MAIN block	{printf("program 1\n");}
+program:	functions MAIN block	{printf("program 1\n");}
         |	MAIN block              {printf("program 2\n");}
         ;
 
@@ -87,7 +87,6 @@ op_expression:		sub_expression                      		{printf("op_expression 1 "
 				| 	op_expression MRTE op_expression            {printf("op_expression 9 ");}
 
 				|	op_expression LOGICAL_OR_OP sub_expression	{printf("op_expression 10 ");}
-
 				|	EXCLAMATION_OP op_expression                {printf("op_expression 11 ");}
                 ;
 
