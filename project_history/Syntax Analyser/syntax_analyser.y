@@ -131,6 +131,8 @@ int main(int argc, char *argv[]) {
         FILE *fp = fopen(argv[1], "r");
         if(fp)
            yyin = fp;
+		else
+			printf("Error opening file\n");
     }
 
     yyparse();
