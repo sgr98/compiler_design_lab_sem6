@@ -1752,5 +1752,3 @@ int main()
 #line 65 "lexical_analyser.l"
 
 int yywrap (void) {return 1;}
-
-// (" "|"\t"|"\n")+

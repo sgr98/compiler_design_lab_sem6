@@ -90,15 +90,15 @@ op_expression:		sub_expression                      		{printf("op_expression 1 "
 				|	EXCLAMATION_OP op_expression                {printf("op_expression 11 ");}
                 ;
 
-sub_expression:		term                                {printf("sub_expression 1 ");}
-                |	sub_expression MUL_OP term 	        {printf("sub_expression 2 ");}
-				|	sub_expression DIV_OP term          {printf("sub_expression 3 ");}
-				|	sub_expression REM_OP term          {printf("sub_expression 4 ");}
-				|	sub_expression LOGICAL_AND_OP term	{printf("sub_expression 5 ");}
-				|	LP op_expression RP                 {printf("sub_expression 6 ");}
+sub_expression:		term                                			{printf("sub_expression 1 ");}
+                |	sub_expression MUL_OP sub_expression 	        {printf("sub_expression 2 ");}
+				|	sub_expression DIV_OP sub_expression          	{printf("sub_expression 3 ");}
+				|	sub_expression REM_OP sub_expression          	{printf("sub_expression 4 ");}
+				|	sub_expression LOGICAL_AND_OP sub_expression	{printf("sub_expression 5 ");}
+				|	LP op_expression RP                 			{printf("sub_expression 6 ");}
                 ;
 
-return_statement:		RETURN term	{printf("return_statement ");}
+return_statement:		RETURN op_expression	{printf("return_statement ");}
                     ;
 
 term:		BOOLEAN_LIT     {printf("term 1 ");}
