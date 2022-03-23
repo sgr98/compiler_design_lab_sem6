@@ -59,7 +59,7 @@ identifier          [a-zA-Z][a-zA-Z_0-9]*
 
 {identifier}            {return IDENTIFIER;}
 
-[ \t\n]+                ;
+[ \t\n]                 ;
 .                       {printf("unexpected character ");}
 
 %%

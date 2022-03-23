@@ -41,12 +41,12 @@ params:		param               {printf("params 1\n");}
 param:		data_type IDENTIFIER	{printf("param\n");}
     	;
 
-block:		LC statements RC	{printf("block\n");}
+block:		LC statements RC	{printf("block 1\n");}
+        |   LC RC	            {printf("block 2\n");}
         ;
 
 statements:		statement               {printf("statements 1\n");}
 			|	statements statement	{printf("statements 2\n");}
-			|							{printf("statements 3\n");}
             ;
 
 statement:		variable_declaration SEMICOLON  {printf("statement 1\n");}
@@ -89,7 +89,6 @@ op_expression:		sub_expression                      		{printf("op_expression 1 "
 				|	op_expression LOGICAL_OR_OP sub_expression	{printf("op_expression 10 ");}
 
 				|	EXCLAMATION_OP op_expression                {printf("op_expression 11 ");}
-				|	LP op_expression RP                         {printf("op_expression 12 ");}
                 ;
 
 sub_expression:		term                                {printf("sub_expression 1 ");}
@@ -97,6 +96,7 @@ sub_expression:		term                                {printf("sub_expression 1 "
 				|	sub_expression DIV_OP term          {printf("sub_expression 3 ");}
 				|	sub_expression REM_OP term          {printf("sub_expression 4 ");}
 				|	sub_expression LOGICAL_AND_OP term	{printf("sub_expression 5 ");}
+				|	LP op_expression RP                 {printf("sub_expression 6 ");}
                 ;
 
 return_statement:		RETURN term	{printf("return_statement ");}
