@@ -1,0 +1,5 @@
+main {
+    char b;
+    char a = 'A';
+    char z = a;
+}

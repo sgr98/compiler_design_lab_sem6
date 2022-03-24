@@ -1,10 +1,25 @@
-%{
-void yyerror (char *s);
-int yylex();
-#include <stdio.h>     /* C declarations used in actions */
-#include <stdlib.h>
-#include <ctype.h>
-extern FILE *yyin;
+%{	
+	#include<fstream>
+	#include<stdio.h>
+	#include<iostream>
+	#include<vector>
+
+	using namespace std;
+	extern FILE* yyin;
+
+	extern "C"
+	{
+		int yyparse(void);
+		int yylex(void);
+		void yyerror(const char* s) {
+			printf("%s\n", s);
+		}
+		int yywrap() {
+			return 1;
+		}
+	}
+	//any instantiation code in c++
+	vector<string> sampleVector;
 %}
 
 %start program_start
@@ -19,7 +34,7 @@ extern FILE *yyin;
 
 %%
 
-program_start:  program	{printf("program_start\n");}
+program_start:  program	{cout << "program_start\n";}
             	;
 
 program:	functions MAIN block	{printf("program 1\n");}
@@ -127,7 +142,7 @@ data_type:		INT		{printf("data_type 1 ");}
 
 // ./parser arithmetic.xgvs
 int main(int argc, char *argv[]) {
-    if(argc > 1) {
+	if(argc > 1) {
         FILE *fp = fopen(argv[1], "r");
         if(fp)
            yyin = fp;
@@ -135,8 +150,6 @@ int main(int argc, char *argv[]) {
 			printf("Error opening file\n");
     }
 
-    yyparse();
-    return 0;
+	yyparse();
+	return 0;
 }
-
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);} 

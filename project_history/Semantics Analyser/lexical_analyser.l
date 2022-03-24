@@ -70,4 +70,4 @@ identifier          [a-zA-Z][a-zA-Z_0-9]*
 .                       {printf("unexpected character ");}
 
 %%
-int yywrap (void) {return 1;}
+// int yywrap (void) {return 1;}

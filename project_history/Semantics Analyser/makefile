@@ -1,8 +1,9 @@
-parser: y.tab.c lex.yy.c y.tab.h
-	gcc y.tab.c lex.yy.c -o parser
-lex.yy.c: lexical_analyser.l
+parser: semantic_analyser.y lexical_analyser.l
 	flex lexical_analyser.l
-y.tab.c: syntax_analyser.y
-	bison -dy syntax_analyser.y
+	bison -dy semantic_analyser.y
+	bison semantic_analyser.y -o gm.cc
+	gcc -c lex.yy.c -o lex.yy.o
+	c++ lex.yy.o gm.cc -o parser
+
 clean:
-	rm -f parser y.tab.c lex.yy.c y.tab.h y.output
+	rm y.tab.c y.tab.h lex.yy.c lex.yy.o gm.cc parser.exe
