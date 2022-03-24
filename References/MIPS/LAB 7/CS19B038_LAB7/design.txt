@@ -1,0 +1,17 @@
+Here I am fully utilising the fact that the precision is limited to 3 decimal places.
+
+The input is taken and the number is stored in the form of a string and the number of decimal places is noted.
+The number is then stored as an integer in a register.
+E.g)    1) "4.028" is stored as 4028 with a number of decimal places = 3
+        2) "3.85" is stored as 385 with a number of decimal places = 2
+        3) "0.02" is stored as 2 with a number of decimal places = 2
+
+Then these numbers are power corrected which intends it the number upto 3 decimal places.
+E.g)    1) 4.028 is re-stored as 4028 in order to achieve something similar to 4.028
+        2) 385 is stored as 3850 in order to achieve something similar to 3.850
+        3) 2 is stored as 20 in order to achieve something similar to 0.020
+This would aid in addition later.
+
+Then the two numbers are added.
+Then the integer and fractional part of the result from the addition is separated and stored in different registers.
+Then it is printed to the console.

@@ -1,0 +1,6 @@
+Pseudo-instructions are those instructions that can be viewed as pre-processor directives in programming languages. It can be composed of more than instruction and can also utilise labels as variables, which would otherwise had to be specified by physically storing data in memory locations and then getting the addresses of those memory locations when writing those instructoins. li is also a psuedo-instruction as it can either be used as:
+
+li <reg>, <immed>
+
+where the <immed> is any integer and <label> is any variable declared before.
+li is comprised of: ori $s0, $zero, 10

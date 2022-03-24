@@ -1,0 +1,479 @@
+my_clock = 1
+n = number_of_instructions
+totalStalls = 0;
+
+execute_noForwarding() {
+    currIns;
+    opcode;
+    eopcode;
+    mopcode;
+    rmd;	//Register Destination
+    rms1;	//Register Source 1
+    rms2;	//Register Source 2
+    imm;
+    EXresult;
+    dre;	//Destination Executive
+    drm;	//Destination Memory
+    drw;	//Destination WriteBack
+    runOnlyUpp = 1;
+    stallType = 0;
+    bool branchDec = True;
+
+    while(PC_value < n) {
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // WB Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        if(my_clock >= 5 && !(runOnlyUpp > 5)) {
+            drw = drm;
+            if(mopcode >= 0 && mopcode <= 15) {
+                if(mopcode == 1) {
+                    drm = EXresult;
+                }
+                else if(mopcode == 2) {
+                    drm = EXresult;
+                }
+            }
+            else if(mopcode >= 16 && mopcode <= 31) {
+                if(mopcode == 17) {
+                    drm = EXresult;
+                }
+            }
+
+            if(stallType > 0) {
+                stallType--;
+                runOnlyUpp++;
+                my_clock++;
+                if(stallType == 0 && runOnlyUpp == 5) {
+                    runOnlyUpp = 5;
+                    continue;
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // MEM Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        if(my_clock >= 4 && !(runOnlyUpp > 4)) {
+            mopcode = eopcode;
+            drm = rmd;
+            if(eopcode >= 48 && eopcode <= 63) {
+                if(opcode == 49)
+                    dre = MEM[EXresult];
+                else if(opcode == 50)
+                    MEM[EXresult] = dre;
+            }
+
+            if(stallType > 0) {
+                stallType--;
+                runOnlyUpp++;
+                my_clock++;
+                if(stallType == 0) {
+                    runOnlyUpp = 5;
+                }
+                continue;
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // EX Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        if(my_clock >= 3 && !(runOnlyUpp > 3)) {
+            eopcode = opcode;
+            dre = rmd;
+            if(opcode >= 0 && opcode <= 15) {
+                if(opcode == 1)
+                    EXresult = add();
+                else if(opcode == 2)
+                    EXresult = sub();
+            }
+            else if(opcode >= 16 && opcode <= 31) {
+                if(opcode == 17)
+                    EXresult = addi();
+                else if(opcode == 18) {
+                    EXresult = bne();
+                    PC_value = EXresult;
+                }
+                else if(opcode == 19) {
+                    EXresult = beq();
+                    PC_value = EXresult;
+                }
+                else if(opcode == 20) {
+                    EXresult = bgt();
+                    PC_value = EXresult;
+                }
+                else if(opcode == 21) {
+                    EXresult = bge();
+                    PC_value = EXresult;
+                }
+            }
+            else if(opcode >= 32 && opcode <= 47) {
+                if(opcode == 33)
+                    PC_value = PC_value + imm;  //OR jump()
+            }
+            else if(opcode >= 48 && opcode <= 63) {
+                if(opcode == 49)
+                    EXresult = ld();
+                else if(opcode == 50)
+                    EXresult = st();
+            }
+
+            
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // ID/RF Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        if(my_clock >= 2 && !(runOnlyUpp > 2)) {
+            opcode = bitToInt(currIns, 26, 31);
+
+            if(opcode >= 0 && opcode <= 15) {
+                rmd = bitToInt(currIns, 21, 25);
+                rms1 = bitToInt(currIns, 16, 20);
+                rms2 = bitToInt(currIns, 11, 15);
+                
+                if(dre == rms1 || dre == rms2) {
+                    runOnlyUpp = 3;
+                    totalStalls += 3;
+                    stallType = 2;
+                    my_clock++;
+                    continue;
+                }
+                else if(drm == rms1 || drm == rms2) {
+                    runOnlyUpp = 3;
+                    totalStalls += 2;
+                    stallType = 1;
+                    my_clock++;
+                    continue;
+                }
+                else if(drw == rms1 || drw == rms2) {
+                    totalStalls += 1;
+                    my_clock++;
+                    continue;
+                }
+
+                PC_value++;
+            }
+            else if(opcode >= 16 && opcode <= 31) {
+                rmd = bitToInt(currIns, 21, 25);
+                rms1 = bitToInt(currIns, 16, 20);
+                imm = bitToInt(currIns, 0, 15);
+                if(opcode >= 17 && opcode <= 17) {
+
+                    if(dre == rms1) {
+                        runOnlyUpp = 3;
+                        totalStalls += 3;
+                        stallType = 2;
+                        my_clock++;
+                        continue;
+                    }
+                    else if(drm == rms1) {
+                        runOnlyUpp = 3;
+                        totalStalls += 2;
+                        stallType = 1;
+                        my_clock++;
+                        continue;
+                    }
+                    else if(drw == rms1) {
+                        totalStalls += 1;
+                        my_clock++;
+                        continue;
+                    }
+
+                    PC_value++;
+                }
+                else {
+                    if(branchDec) {
+                        branchDec = false;
+                        totalStalls++;
+                        my_clock++;
+                        continue;
+                    }
+                    else {
+                        branchDec = true;
+                    }
+                }
+            }
+            else if(opcode >= 32 && opcode <= 47) {
+                imm = bitToInt(currIns, 0, 15);
+                if(branchDec) {
+                    branchDec = false;
+                    totalStalls++;
+                    my_clock++;
+                    continue;
+                }
+                else {
+                    branchDec = true;
+                }
+            }
+            else if(opcode >= 48 && opcode <= 63) {
+                rmd = bitToInt(currIns, 21, 25);
+                rms1 = bitToInt(currIns, 16, 20);
+                rms2 = bitToInt(currIns, 11, 15);
+
+                if(opcode == 49) {
+                    if(dre == rms2) {
+                        runOnlyUpp = 3;
+                        totalStalls += 3;
+                        stallType = 2;
+                        my_clock++;
+                        continue;
+                    }
+                    else if(drm == rms2) {
+                        runOnlyUpp = 3;
+                        totalStalls += 2;
+                        stallType = 1;
+                        my_clock++;
+                        continue;
+                    }
+                    else if(drw == rms2) {
+                        totalStalls += 1;
+                        my_clock++;
+                        continue;
+                    }
+                }
+
+                PC_value++;
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // IF Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        if(my_clock >= 1 && !(runOnlyUpp > 1)) {
+            currIns = IF(PC_value);
+        }
+
+        my_clock++;
+    }
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////
+individual instructions (will try to make a function)
+
+
+///////////////////////////////////////////////////////////////////////////
+individual instructions (will try to make a function)
+
+
+///////////////////////////////////////////////////////////////////////////
+individual instructions (will try to make a function)
+
+
+///////////////////////////////////////////////////////////////////////////
+bitToInt(ins, i1, i2) {
+    return INT(ins(i1, i2));
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+IF(index) {
+    return encodedInstructinos(index);
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+For pipeline with forwarding
+
+execute_Forwarding() {
+    // Will remove any unused variables while implementing
+    currIns;
+    opcode;
+    eopcode;
+    mopcode;
+    rmd;
+    rms1;
+    rms2;
+    imm;
+    EXresult;   (only used in load and store instructions)
+    dre;
+    drm;
+    runOnlyUpp = 1;
+
+    while(PC_value < n) {
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // WB Stage (Essentially not required for the simulator)
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        if(my_clock >= 5 && !(runOnlyUpp > 5)) {
+            if(mopcode >= 0 && mopcode <= 15) {
+                if(mopcode == 1) {
+                    drm = EXresult;
+                }
+                else if(mopcode == 2) {
+                    drm = EXresult;
+                }
+            }
+            else if(mopcode >= 16 && mopcode <= 31) {
+                if(mopcode == 17) {
+                    drm = EXresult;
+                }
+            }
+            if(runOnlyUpp > 1) {
+                runOnlyUpp = 1;
+                totalStalls += 1;
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // MEM Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        else if(my_clock >= 4 && !(runOnlyUpp > 4)) {
+            mopcode = eopcode;
+            drm = rmd;
+            if(eopcode >= 48 && eopcode <= 63) {
+                if(opcode == 49) {
+                    dre = MEM[EXresult];
+                    totalStalls++;
+                    my_clock++;
+                    continue;
+                }
+                else if(opcode == 50)
+                    MEM[EXresult] = dre;
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // EX Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        else if(my_clock >= 3 && !(runOnlyUpp > 3)) {
+            eopcode = opcode;
+            dre = rmd;
+            if(opcode >= 0 && opcode <= 15) {
+                if(opcode == 1)
+                    rmd = add();
+                else if(opcode == 2)
+                    rmd = sub();
+            }
+            else if(opcode >= 16 && opcode <= 31) {
+                if(opcode == 17)
+                    rmd = addi();
+                else if(opcode == 18) {
+                    EXresult = bne();
+                    PC_value = EXresult;
+                }
+                else if(opcode == 19) {
+                    EXresult = beq();
+                    PC_value = EXresult;
+                }
+                else if(opcode == 20) {
+                    EXresult = bgt();
+                    PC_value = EXresult;
+                }
+                else if(opcode == 21) {
+                    EXresult = bge();
+                    PC_value = EXresult;
+                }
+            }
+            else if(opcode >= 32 && opcode <= 47) {
+                if(opcode == 33)
+                    PC_value = PC_value + imm;  //OR jump()
+            }
+            else if(opcode >= 48 && opcode <= 63) {
+                if(opcode == 49)
+                    EXresult = ld();
+                else if(opcode == 50)
+                    EXresult = st();
+            }
+
+            
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // ID/RF Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        else if(my_clock >= 2 && !(runOnlyUpp > 2)) {
+            opcode = bitToInt(currIns, 26, 31);
+
+            if(opcode >= 0 && opcode <= 15) {
+                rmd = bitToInt(currIns, 21, 25);
+                rms1 = bitToInt(currIns, 16, 20);
+                rms2 = bitToInt(currIns, 11, 15);
+                PC_value++;
+            }
+            else if(opcode >= 16 && opcode <= 31) {
+                rmd = bitToInt(currIns, 21, 25);
+                rms1 = bitToInt(currIns, 16, 20);
+                imm = bitToInt(currIns, 0, 15);
+                if(opcode >= 17 && opcode <= 17) {
+                    PC_value++;
+                }
+                else {
+                    if(branchDec) {
+                        branchDec = false;
+                        totalStalls++;
+                        my_clock++;
+                        continue;
+                    }
+                    else {
+                        branchDec = true;
+                    }
+                }
+            }
+            else if(opcode >= 32 && opcode <= 47) {
+                imm = bitToInt(currIns, 0, 15);
+                if(branchDec) {
+                    branchDec = false;
+                    totalStalls++;
+                    my_clock++;
+                    continue;
+                }
+                else {
+                    branchDec = true;
+                }
+            }
+            else if(opcode >= 48 && opcode <= 63) {
+                rmd = bitToInt(currIns, 21, 25);
+                rms1 = bitToInt(currIns, 16, 20);
+                rms2 = bitToInt(currIns, 11, 15);
+                PC_value++;
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // IF Stage
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        else if(my_clock >= 1 && !(runOnlyUpp > 1)) {
+            currIns = IF(PC_value);
+        }
+
+        my_clock++;
+    }
+}
