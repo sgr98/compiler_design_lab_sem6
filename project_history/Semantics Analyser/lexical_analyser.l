@@ -1,7 +1,8 @@
 %{
-#include "y.tab.h"
-void yyerror (char *s);
-int yylex();
+    #include "y.tab.h"
+    #include <string.h>
+    void yyerror (char *s);
+    int yylex();
 %}
 
 boolean_literal     ("true"|"false")
@@ -59,12 +60,12 @@ identifier          [a-zA-Z][a-zA-Z_0-9]*
 "char"                  {return CHAR;}
 "boolean"               {return BOOLEAN;}
 
-{boolean_literal}       {return BOOLEAN_LIT;}
-{float_literal}         {return FLOAT_LIT;}
-{int_literal}           {return INT_LIT;}
-{character_literal}     {return CHAR_LIT;}
+{boolean_literal}       {yylval.str = strdup(yytext); return BOOLEAN_LIT;}
+{float_literal}         {yylval.str = strdup(yytext); return FLOAT_LIT;}
+{int_literal}           {yylval.str = strdup(yytext); return INT_LIT;}
+{character_literal}     {yylval.str = strdup(yytext); return CHAR_LIT;}
 
-{identifier}            {return IDENTIFIER;}
+{identifier}            {yylval.str = strdup(yytext); return IDENTIFIER;}
 
 [ \t\n]                 ;
 .                       {printf("unexpected character ");}
