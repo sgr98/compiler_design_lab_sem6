@@ -1,6 +1,6 @@
 make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target 'all'.  Stop.
- 
+
 # GNU Make 4.3
 # Built for Windows32
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Mar 21 20:14:38 2022
+# Make data base, printed on Fri Apr 15 20:14:34 2022
 
 # Variables
 
@@ -27,7 +27,7 @@ VBOX_MSI_INSTALL_PATH = D:\Program files(for my)\Oracle_Virtual_Box\Oracle_Virtu
 # environment
 LOCALAPPDATA = C:\Users\Sagar Singh\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-67be5842-0f0a-46b7-b458-7f191d0a1c57-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-a99f798b-e308-47e5-af57-6b6bc6145b1f-sock
 # environment
 VSCODE_CWD = D:\Program files(for my)\Visual Studio code\Microsoft VS Code
 # environment
@@ -43,7 +43,7 @@ MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_1252_CXXSBUUOQMLYHXHJ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19244_LZGPTNXEMLPXWHXX
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -59,7 +59,7 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\Sagar Singh\AppData\Roaming\Code\CachedData\c722ca6c7eed3d7987c0d5c3df5c45f6b15e77d1
+VSCODE_CODE_CACHE_PATH = C:\Users\Sagar Singh\AppData\Roaming\Code\CachedData\8dfae7a5cd50421d10cd99cb873990460525a898
 # environment
 LANG = C
 # default
@@ -99,7 +99,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 1252
+VSCODE_PID = 19244
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -197,7 +197,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 TEMP = C:\Users\SAGARS~1\AppData\Local\Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\2d1bd7037cd89a30c234f26be1ebfdd2-1.65.2-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\2d1bd7037cd89a30c234f26be1ebfdd2-1.66.1-main-sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -223,7 +223,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647791191): 9 files, no impossibilities.
+# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647882237): 9 files, no impossibilities.
 
 # 9 files, no impossibilities in 1 directories.
 
@@ -288,6 +288,6 @@ GNUmakefile:
 # strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
 # Load=16/8192=0%, Rehash=0, Collisions=0/19=0%
-# Finished Make data base on Mon Mar 21 20:14:38 2022
+# Finished Make data base on Fri Apr 15 20:14:34 2022
 
  
