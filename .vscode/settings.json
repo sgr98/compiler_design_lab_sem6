@@ -2,6 +2,9 @@
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
         "stdio.h": "c",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "xstring": "cpp",
+        "utility": "cpp",
+        "vector": "cpp"
     }
 }

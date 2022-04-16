@@ -1,0 +1,32 @@
+### FIVE 5
+### PI 3.14
+
+/*
+    Testing out block comments
+    Testing more
+*/
+
+main {
+    // Declaring Variables
+    int a, b = 10;
+    a = FIVE;
+
+    int sum = a + b;
+    a = a + b + FIVE;
+
+    int dif = a - b;
+
+    // Initialising Variables
+    int prod = a * b;   // dfsjjlkk
+
+    /* Try 1 */float c = 20 * PI, d = 3 * PI;   /* sdffds */
+    c /= d;
+
+    /*
+        Testing out block comments
+        Testing more
+        2
+    */
+
+    int x = (a + b * dif - prod) / b;
+}
