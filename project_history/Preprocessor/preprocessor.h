@@ -25,7 +25,7 @@ class Preprocessor {
         // Update Macro value if exists or append new one
         void addMacro(string macroIden, string macroVal);
 		// Get all macros and values and set it in the macroTable
-        void getMacros(string macroLine);
+        void getMacros(string macroLine, int lineno);
         // Replace all macro values in the rest of the program
         void replaceMacros();
         // Print Macros

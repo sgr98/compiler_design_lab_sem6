@@ -34,6 +34,8 @@ void Preprocessor::openFile(string fileName) {
         myfile.close();
     }
     else {
+        errorText = "\nERROR CODE(01001): Error while Preprocessing, error opening file " + fileName 
+        + ". Check whether file name/path entered is correct.";
         preProcessorError = true;
         exitOnError = true;
     }
@@ -48,6 +50,8 @@ void Preprocessor::writeFile(string fileName) {
         myfile.close();
     }
     else {
+        errorText = "\nERROR CODE(01002): Error while Preprocessing, error writing or creating file "
+        + fileName;
         preProcessorError = true;
         exitOnError = true;
     }
@@ -68,7 +72,7 @@ void Preprocessor::addMacro(string macroIden, string macroVal) {
     macroTable.push_back(macro);
 }
 
-void Preprocessor::getMacros(string macroLine) {
+void Preprocessor::getMacros(string macroLine, int lineno) {
     string macroName = "";
     string macroVal = "";
 
@@ -77,23 +81,32 @@ void Preprocessor::getMacros(string macroLine) {
 
     while(i < len && (macroLine[i] == ' ' || macroLine[i] == '\t'))
         i++;
-    if(i > len) {
+    if(i >= len) {
         preProcessorError = true;
-        errorText += "// Add error Text";
+        errorText += "\nERROR CODE(01004): Preprocessing error. Neither identifier nor value provided for the macro at line "
+            + to_string(lineno) + ".";
+        return;
     }
     while(i < len && !(macroLine[i] == ' ' || macroLine[i] == '\t')) {
         if(isIdentCharacter(macroLine[i]))
             macroName += macroLine[i];
         else {
             preProcessorError = true;
-            errorText += "// Add error Text";
+            errorText += "\nERROR CODE(01005): Preprocessing error. Invalid character used for macro at line "
+                + to_string(lineno) + ".";
+            return;
         }
         i++;
     }
 
     while(i < len && (macroLine[i] == ' ' || macroLine[i] == '\t'))
         i++;
-
+    if(i >= len) {
+        preProcessorError = true;
+        errorText += "\nERROR CODE(01006): Preprocessing error. No value provided for the macro "
+            + macroName + " at line " + to_string(lineno) + ".";
+        return;
+    }
     while(i < len && !(macroLine[i] == ' ' || macroLine[i] == '\t')) {
         macroVal += macroLine[i];
         i++;
@@ -129,8 +142,18 @@ void Preprocessor::processText() {
         int j = 0;
         int len = fileTextLines[i].length();
         if(fileTextLines[i][0] == '#' && fileTextLines[i][1] == '#' && fileTextLines[i][2] == '#') {
-            getMacros(fileTextLines[i]);
+            getMacros(fileTextLines[i], i + 1);
             continue;
+        }
+        else if(fileTextLines[i][0] == '#' && fileTextLines[i][1] == '#') {
+            preProcessorError = true;
+            errorText += "\nERROR CODE(01003): Preprocessing error. Incomplete number of # provided at line "
+            + to_string(i + 1) + ". Three hashes: ### are requied to define a macro.";
+        }
+        else if(fileTextLines[i][0] == '#') {
+            preProcessorError = true;
+            errorText += "\nERROR CODE(01003): Preprocessing error. Incomplete number of # provided at line "
+            + to_string(i + 1) + ". Three hashes: ### are requied to define a macro.";
         }
         while(j < len) {
             if(!inQuotes) {
@@ -194,10 +217,25 @@ Preprocessor::Preprocessor() {
 
 string Preprocessor::processFileText(string fileName, string processedFileName) {
     openFile(fileName);
+    if(exitOnError) {
+        cout << errorText << "\n\n";
+        return errorText;
+    }
     processText();
-    replaceMacros();
-    writeFile(processedFileName);
+    if(!preProcessorError) {
+        replaceMacros();
+        writeFile(processedFileName);
+    }
+    if(exitOnError) {
+        cout << errorText << "\n\n";
+        return errorText;
+    }
     // printMacros();
+    if(preProcessorError) {
+        cout << errorText << "\n\n";
+        return errorText;
+    }
+    resetPreProcessor();
     return processedText;
 }
 

@@ -1,5 +1,0 @@
-main {
-    char second_var, third_var = 'c';
-    char first_var = 'a';
-    char last_var = first_var;
-}
