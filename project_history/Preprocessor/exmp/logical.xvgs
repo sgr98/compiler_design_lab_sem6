@@ -1,8 +1,0 @@
-main {
-    boolean a, b = true;
-    a = !b;
-
-    boolean c = a || b;
-    boolean d = a && b;
-    boolean e = !c || d;
-}

@@ -1,5 +1,7 @@
+### A_KEY 'a'
+
 main {
     char second_var, third_var = 'c';
-    char first_var = 'A';
+    char first_var = A_KEY;
     char last_var = first_var;
 }
