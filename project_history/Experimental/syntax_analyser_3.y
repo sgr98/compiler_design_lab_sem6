@@ -256,48 +256,45 @@ op_expression:		sub_expression
 					}
                 ;
 
-sub_expression:		factor
+sub_expression:		term
 					{
 						printf("sub_expression 1 ");
 					}
 
-                |	sub_expression MUL_OP factor
+                |	sub_expression MUL_OP term
 					{
 						printf("sub_expression 2 ");
 					}
 
-				|	sub_expression DIV_OP factor
+				|	sub_expression DIV_OP term
 					{
 						printf("sub_expression 3 ");
 					}
 
-				|	sub_expression REM_OP factor
+				|	sub_expression REM_OP term
 					{
 						printf("sub_expression 4 ");
 					}
 
-				|	sub_expression LOGICAL_AND_OP factor
+				|	sub_expression LOGICAL_AND_OP term
 					{
 						printf("sub_expression 5 ");
 					}
+					
+
+
+				|	LP op_expression RP
+					{
+						printf("sub_expression 6 ");
+					}
                 ;
 
-return_statement:	RETURN op_expression
-					{
-						printf("return_statement ");
-					}
-				;
+return_statement:		RETURN op_expression
+						{
+							printf("return_statement ");
+						}
+                    ;
 
-factor:		term
-			{
-				printf("factor 1 ");
-			}
-
-		|	LP op_expression RP
-			{
-				printf("factor 2 ");
-			}
-		;
 term:		BOOLEAN_LIT
 			{
 				printf("term 1 ");
