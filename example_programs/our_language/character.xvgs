@@ -1,5 +1,5 @@
 main {
-    char b;
-    char a = 'A';
-    char z = a;
+    char second_var, third_var = 'c';
+    char first_var = 'A';
+    char last_var = first_var;
 }
