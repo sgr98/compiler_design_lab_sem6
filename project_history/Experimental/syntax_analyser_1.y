@@ -77,29 +77,133 @@ assign_expression:		IDENTIFIER ASSIGN_OP op_expression      {printf("assign_expr
 					|	IDENTIFIER REM_ASSIGN_OP op_expression  {printf("assign_expression 6 ");}
                     ;
 
-op_expression:		sub_expression                      		{printf("op_expression 1 ");}
-				|	op_expression ADD_OP sub_expression         {printf("op_expression 2 ");}
-				|	op_expression SUB_OP sub_expression         {printf("op_expression 3 ");}
-
-				|	op_expression EQUAL_OP sub_expression		{printf("op_expression 4 ");}
-				|	op_expression NOT_EQUAL_OP sub_expression	{printf("op_expression 5 ");}
-				| 	op_expression LST sub_expression			{printf("op_expression 6 ");}
-				| 	op_expression LSTE sub_expression			{printf("op_expression 7 ");}
-				| 	op_expression MRT sub_expression			{printf("op_expression 8 ");}
-				| 	op_expression MRTE sub_expression			{printf("op_expression 9 ");}
-
-				|	op_expression LOGICAL_OR_OP sub_expression	{printf("op_expression 10 ");}
-				|	EXCLAMATION_OP sub_expression				{printf("op_expression 11 ");}
+op_expression:		arithmetic_additive_expression              {printf("op_expression 1 ");}
+				|	logical_or_expression         				{printf("op_expression 2 ");}
                 ;
 
-sub_expression:		term                                {printf("sub_expression 1 ");}
-                |	sub_expression MUL_OP term 	        {printf("sub_expression 2 ");}
-				|	sub_expression DIV_OP term          {printf("sub_expression 3 ");}
-				|	sub_expression REM_OP term          {printf("sub_expression 4 ");}
-				|	sub_expression LOGICAL_AND_OP term	{printf("sub_expression 5 ");}
-				
-				|	LP op_expression RP					{printf("sub_expression 7 ");}
-                ;
+arithmetic_additive_expression:		arithmetic_multiplicative_expression
+									{
+										printf("arithmetic_additive_expression 1 ");
+									}
+
+								|	arithmetic_additive_expression ADD_OP arithmetic_multiplicative_expression
+									{
+										printf("arithmetic_additive_expression 2 ");
+									}
+
+								|	arithmetic_additive_expression SUB_OP arithmetic_multiplicative_expression
+									{
+										printf("arithmetic_additive_expression 3 ");
+									}
+
+								;
+
+arithmetic_multiplicative_expression:	term
+										{
+											printf("arithmetic_multiplicative_expression 1 ");
+										}	
+									
+									|	arithmetic_multiplicative_expression MUL_OP term
+										{
+											printf("arithmetic_multiplicative_expression 2 ");
+										}
+
+									|	arithmetic_multiplicative_expression DIV_OP term
+										{
+											printf("arithmetic_multiplicative_expression 3 ");
+										}
+
+									|	arithmetic_multiplicative_expression REM_OP term
+										{
+											printf("arithmetic_multiplicative_expression 4 ");
+										}
+
+									|	LP op_expression RP
+										{
+											printf("arithmetic_multiplicative_expression 6 ");
+										}
+									;
+
+logical_or_expression:		logical_and_expression
+							{
+								printf("logical_or_expression 1 ");
+							}
+
+						|	logical_or_expression LOGICAL_OR_OP logical_and_expression
+							{
+								printf("logical_or_expression 2 ");
+							}
+						;
+						
+logical_and_expression:		logical_rel_expression
+							{
+								printf("logical_and_expression 1 ");
+							}
+
+						|	logical_and_expression LOGICAL_AND_OP logical_rel_expression
+							{
+								printf("logical_and_expression 1 ");
+							}
+						;
+
+logical_rel_expression:		logical_comp_expression
+							{
+								printf("logical_rel_expression 1 ");
+							}
+
+						|	logical_rel_expression EQUAL_OP logical_comp_expression
+							{
+								printf("logical_rel_expression 2 ");
+							}
+						
+						|	logical_rel_expression NOT_EQUAL_OP logical_comp_expression
+							{
+								printf("logical_rel_expression 3 ");
+							}
+						;
+
+logical_comp_expression:	logical_not_expression
+							{
+								printf("logical_comp_expression 1 ");
+							}
+
+						|	logical_comp_expression	LST logical_not_expression
+							{
+								printf("logical_comp_expression 2 ");
+							}
+						
+						|	logical_comp_expression	LSTE logical_not_expression
+							{
+								printf("logical_comp_expression 3 ");
+							}
+
+						|	logical_comp_expression	MRT logical_not_expression
+							{
+								printf("logical_comp_expression 4 ");
+							}
+
+						|	logical_comp_expression	MRTE logical_not_expression
+							{
+								printf("logical_comp_expression 5 ");
+							}
+						;
+
+logical_not_expression:		term
+							{
+								printf("logical_not_expression 1 ");
+							}
+						
+						|	EXCLAMATION_OP logical_not_expression
+							{
+								printf("logical_not_expression 2 ");
+							}
+
+						|	LP op_expression RP
+							{
+								printf("logical_not_expression 4 ");
+							}
+
+						;
 
 return_statement:		RETURN op_expression	{printf("return_statement ");}
                     ;

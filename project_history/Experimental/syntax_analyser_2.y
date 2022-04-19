@@ -89,7 +89,7 @@ op_expression:		sub_expression                      		{printf("op_expression 1 "
 				| 	op_expression MRTE sub_expression			{printf("op_expression 9 ");}
 
 				|	op_expression LOGICAL_OR_OP sub_expression	{printf("op_expression 10 ");}
-				|	EXCLAMATION_OP sub_expression				{printf("op_expression 11 ");}
+				|	EXCLAMATION_OP op_expression		{printf("sub_expression 6 ");}
                 ;
 
 sub_expression:		term                                {printf("sub_expression 1 ");}
