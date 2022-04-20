@@ -1,0 +1,10 @@
+main {
+    int a = 0;
+    int n = 2;
+    int i = 0;
+    
+    loop(i < n) {
+        a += i;
+        i += 1;
+    }
+}

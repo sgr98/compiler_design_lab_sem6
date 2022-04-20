@@ -5,4 +5,6 @@ main {
     boolean c = a || b;
     boolean d = a && b;
     boolean e = !c || d;
+    boolean f = a > b;
+    boolean g = a <= (b || c && d);
 }

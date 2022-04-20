@@ -8,7 +8,7 @@ extern FILE *yyin;
 %}
 
 %start program_start
-%token MAIN VOID RETURN INT FLOAT CHAR BOOLEAN
+%token MAIN VOID RETURN INT FLOAT CHAR BOOLEAN IF ELIF ELSE LOOP BREAK CONTINUE
 %token IDENTIFIER BOOLEAN_LIT FLOAT_LIT INT_LIT CHAR_LIT
 %token SEMICOLON COMMA LP RP LC RC
 %token ADD_ASSIGN_OP SUB_ASSIGN_OP MUL_ASSIGN_OP DIV_ASSIGN_OP REM_ASSIGN_OP
@@ -116,14 +116,24 @@ statement:		variable_declaration SEMICOLON
 					printf("statement 2\n");
 				}
 
-			|	return_statement SEMICOLON
+			|	conditional_statement
 				{
 					printf("statement 3\n");
 				}
 
-			|	SEMICOLON
+			|	loop_statement
 				{
 					printf("statement 4\n");
+				}
+
+			|	return_statement SEMICOLON
+				{
+					printf("statement 5\n");
+				}
+
+			|	SEMICOLON
+				{
+					printf("statement 6\n");
 				}
             ;
 
@@ -167,32 +177,32 @@ expression:		assign_expression
 
 assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 						{
-							printf("expression 1 ");
+							printf("assign_expression 1 ");
 						}
 
 					|	IDENTIFIER ADD_ASSIGN_OP op_or_expression
 						{
-							printf("expression 2 ");
+							printf("assign_expression 2 ");
 						}
 
 					|	IDENTIFIER SUB_ASSIGN_OP op_or_expression
 						{
-							printf("expression 3 ");
+							printf("assign_expression 3 ");
 						}
 
 					|	IDENTIFIER MUL_ASSIGN_OP op_or_expression
 						{
-							printf("expression 4 ");
+							printf("assign_expression 4 ");
 						}
 
 					|	IDENTIFIER DIV_ASSIGN_OP op_or_expression
 						{
-							printf("expression 5 ");
+							printf("assign_expression 5 ");
 						}
 
 					|	IDENTIFIER REM_ASSIGN_OP op_or_expression
 						{
-							printf("expression 6 ");
+							printf("assign_expression 6 ");
 						}
                     ;
 
@@ -307,6 +317,56 @@ op_neg_expression:      factor
                             printf("op_neg_expression 2 ");
                         }
                     ;
+
+conditional_statement:		simple_if
+							{
+								printf("conditional_statement 1 ");
+							}
+
+						|	simple_if simple_else
+							{
+								printf("conditional_statement 2 ");
+							}
+
+						|	simple_if ladder_elif
+							{
+								printf("conditional_statement 3 ");
+							}
+
+						|	simple_if ladder_elif simple_else
+							{
+								printf("conditional_statement 4 ");
+							}
+						;
+
+simple_if:		IF LP op_or_expression RP block
+				{
+					printf("simple_if ");
+				}
+			;
+
+ladder_elif:	ELIF LP op_or_expression RP block
+				{
+					printf("ladder_elif 1 ");
+				}
+
+			|	ELIF LP op_or_expression RP block ladder_elif
+				{
+					printf("ladder_elif 2 ");
+				}
+			;
+
+simple_else:	ELSE block
+				{
+					printf("simple_else ");
+				}
+			;
+
+loop_statement:		LOOP LP op_or_expression RP block
+					{
+						printf("loop_statement ");
+					}
+				;
 
 return_statement:	RETURN op_or_expression
 					{

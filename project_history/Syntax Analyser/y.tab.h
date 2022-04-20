@@ -46,37 +46,43 @@
      FLOAT = 262,
      CHAR = 263,
      BOOLEAN = 264,
-     IDENTIFIER = 265,
-     BOOLEAN_LIT = 266,
-     FLOAT_LIT = 267,
-     INT_LIT = 268,
-     CHAR_LIT = 269,
-     SEMICOLON = 270,
-     COMMA = 271,
-     LP = 272,
-     RP = 273,
-     LC = 274,
-     RC = 275,
-     ADD_ASSIGN_OP = 276,
-     SUB_ASSIGN_OP = 277,
-     MUL_ASSIGN_OP = 278,
-     DIV_ASSIGN_OP = 279,
-     REM_ASSIGN_OP = 280,
-     EQUAL_OP = 281,
-     NOT_EQUAL_OP = 282,
-     MRTE = 283,
-     LSTE = 284,
-     MRT = 285,
-     LST = 286,
-     LOGICAL_AND_OP = 287,
-     LOGICAL_OR_OP = 288,
-     EXCLAMATION_OP = 289,
-     ASSIGN_OP = 290,
-     ADD_OP = 291,
-     SUB_OP = 292,
-     MUL_OP = 293,
-     DIV_OP = 294,
-     REM_OP = 295
+     IF = 265,
+     ELIF = 266,
+     ELSE = 267,
+     LOOP = 268,
+     BREAK = 269,
+     CONTINUE = 270,
+     IDENTIFIER = 271,
+     BOOLEAN_LIT = 272,
+     FLOAT_LIT = 273,
+     INT_LIT = 274,
+     CHAR_LIT = 275,
+     SEMICOLON = 276,
+     COMMA = 277,
+     LP = 278,
+     RP = 279,
+     LC = 280,
+     RC = 281,
+     ADD_ASSIGN_OP = 282,
+     SUB_ASSIGN_OP = 283,
+     MUL_ASSIGN_OP = 284,
+     DIV_ASSIGN_OP = 285,
+     REM_ASSIGN_OP = 286,
+     EQUAL_OP = 287,
+     NOT_EQUAL_OP = 288,
+     MRTE = 289,
+     LSTE = 290,
+     MRT = 291,
+     LST = 292,
+     LOGICAL_AND_OP = 293,
+     LOGICAL_OR_OP = 294,
+     EXCLAMATION_OP = 295,
+     ASSIGN_OP = 296,
+     ADD_OP = 297,
+     SUB_OP = 298,
+     MUL_OP = 299,
+     DIV_OP = 300,
+     REM_OP = 301
    };
 #endif
 /* Tokens.  */
@@ -87,37 +93,43 @@
 #define FLOAT 262
 #define CHAR 263
 #define BOOLEAN 264
-#define IDENTIFIER 265
-#define BOOLEAN_LIT 266
-#define FLOAT_LIT 267
-#define INT_LIT 268
-#define CHAR_LIT 269
-#define SEMICOLON 270
-#define COMMA 271
-#define LP 272
-#define RP 273
-#define LC 274
-#define RC 275
-#define ADD_ASSIGN_OP 276
-#define SUB_ASSIGN_OP 277
-#define MUL_ASSIGN_OP 278
-#define DIV_ASSIGN_OP 279
-#define REM_ASSIGN_OP 280
-#define EQUAL_OP 281
-#define NOT_EQUAL_OP 282
-#define MRTE 283
-#define LSTE 284
-#define MRT 285
-#define LST 286
-#define LOGICAL_AND_OP 287
-#define LOGICAL_OR_OP 288
-#define EXCLAMATION_OP 289
-#define ASSIGN_OP 290
-#define ADD_OP 291
-#define SUB_OP 292
-#define MUL_OP 293
-#define DIV_OP 294
-#define REM_OP 295
+#define IF 265
+#define ELIF 266
+#define ELSE 267
+#define LOOP 268
+#define BREAK 269
+#define CONTINUE 270
+#define IDENTIFIER 271
+#define BOOLEAN_LIT 272
+#define FLOAT_LIT 273
+#define INT_LIT 274
+#define CHAR_LIT 275
+#define SEMICOLON 276
+#define COMMA 277
+#define LP 278
+#define RP 279
+#define LC 280
+#define RC 281
+#define ADD_ASSIGN_OP 282
+#define SUB_ASSIGN_OP 283
+#define MUL_ASSIGN_OP 284
+#define DIV_ASSIGN_OP 285
+#define REM_ASSIGN_OP 286
+#define EQUAL_OP 287
+#define NOT_EQUAL_OP 288
+#define MRTE 289
+#define LSTE 290
+#define MRT 291
+#define LST 292
+#define LOGICAL_AND_OP 293
+#define LOGICAL_OR_OP 294
+#define EXCLAMATION_OP 295
+#define ASSIGN_OP 296
+#define ADD_OP 297
+#define SUB_OP 298
+#define MUL_OP 299
+#define DIV_OP 300
+#define REM_OP 301
 
 
 
