@@ -159,156 +159,130 @@ expression:		assign_expression
 					printf("expression 1 ");
 				}
 
-			|	op_or_expression
+			|	op_expression
 				{
 					printf("expression 2 ");
 				}
             ;
 
-assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
+assign_expression:		IDENTIFIER ASSIGN_OP op_expression
 						{
 							printf("expression 1 ");
 						}
 
-					|	IDENTIFIER ADD_ASSIGN_OP op_or_expression
+					|	IDENTIFIER ADD_ASSIGN_OP op_expression
 						{
 							printf("expression 2 ");
 						}
 
-					|	IDENTIFIER SUB_ASSIGN_OP op_or_expression
+					|	IDENTIFIER SUB_ASSIGN_OP op_expression
 						{
 							printf("expression 3 ");
 						}
 
-					|	IDENTIFIER MUL_ASSIGN_OP op_or_expression
+					|	IDENTIFIER MUL_ASSIGN_OP op_expression
 						{
 							printf("expression 4 ");
 						}
 
-					|	IDENTIFIER DIV_ASSIGN_OP op_or_expression
+					|	IDENTIFIER DIV_ASSIGN_OP op_expression
 						{
 							printf("expression 5 ");
 						}
 
-					|	IDENTIFIER REM_ASSIGN_OP op_or_expression
+					|	IDENTIFIER REM_ASSIGN_OP op_expression
 						{
 							printf("expression 6 ");
 						}
                     ;
 
-op_or_expression:   op_and_expression
-                    {
-                        printf("op_or_expression 1 ");
-                    }
+op_expression:		sub_expression
+					{
+						printf("op_expression 1 ");
+					}
 
-                |	op_or_expression LOGICAL_OR_OP op_and_expression
-                    {
-                        printf("op_or_expression 2 ");
-                    }
+				|	op_expression ADD_OP sub_expression
+					{
+						printf("op_expression 2 ");
+					}
+
+				|	op_expression SUB_OP sub_expression
+					{
+						printf("op_expression 3 ");
+					}
+
+
+
+				|	op_expression EQUAL_OP sub_expression
+					{
+						printf("op_expression 4 ");
+					}
+
+				|	op_expression NOT_EQUAL_OP sub_expression
+					{
+						printf("op_expression 5 ");
+					}
+
+				| 	op_expression LST sub_expression
+					{
+						printf("op_expression 6 ");
+					}
+
+				| 	op_expression LSTE sub_expression
+					{
+						printf("op_expression 7 ");
+					}
+
+				| 	op_expression MRT sub_expression
+					{
+						printf("op_expression 8 ");
+					}
+
+				| 	op_expression MRTE sub_expression
+					{
+						printf("op_expression 9 ");
+					}
+
+
+
+				|	op_expression LOGICAL_OR_OP sub_expression
+					{
+						printf("op_expression 10 ");
+					}
+					
+				|	EXCLAMATION_OP sub_expression
+					{
+						printf("op_expression 11 ");
+					}
                 ;
 
-op_and_expression:      op_rel_expression
-                        {
-                            printf("op_and_expression 1 ");
-                        }
+sub_expression:		factor
+					{
+						printf("sub_expression 1 ");
+					}
 
-                    |	op_and_expression LOGICAL_AND_OP op_rel_expression
-                        {
-                            printf("op_and_expression 2 ");
-                        }
-                    ;
+                |	sub_expression MUL_OP factor
+					{
+						printf("sub_expression 2 ");
+					}
 
-op_rel_expression:      op_condt_expression
-                        {
-                            printf("op_rel_expression 1 ");
-                        }
+				|	sub_expression DIV_OP factor
+					{
+						printf("sub_expression 3 ");
+					}
 
-                    |	op_rel_expression EQUAL_OP op_condt_expression
-                        {
-                            printf("op_rel_expression 2 ");
-                        }
-                    
-                    |	op_rel_expression NOT_EQUAL_OP op_condt_expression
-                        {
-                            printf("op_rel_expression 3 ");
-                        }
-                    ;
+				|	sub_expression REM_OP factor
+					{
+						printf("sub_expression 4 ");
+					}
 
-op_condt_expression:    op_additive_expression
-                        {
-                            printf("op_condt_expression 1 ");
-                        }
+				|	sub_expression LOGICAL_AND_OP factor
+					{
+						printf("sub_expression 5 ");
+					}
+                ;
 
-                    |	op_condt_expression LST op_additive_expression
-                        {
-                            printf("op_condt_expression 2 ");
-                        }
-
-                    |	op_condt_expression LSTE op_additive_expression
-                        {
-                            printf("op_condt_expression 3 ");
-                        }
-
-                    |	op_condt_expression MRT op_additive_expression
-                        {
-                            printf("op_condt_expression 4 ");
-                        }
-
-                    |	op_condt_expression MRTE op_additive_expression
-                        {
-                            printf("op_condt_expression 5 ");
-                        }
-                    ;
-
-op_additive_expression:     op_multiplicative_expression
-                            {
-                                printf("op_additive_expression 1 ");
-                            }
-
-                        |	op_additive_expression ADD_OP op_multiplicative_expression
-                            {
-                                printf("op_additive_expression 2 ");
-                            }
-
-                        |	op_additive_expression SUB_OP op_multiplicative_expression
-                            {
-                                printf("op_additive_expression 3 ");
-                            }
-                        ;
-
-op_multiplicative_expression:       op_neg_expression
-                                    {
-                                        printf("op_multiplicative_expression 1 ");
-                                    }
-
-                                |	op_multiplicative_expression MUL_OP op_neg_expression
-                                    {
-                                        printf("op_multiplicative_expression 2 ");
-                                    }
-
-                                |	op_multiplicative_expression DIV_OP op_neg_expression
-                                    {
-                                        printf("op_multiplicative_expression 3 ");
-                                    }
-                                
-                                |	op_multiplicative_expression REM_OP op_neg_expression
-                                    {
-                                        printf("op_multiplicative_expression 4 ");
-                                    }
-                                ;
-
-op_neg_expression:      factor
-                        {
-                            printf("op_neg_expression 1 ");
-                        }
-
-                    |	EXCLAMATION_OP factor
-                        {
-                            printf("op_neg_expression 2 ");
-                        }
-                    ;
-
-return_statement:	RETURN op_or_expression
+return_statement:	RETURN op_expression
 					{
 						printf("return_statement ");
 					}
@@ -319,7 +293,7 @@ factor:		term
 				printf("factor 1 ");
 			}
 
-		|	LP op_or_expression RP
+		|	LP op_expression RP
 			{
 				printf("factor 2 ");
 			}

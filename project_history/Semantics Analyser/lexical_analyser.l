@@ -8,7 +8,7 @@
 boolean_literal     ("true"|"false")
 float_literal       [0-9]+\.[0-9]+
 int_literal         [0-9]+
-character_literal   \'(.|\\"n"|\\"t"|\\\')\'
+character_literal   \'(.|\\"n"|\\"t"|\\\'|\\"0")\'
 identifier          [a-zA-Z][a-zA-Z_0-9]*
 
 %%
