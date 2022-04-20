@@ -1,4 +1,4 @@
-%{	
+%{
 	#include <fstream>
 	#include <iostream>
 	#include <stdio.h>
@@ -14,8 +14,8 @@
 
 	extern "C"
 	{
-		int yyparse(void);
-		int yylex(void);
+		// int yyparse(void);
+		int yylex();
 		void yyerror(const char* s) {
 			fprintf (stderr, "%s\n", s);
 			exit(EXIT_SUCCESS);
@@ -24,550 +24,560 @@
 			return 1;
 		}
 	}
-	int DEBUG_CODE = -1;
+	int DEBUG_CODE = 1;
 
 	string TAC = "";
-
-	// INT		:	1
-	// FLOAT	:	2
-	// CHAR		:	3
-	// BOOLEAN	:	4
-	// FUNCTION	:	5
-	class Entry {
-		public:
-			string identifier;
-			int type;
-			bool initialised;
-
-			Entry(string iden, int tp, bool initial) {
-				identifier = iden;
-				type = tp;
-				initialised = initial;
-			}
-	};
-	vector<Entry> symbolTable;
-
-	vector<string> vars_st;
-	vector<bool> vars_in;
-
-	int currIden = 0;
-
-
-	// Function Declarations
-	int getIndexFromSymbolTable(string iden);
-	void updateSymbolTable(string iden, int tp, bool initial);
-	void printSymbolTable();
-	void generateTACFile();
 %}
 
 %start program_start
-%union {char *str; int type;}
+// %union {char *str; int type;}
 
-%token MAIN VOID RETURN INT FLOAT CHAR BOOLEAN
-%token IF ELIF ELSE LOOP BREAK CONTINUE
-%token <str> IDENTIFIER BOOLEAN_LIT FLOAT_LIT INT_LIT CHAR_LIT
+%token MAIN VOID RETURN INT FLOAT CHAR BOOLEAN IF ELIF ELSE LOOP BREAK CONTINUE
+%token IDENTIFIER BOOLEAN_LIT FLOAT_LIT INT_LIT CHAR_LIT
 %token SEMICOLON COMMA LP RP LC RC
 %token ADD_ASSIGN_OP SUB_ASSIGN_OP MUL_ASSIGN_OP DIV_ASSIGN_OP REM_ASSIGN_OP
 %token EQUAL_OP NOT_EQUAL_OP MRTE LSTE MRT LST
 %token LOGICAL_AND_OP LOGICAL_OR_OP EXCLAMATION_OP
-%token <str> ASSIGN_OP ADD_OP SUB_OP MUL_OP DIV_OP REM_OP
-
-%type <type> data_type 
-%type <str> ident_nont
+%token ASSIGN_OP ADD_OP SUB_OP MUL_OP DIV_OP REM_OP
 
 %%
 
-program_start:  program	
+program_start:  program
 				{
 					if(DEBUG_CODE == 1)
-						cout << "program_start\n\n";
-					
-					// printSymbolTable();
-					int n = symbolTable.size();
-					for(int i = 0; i < n; i++) {
-						TAC += (symbolTable[i].identifier + "." + to_string(symbolTable[i].type) + "\n");
-					}
-					TAC = TAC.substr(0, TAC.length() - 1);
-					// cout << TAC;
-					generateTACFile();
+						printf("program_start\n");
 				}
             	;
 
-program:	functions MAIN block	
+program:	MAIN block
 			{
 				if(DEBUG_CODE == 1)
 					printf("program 1\n");
 			}
 
-        |	MAIN block              
+        |	functions MAIN block
 			{
 				if(DEBUG_CODE == 1)
 					printf("program 2\n");
 			}
         ;
 
-functions:		function_declaration            
+functions:		function_declaration
 				{
 					if(DEBUG_CODE == 1)
 						printf("functions 1\n");
 				}
 
-			|	functions function_declaration	
+			|	functions function_declaration
 				{
 					if(DEBUG_CODE == 1)
 						printf("functions 2\n");
 				}
             ;
 
-function_declaration:	VOID ident_nont LP params RP block		
+function_declaration:	VOID IDENTIFIER LP RP block
 						{
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 1\n");
 						}
 
-					|	data_type ident_nont LP params RP block	
+					|	VOID IDENTIFIER LP params RP block
 						{
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 2\n");
 						}
+
+					|	data_type IDENTIFIER LP RP block
+						{
+							if(DEBUG_CODE == 1)
+								printf("function_declaration 3\n");
+						}
+
+					|	data_type IDENTIFIER LP params RP block
+						{
+							if(DEBUG_CODE == 1)
+								printf("function_declaration 4\n");
+						}
                     ;
 
-params:		param               
-			{
-				if(DEBUG_CODE == 1)
-					printf("params 1\n");
-			}
-
-		|	params COMMA param	
+params:		param
 			{
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			}
 
-		|	                    
+		|	params COMMA param
 			{
 				if(DEBUG_CODE == 1)
-					printf("params 3\n");
+					printf("params 2\n");
 			}
-        ;
+		;
 
-param:		data_type ident_nont	
+param:		data_type IDENTIFIER
 			{
 				if(DEBUG_CODE == 1)
-					printf("param\n");
+					printf("param \n");
 			}
     	;
 
-block:		LC statements RC	
+block:		LC RC
 			{
 				if(DEBUG_CODE == 1)
 					printf("block 1\n");
 			}
 
-        |   LC RC	            
+        |   LC statement_list RC
 			{
 				if(DEBUG_CODE == 1)
 					printf("block 2\n");
 			}
         ;
 
-statements:		statement               
-				{
-					if(DEBUG_CODE == 1)
-						printf("statements 1\n");
-				}
+statement_list:		statement
+					{
+						if(DEBUG_CODE == 1)
+							printf("statement_list 1\n");
+					}
 
-			|	statements statement	
-				{
-					if(DEBUG_CODE == 1)
-						printf("statements 2\n");
-				}
-            ;
+				|	statement_list statement
+					{
+						if(DEBUG_CODE == 1)
+							printf("statement_list 2\n");
+					}
+            	;
 
-statement:		variable_declaration SEMICOLON   
+statement:		variable_declaration SEMICOLON
 				{
 					if(DEBUG_CODE == 1)
 						printf("statement 1\n");
 				}
 
-			|	expression SEMICOLON             
+			|	expression SEMICOLON
 				{
 					if(DEBUG_CODE == 1)
 						printf("statement 2\n");
 				}
 
-			|	return_statement SEMICOLON       
+			|	conditional_statement
 				{
 					if(DEBUG_CODE == 1)
 						printf("statement 3\n");
 				}
-            ;
 
-variable_declaration:		data_type variable	
-							{	
-								if(DEBUG_CODE == 1)
-									printf("variable_declaration ");
-								int n = vars_in.size();
-								for(int i = 0; i < n; i++) {
-									int in = getIndexFromSymbolTable(vars_st[i]);
-									if(in == -1) {
-										symbolTable.push_back(Entry(vars_st[i], $1, vars_in[i]));
-									}
-									else {
-										yyerror("Syntax Error");
-									}
-								}
-								vars_in.clear();
-								vars_st.clear();
-							}
-                        ;
-
-variable:		ident_nont                                      
-				{	
-					vars_st.push_back(string($1));
-					vars_in.push_back(false);
-
-					//TAC = TAC + string($1) + "\n";
-
+			|	loop_statement
+				{
 					if(DEBUG_CODE == 1)
-						printf("variable 1 ");
+						printf("statement 4\n");
 				}
 
-			|	ident_nont ASSIGN_OP expression                 
+			|	return_statement SEMICOLON
 				{
-					vars_st.push_back(string($1));
-					vars_in.push_back(true);
-
-					// TAC = TAC +
-
 					if(DEBUG_CODE == 1)
-						printf("variable 2 ");
+						printf("statement 5\n");
 				}
 
-			|	variable COMMA ident_nont                       
+			|	SEMICOLON
 				{
-					vars_st.push_back(string($3));
-					vars_in.push_back(false);
-
-					//TAC = TAC + string($1) + "\n";
-
 					if(DEBUG_CODE == 1)
-						printf("variable 3 ");
-				}
-
-			|	variable COMMA ident_nont ASSIGN_OP expression  
-				{
-					vars_st.push_back(string($3));
-					vars_in.push_back(true);
-					if(DEBUG_CODE == 1)
-						printf("variable 4 ");
+						printf("statement 6\n");
 				}
             ;
 
-expression:		assign_expression	
+variable_declaration:	data_type variable_list
+						{
+							if(DEBUG_CODE == 1)
+								printf("variable_declaration \n");
+						}
+                    ;
+
+variable_list:		IDENTIFIER
+					{
+						if(DEBUG_CODE == 1)
+							printf("variable_list 1 ");
+					}
+
+				|	IDENTIFIER ASSIGN_OP expression
+					{
+						if(DEBUG_CODE == 1)
+							printf("variable_list 2 ");
+					}
+
+				|	variable_list COMMA IDENTIFIER
+					{
+						if(DEBUG_CODE == 1)
+							printf("variable_list 3 ");
+					}
+
+				|	variable_list COMMA IDENTIFIER ASSIGN_OP expression
+					{
+						if(DEBUG_CODE == 1)
+							printf("variable_list 4 ");
+					}
+				;
+
+expression:		assign_expression
 				{
 					if(DEBUG_CODE == 1)
 						printf("expression 1 ");
 				}
 
-			|	op_expression       
+			|	op_or_expression
 				{
 					if(DEBUG_CODE == 1)
 						printf("expression 2 ");
 				}
             ;
 
-assign_expression:		ident_nont ASSIGN_OP op_expression      
+assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 						{
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 1 ");
 						}
 
-					|	ident_nont ADD_ASSIGN_OP op_expression  
+					|	IDENTIFIER ADD_ASSIGN_OP op_or_expression
 						{
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 2 ");
 						}
 
-					|	ident_nont SUB_ASSIGN_OP op_expression  
+					|	IDENTIFIER SUB_ASSIGN_OP op_or_expression
 						{
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 3 ");
 						}
 
-					|	ident_nont MUL_ASSIGN_OP op_expression  
+					|	IDENTIFIER MUL_ASSIGN_OP op_or_expression
 						{
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 4 ");
 						}
 
-					|	ident_nont DIV_ASSIGN_OP op_expression  
+					|	IDENTIFIER DIV_ASSIGN_OP op_or_expression
 						{
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 5 ");
 						}
 
-					|	ident_nont REM_ASSIGN_OP op_expression  
+					|	IDENTIFIER REM_ASSIGN_OP op_or_expression
 						{
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 6 ");
 						}
                     ;
 
-op_expression:		sub_expression                      		
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 1 ");
-					}
+op_or_expression:   op_and_expression
+                    {
+                        if(DEBUG_CODE == 1)
+							printf("op_or_expression 1 ");
+                    }
 
-				|	op_expression ADD_OP sub_expression         
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 2 ");
-					}
-
-				|	op_expression SUB_OP sub_expression         
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 3 ");
-					}
-
-
-				|	op_expression EQUAL_OP op_expression        
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 4 ");
-					}
-
-				|	op_expression NOT_EQUAL_OP op_expression    
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 5 ");
-					}
-
-				| 	op_expression LST op_expression             
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 6 ");
-					}
-
-				| 	op_expression LSTE op_expression            
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 7 ");
-					}
-
-				| 	op_expression MRT op_expression             
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 8 ");
-					}
-
-				| 	op_expression MRTE op_expression            
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 9 ");
-					}
-
-
-				|	op_expression LOGICAL_OR_OP sub_expression	
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 10 ");
-					}
-
-				|	EXCLAMATION_OP op_expression                
-					{
-						if(DEBUG_CODE == 1)
-							printf("op_expression 11 ");
-					}
+                |	op_or_expression LOGICAL_OR_OP op_and_expression
+                    {
+                        if(DEBUG_CODE == 1)
+							printf("op_or_expression 2 ");
+                    }
                 ;
 
-sub_expression:		term                                			
-					{
-						if(DEBUG_CODE == 1)
-							printf("sub_expression 1 ");
-					}
+op_and_expression:      op_rel_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_and_expression 1 ");
+                        }
 
-                |	sub_expression MUL_OP sub_expression 	        
-					{
-						if(DEBUG_CODE == 1)
-							printf("sub_expression 2 ");
-					}
-
-				|	sub_expression DIV_OP sub_expression          	
-					{
-						if(DEBUG_CODE == 1)
-							printf("sub_expression 3 ");
-					}
-
-				|	sub_expression REM_OP sub_expression          	
-					{
-						if(DEBUG_CODE == 1)
-							printf("sub_expression 4 ");
-					}
-
-				|	sub_expression LOGICAL_AND_OP sub_expression	
-					{
-						if(DEBUG_CODE == 1)
-							printf("sub_expression 5 ");
-					}
-
-				|	LP op_expression RP                 			
-					{
-						if(DEBUG_CODE == 1)
-							printf("sub_expression 6 ");
-					}
-                ;
-
-return_statement:		RETURN op_expression	
-						{
-							if(DEBUG_CODE == 1)
-								printf("return_statement ");
-						}
+                    |	op_and_expression LOGICAL_AND_OP op_rel_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_and_expression 2 ");
+                        }
                     ;
 
-term:		BOOLEAN_LIT     
-		{
-			if(DEBUG_CODE == 1)
-				printf("term 1 ");
-		}
+op_rel_expression:      op_condt_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_rel_expression 1 ");
+                        }
 
-		|	FLOAT_LIT       
-		{
-			if(DEBUG_CODE == 1)
-				printf("term 2 ");
-		}
+                    |	op_rel_expression EQUAL_OP op_condt_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_rel_expression 2 ");
+                        }
+                    
+                    |	op_rel_expression NOT_EQUAL_OP op_condt_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_rel_expression 3 ");
+                        }
+                    ;
 
-		|	INT_LIT         
-		{
-			if(DEBUG_CODE == 1)
-				printf("term 3 ");
-		}
+op_condt_expression:    op_additive_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_condt_expression 1 ");
+                        }
 
-		|	CHAR_LIT        
-		{
-			if(DEBUG_CODE == 1)
-				printf("term 4 ");
-		}
+                    |	op_condt_expression LST op_additive_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_condt_expression 2 ");
+                        }
 
-		|	functional_call 
-		{
-			if(DEBUG_CODE == 1)
-				printf("term 5 ");
-		}
+                    |	op_condt_expression LSTE op_additive_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_condt_expression 3 ");
+                        }
 
-		|	ident_nont		
-		{
-			if(DEBUG_CODE == 1)
-				printf("term 6 ");
-		}
-        ;
+                    |	op_condt_expression MRT op_additive_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_condt_expression 4 ");
+                        }
 
-functional_call:	ident_nont LP args RP	
+                    |	op_condt_expression MRTE op_additive_expression
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_condt_expression 5 ");
+                        }
+                    ;
+
+op_additive_expression:     op_multiplicative_expression
+                            {
+                                if(DEBUG_CODE == 1)
+									printf("op_additive_expression 1 ");
+                            }
+
+                        |	op_additive_expression ADD_OP op_multiplicative_expression
+                            {
+                                if(DEBUG_CODE == 1)
+									printf("op_additive_expression 2 ");
+                            }
+
+                        |	op_additive_expression SUB_OP op_multiplicative_expression
+                            {
+                                if(DEBUG_CODE == 1)
+									printf("op_additive_expression 3 ");
+                            }
+                        ;
+
+op_multiplicative_expression:       op_neg_expression
+                                    {
+                                        if(DEBUG_CODE == 1)
+											printf("op_multiplicative_expression 1 ");
+                                    }
+
+                                |	op_multiplicative_expression MUL_OP op_neg_expression
+                                    {
+                                        if(DEBUG_CODE == 1)
+											printf("op_multiplicative_expression 2 ");
+                                    }
+
+                                |	op_multiplicative_expression DIV_OP op_neg_expression
+                                    {
+                                        if(DEBUG_CODE == 1)
+											printf("op_multiplicative_expression 3 ");
+                                    }
+                                
+                                |	op_multiplicative_expression REM_OP op_neg_expression
+                                    {
+                                        if(DEBUG_CODE == 1)
+											printf("op_multiplicative_expression 4 ");
+                                    }
+                                ;
+
+op_neg_expression:      factor
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_neg_expression 1 ");
+                        }
+
+                    |	EXCLAMATION_OP factor
+                        {
+                            if(DEBUG_CODE == 1)
+								printf("op_neg_expression 2 ");
+                        }
+                    ;
+
+conditional_statement:		simple_if
+							{
+								if(DEBUG_CODE == 1)
+									printf("conditional_statement 1 ");
+							}
+
+						|	simple_if simple_else
+							{
+								if(DEBUG_CODE == 1)
+									printf("conditional_statement 2 ");
+							}
+
+						|	simple_if ladder_elif
+							{
+								if(DEBUG_CODE == 1)
+									printf("conditional_statement 3 ");
+							}
+
+						|	simple_if ladder_elif simple_else
+							{
+								if(DEBUG_CODE == 1)
+									printf("conditional_statement 4 ");
+							}
+						;
+
+simple_if:		IF LP op_or_expression RP block
+				{
+					if(DEBUG_CODE == 1)
+						printf("simple_if ");
+				}
+			;
+
+ladder_elif:	ELIF LP op_or_expression RP block
+				{
+					if(DEBUG_CODE == 1)
+						printf("ladder_elif 1 ");
+				}
+
+			|	ELIF LP op_or_expression RP block ladder_elif
+				{
+					if(DEBUG_CODE == 1)
+						printf("ladder_elif 2 ");
+				}
+			;
+
+simple_else:	ELSE block
+				{
+					if(DEBUG_CODE == 1)
+						printf("simple_else ");
+				}
+			;
+
+loop_statement:		LOOP LP op_or_expression RP block
 					{
 						if(DEBUG_CODE == 1)
-							printf("functional_call 6 ");
+							printf("loop_statement ");
+					}
+				;
+
+return_statement:	RETURN op_or_expression
+					{
+						if(DEBUG_CODE == 1)
+							printf("return_statement ");
+					}
+				;
+
+factor:		term
+			{
+				if(DEBUG_CODE == 1)
+					printf("factor 1 ");
+			}
+
+		|	LP op_or_expression RP
+			{
+				if(DEBUG_CODE == 1)
+					printf("factor 2 ");
+			}
+		;
+term:		BOOLEAN_LIT
+			{
+				if(DEBUG_CODE == 1)
+					printf("term 1 ");
+			}
+
+		|	FLOAT_LIT
+			{
+				if(DEBUG_CODE == 1)
+					printf("term 2 ");
+			}
+
+		|	INT_LIT
+			{
+				if(DEBUG_CODE == 1)
+					printf("term 3 ");
+			}
+
+		|	CHAR_LIT
+			{
+				if(DEBUG_CODE == 1)
+					printf("term 4 ");
+			}
+
+		|	functional_call
+			{
+				if(DEBUG_CODE == 1)
+					printf("term 5 ");
+			}
+
+		|	IDENTIFIER
+			{
+				if(DEBUG_CODE == 1)
+					printf("term 6 ");
+			}
+        ;
+
+functional_call:	IDENTIFIER LP RP
+					{
+						if(DEBUG_CODE == 1)
+							printf("functional_call 1 ");
+					}
+
+				|	IDENTIFIER LP args RP
+					{
+						if(DEBUG_CODE == 1)
+							printf("functional_call 2 ");
 					}
                 ;
 
-args:		term            
+args:		term
 			{
 				if(DEBUG_CODE == 1)
 					printf("args 1 ");
 			}
 
-		|	args COMMA term 
+		|	args COMMA term
 			{
 				if(DEBUG_CODE == 1)
 					printf("args 2 ");
 			}
-
-		|	                
-			{
-				if(DEBUG_CODE == 1)
-					printf("args 3 ");
-			}
         ;
 
-data_type:		INT		
+data_type:		INT
 				{
-					$$ = 1;
 					if(DEBUG_CODE == 1)
 						printf("data_type 1 ");
 				}
 
-			|	FLOAT 	
+			|	FLOAT
 				{
-					$$ = 2;
 					if(DEBUG_CODE == 1)
 						printf("data_type 2 ");
 				}
 
-			|	CHAR    
+			|	CHAR
 				{
-					$$ = 3;
 					if(DEBUG_CODE == 1)
 						printf("data_type 3 ");
 				}
 
-			|	BOOLEAN	
+			|	BOOLEAN
 				{
-					$$ = 4;
 					if(DEBUG_CODE == 1)
 						printf("data_type 4 ");
 				}
 			;
-
-ident_nont:		IDENTIFIER	
-				{	
-					$$ = $1;
-					if(DEBUG_CODE == 1)
-						printf("ident_nont ");
-				}
-			;
-
 %%
 
-int getIndexFromSymbolTable(string iden) {
-	int n = symbolTable.size();
-	for(int i = 0; i < n; i++)
-		if(iden.compare(symbolTable[i].identifier) == 0)
-			return i;
-	return -1;
-}
-
-void updateSymbolTable(string iden, int tp, bool initial) {
-	int in = getIndexFromSymbolTable(iden);
-	if(in == -1)
-		symbolTable.push_back(Entry(iden, tp, initial));
-	else
-		symbolTable[in].initialised = initial;
-}
-
-void printSymbolTable() {
-	int n = symbolTable.size();
-	for(int i = 0; i < n; i++)
-		cout << symbolTable[i].identifier << "\t" << symbolTable[i].type 
-		<< "\t" << symbolTable[i].initialised << endl;
-}
-
-void generateTACFile() {
-	ofstream tacFile("file.tac");
-	tacFile << TAC;
-	tacFile.close();
-}
-
-// ./parser arithmetic.xgvs
+// ./parser ./exmp/arithmetic.xvgs
 int main(int argc, char *argv[]) {
-	if(argc > 1) {
+    if(argc > 1) {
         FILE *fp = fopen(argv[1], "r");
         if(fp)
            yyin = fp;
 		else
-			cout << "Error opening file\n";
+			printf("Error opening file\n");
     }
 
-	yyparse();
-	return 0;
+    yyparse();
+	// printf("Hello\n");
+    return 0;
 }
+
+void yyerror (char *s) {fprintf (stderr, "%s\n", s);} 
