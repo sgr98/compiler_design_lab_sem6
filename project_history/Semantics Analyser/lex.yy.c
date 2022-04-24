@@ -877,27 +877,27 @@ YY_RULE_SETUP
 case 40:
 YY_RULE_SETUP
 #line 63 "lexical_analyser.l"
-{/* yylval.str = strdup(yytext); */ return BOOLEAN_LIT;}
+{yylval.str = strdup(yytext); return BOOLEAN_LIT;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 64 "lexical_analyser.l"
-{/* yylval.str = strdup(yytext); */ return FLOAT_LIT;}
+{yylval.str = strdup(yytext); return FLOAT_LIT;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 65 "lexical_analyser.l"
-{/* yylval.str = strdup(yytext); */ return INT_LIT;}
+{yylval.str = strdup(yytext); return INT_LIT;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 66 "lexical_analyser.l"
-{/* yylval.str = strdup(yytext); */ return CHAR_LIT;}
+{yylval.str = strdup(yytext); return CHAR_LIT;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 68 "lexical_analyser.l"
-{/* yylval.str = strdup(yytext); */ return IDENTIFIER;}
+{yylval.str = strdup(yytext); return IDENTIFIER;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
