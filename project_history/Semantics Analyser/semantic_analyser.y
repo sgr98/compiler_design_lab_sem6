@@ -35,6 +35,7 @@
 	// IMPORTANT GLOBAL VARIABLES
 	int DATA_TYPE = 0;
 	int SCOPE = 0;
+	int FUNCTION = 1;
 	stack<int> currentScope;
 
 	// SYMBOL TABLE
@@ -44,18 +45,36 @@
 			int type;
 			int scopeIn;
 			int scope;
+			int fIndex;
 
-			SymbolTableNode(string iden, int tp, int scpIn, int scp) {
+			SymbolTableNode(string iden, int tp, int scpIn, int scp, int fInd) {
 				IDEN = iden;
 				type = tp;
 				scopeIn = scpIn;
 				scope = scp;
+				fIndex = fInd;
+			}
+	};
+
+	class FunctionTableNode {
+		public:
+			string IDEN;
+			int returnType;
+			int nArgs;
+			int fnIndex;
+
+			FunctionTableNode(string iden, int rtp, int nargs, int fInd) {
+				IDEN = iden;
+				returnType = rtp;
+				nArgs = nargs;
+				fnIndex = fInd;
 			}
 	};
 
 	class SymbolTable {
 		private:
 			vector<SymbolTableNode> internalSymbolTable;
+			vector<FunctionTableNode> internalFunctionTable;
 
 		public:
 			SymbolTable() {
@@ -63,7 +82,13 @@
 			}
 
 			bool functionIDENExists(string IDEN) {
-				int n = internalSymbolTable.size();
+				int n = internalFunctionTable.size();
+				for(int i = 0; i < n; i++) {
+					if(IDEN.compare(internalFunctionTable[i].IDEN) == 0)
+						return true;
+				}
+				
+				n = internalSymbolTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalSymbolTable[i].IDEN) == 0)
 						return true;
@@ -72,7 +97,13 @@
 			}
 
 			bool IDENExists(string IDEN, int scopeIn) {
-				int n = internalSymbolTable.size();
+				int n = internalFunctionTable.size();
+				for(int i = 0; i < n; i++) {
+					if(IDEN.compare(internalFunctionTable[i].IDEN) == 0)
+						return true;
+				}
+
+				n = internalSymbolTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalSymbolTable[i].IDEN) == 0 
 					&& scopeIn == internalSymbolTable[i].scopeIn)
@@ -81,53 +112,51 @@
 				return false;
 			}
 
-			int addIDEN(string IDEN, int type, int scopeIn, int scope) {
-				if(IDENExists(IDEN, scopeIn))
-					return -1;
-				SymbolTableNode stn(IDEN, type, scopeIn, scope);
-				internalSymbolTable.push_back(stn);
-				return 1;
+			int addIDEN(string IDEN, int type, int scopeIn, int scope, int fIndex, bool isFun) {
+				if(isFun) {
+					// type: return type
+					// scope: nargs
+					if(functionIDENExists(IDEN))
+						return -1;
+					FunctionTableNode ftn(IDEN, type, scope, fIndex);
+					internalFunctionTable.push_back(ftn);
+					return 1;
+				}
+				else {
+					if(IDENExists(IDEN, scopeIn))
+						return -1;
+					SymbolTableNode stn(IDEN, type, scopeIn, scope, fIndex);
+					internalSymbolTable.push_back(stn);
+					return 1;
+				}
 			}
 
 			void printTable() {
 				int n = internalSymbolTable.size();
-				cout << "IDEN\t| TYPE\t| SCPIN\t| SCOPE\n";
-				cout << "--------|-------|-------|--------\n";
+				cout << "\nSYMBOL TABLE\n";
+				cout << "IDEN\t| TYPE\t| SCPIN\t| SCOPE\t| FINDEX\n";
+				cout << "--------|-------|-------|-------|--------\n";
 				for(int i = 0; i < n; i++) {
 					cout << internalSymbolTable[i].IDEN << "\t| "
 						<< internalSymbolTable[i].type << "\t| "
 						<< internalSymbolTable[i].scopeIn << "\t| "
-						<< internalSymbolTable[i].scope << "\n";
+						<< internalSymbolTable[i].scope << "\t| "
+						<< internalSymbolTable[i].fIndex << "\n";
+				}
+
+				n = internalFunctionTable.size();
+				cout << "\nFUNCTION TABLE\n";
+				cout << "IDEN\t| RTYPE\t| NARGS\t| FINDEX\n";
+				cout << "--------|-------|-------|--------\n";
+				for(int i = 0; i < n; i++) {
+					cout << internalFunctionTable[i].IDEN << "\t| "
+						<< internalFunctionTable[i].returnType << "\t| "
+						<< internalFunctionTable[i].nArgs << "\t| "
+						<< internalFunctionTable[i].fnIndex << "\n";
 				}
 			}
 	};
 	SymbolTable symbolTable;
-
-	// FUNCTION TABLE
-
-	// class FunctionTableNode {
-	// 	public:
-	// 		string IDEN;
-	// 		int returntype;
-	// 		int scope;
-
-	// 		FunctionTableNode(string iden, int tp, int scp) {
-	// 			IDEN = iden;
-	// 			type = tp;
-	// 			scope = scp;
-	// 		}
-	// };
-
-	// class FunctionTable {
-	// 	private:
-	// 		vector<FunctionTableNode> internalFunctionTable;
-
-	// 	public:
-	// 		FunctionTable() {
-
-	// 		}
-	// };
-	// FunctionTable functionTable;
 %}
 
 %start program_start
@@ -153,20 +182,33 @@ program_start:  program
 				}
             	;
 
-program:	MAIN block
+program:	main_term block
 			{
 				
 				if(DEBUG_CODE == 1)
 					printf("program 1\n");
 			}
 
-        |	functions MAIN block
+        |	functions main_term block
 			{
 				
 				if(DEBUG_CODE == 1)
 					printf("program 2\n");
 			}
         ;
+
+main_term:		MAIN
+				{
+					FUNCTION = 0;
+					if(symbolTable.addIDEN("main", -1, -1, -1, FUNCTION, true) == -1) {
+						const char *s = "FUNCTION Identifier with this value already exists";
+						yyerror(s);
+					}
+
+					if(DEBUG_CODE == 1)
+						printf("main_term\n");
+				}
+			;
 
 functions:		function_declaration
 				{
@@ -185,8 +227,9 @@ functions:		function_declaration
 
 function_declaration:	VOID IDENTIFIER left_paran right_paran block
 						{
-							if(symbolTable.functionIDENExists($2)) {
-								const char *s = "Identifier with this value already exists";
+							FUNCTION++;
+							if(symbolTable.addIDEN($2, 0, -1, 0, FUNCTION - 1, true) == -1) {
+								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
 
@@ -196,8 +239,9 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 
 					|	VOID IDENTIFIER left_paran params right_paran block
 						{
-							if(symbolTable.functionIDENExists($2)) {
-								const char *s = "Identifier with this value already exists";
+							FUNCTION++;
+							if(symbolTable.addIDEN($2, 0, -1, -8, FUNCTION - 1, true) == -1) {
+								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
 
@@ -207,8 +251,9 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 
 					|	data_type IDENTIFIER left_paran right_paran block
 						{
-							if(symbolTable.functionIDENExists($2)) {
-								const char *s = "Identifier with this value already exists";
+							FUNCTION++;
+							if(symbolTable.addIDEN($2, DATA_TYPE, -1, 0, FUNCTION - 1, true) == -1) {
+								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
 
@@ -218,8 +263,9 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 
 					|	data_type IDENTIFIER left_paran params right_paran block
 						{
-							if(symbolTable.functionIDENExists($2)) {
-								const char *s = "Identifier with this value already exists";
+							FUNCTION++;
+							if(symbolTable.addIDEN($2, DATA_TYPE, -1, -8, FUNCTION - 1, true) == -1) {
+								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
 
@@ -245,7 +291,7 @@ params:		param
 
 param:		data_type IDENTIFIER
 			{
-				if(symbolTable.addIDEN($2, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
+				if(symbolTable.addIDEN($2, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 					const char *s = "Identifier with this value already exists";
 					yyerror(s);
 				}
@@ -338,7 +384,7 @@ variable_declaration:	data_type variable_list
 
 variable_list:		IDENTIFIER
 					{
-						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
+						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -349,7 +395,7 @@ variable_list:		IDENTIFIER
 
 				|	IDENTIFIER ASSIGN_OP expression
 					{
-						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
+						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -360,7 +406,7 @@ variable_list:		IDENTIFIER
 
 				|	variable_list COMMA IDENTIFIER
 					{	
-						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
+						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -371,7 +417,7 @@ variable_list:		IDENTIFIER
 
 				|	variable_list COMMA IDENTIFIER ASSIGN_OP expression
 					{
-						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
+						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
