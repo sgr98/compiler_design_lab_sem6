@@ -107,6 +107,7 @@
 	int DATA_TYPE = 0;
 	int SCOPE = 0;
 	int FUNCTION = 1;
+	int NARGS = 0;
 	stack<int> currentScope;
 
 	// SYMBOL TABLE
@@ -231,7 +232,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 235 "gm.cc"
+#line 236 "gm.cc"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -312,12 +313,12 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 163 "semantic_analyser.y"
+#line 164 "semantic_analyser.y"
 char *str; int type;
 
 
 /* Line 214 of yacc.c  */
-#line 321 "gm.cc"
+#line 322 "gm.cc"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -329,7 +330,7 @@ char *str; int type;
 
 
 /* Line 264 of yacc.c  */
-#line 333 "gm.cc"
+#line 334 "gm.cc"
 
 #ifdef short
 # undef short
@@ -651,15 +652,15 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   176,   176,   185,   192,   200,   213,   220,   228,   240,
-     252,   264,   277,   284,   292,   304,   311,   319,   326,   334,
-     341,   348,   355,   362,   369,   377,   385,   396,   407,   418,
-     430,   437,   445,   452,   459,   466,   473,   480,   488,   495,
-     503,   510,   518,   525,   532,   540,   547,   554,   561,   568,
-     576,   583,   590,   598,   605,   612,   619,   627,   634,   642,
-     649,   656,   663,   671,   679,   686,   694,   702,   710,   718,
-     725,   732,   739,   746,   753,   760,   767,   775,   782,   790,
-     797,   805,   813,   821,   829,   838,   848,   858,   868
+       0,   177,   177,   186,   193,   201,   214,   221,   229,   242,
+     255,   268,   282,   289,   297,   309,   316,   324,   331,   339,
+     346,   353,   360,   367,   374,   382,   390,   401,   412,   423,
+     435,   442,   450,   457,   464,   471,   478,   485,   493,   500,
+     508,   515,   523,   530,   537,   545,   552,   559,   566,   573,
+     581,   588,   595,   603,   610,   617,   624,   632,   639,   647,
+     654,   661,   668,   676,   684,   691,   699,   707,   715,   723,
+     730,   737,   744,   751,   758,   765,   772,   780,   787,   795,
+     802,   810,   818,   826,   834,   843,   853,   863,   873
 };
 #endif
 
@@ -1674,7 +1675,7 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 177 "semantic_analyser.y"
+#line 178 "semantic_analyser.y"
     {
 					symbolTable.printTable();
 					
@@ -1686,7 +1687,7 @@ yyreduce:
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 186 "semantic_analyser.y"
+#line 187 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1697,7 +1698,7 @@ yyreduce:
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 193 "semantic_analyser.y"
+#line 194 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1708,7 +1709,7 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 201 "semantic_analyser.y"
+#line 202 "semantic_analyser.y"
     {
 					FUNCTION = 0;
 					if(symbolTable.addIDEN("main", -1, -1, -1, FUNCTION, true) == -1) {
@@ -1724,7 +1725,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 214 "semantic_analyser.y"
+#line 215 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1735,7 +1736,7 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 221 "semantic_analyser.y"
+#line 222 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1746,13 +1747,14 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 229 "semantic_analyser.y"
+#line 230 "semantic_analyser.y"
     {
 							FUNCTION++;
 							if(symbolTable.addIDEN((yyvsp[(2) - (5)].str), 0, -1, 0, FUNCTION - 1, true) == -1) {
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 1\n");
@@ -1762,13 +1764,14 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 241 "semantic_analyser.y"
+#line 243 "semantic_analyser.y"
     {
 							FUNCTION++;
-							if(symbolTable.addIDEN((yyvsp[(2) - (6)].str), 0, -1, -8, FUNCTION - 1, true) == -1) {
+							if(symbolTable.addIDEN((yyvsp[(2) - (6)].str), 0, -1, NARGS, FUNCTION - 1, true) == -1) {
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 2\n");
@@ -1778,13 +1781,14 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 253 "semantic_analyser.y"
+#line 256 "semantic_analyser.y"
     {
 							FUNCTION++;
 							if(symbolTable.addIDEN((yyvsp[(2) - (5)].str), DATA_TYPE, -1, 0, FUNCTION - 1, true) == -1) {
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 3\n");
@@ -1794,13 +1798,14 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 265 "semantic_analyser.y"
+#line 269 "semantic_analyser.y"
     {
 							FUNCTION++;
-							if(symbolTable.addIDEN((yyvsp[(2) - (6)].str), DATA_TYPE, -1, -8, FUNCTION - 1, true) == -1) {
+							if(symbolTable.addIDEN((yyvsp[(2) - (6)].str), DATA_TYPE, -1, NARGS, FUNCTION - 1, true) == -1) {
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 4\n");
@@ -1810,9 +1815,9 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 278 "semantic_analyser.y"
+#line 283 "semantic_analyser.y"
     {
-				
+				NARGS++;
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			;}
@@ -1821,9 +1826,9 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 285 "semantic_analyser.y"
+#line 290 "semantic_analyser.y"
     {
-				
+				NARGS++;
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			;}
@@ -1832,7 +1837,7 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 293 "semantic_analyser.y"
+#line 298 "semantic_analyser.y"
     {
 				if(symbolTable.addIDEN((yyvsp[(2) - (2)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 					const char *s = "Identifier with this value already exists";
@@ -1847,7 +1852,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 305 "semantic_analyser.y"
+#line 310 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1858,7 +1863,7 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 312 "semantic_analyser.y"
+#line 317 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1869,7 +1874,7 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 320 "semantic_analyser.y"
+#line 325 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -1880,7 +1885,7 @@ yyreduce:
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 327 "semantic_analyser.y"
+#line 332 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -1891,7 +1896,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 335 "semantic_analyser.y"
+#line 340 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1902,7 +1907,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 342 "semantic_analyser.y"
+#line 347 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1913,7 +1918,7 @@ yyreduce:
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 349 "semantic_analyser.y"
+#line 354 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1924,7 +1929,7 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 356 "semantic_analyser.y"
+#line 361 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1935,7 +1940,7 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 363 "semantic_analyser.y"
+#line 368 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1946,7 +1951,7 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 370 "semantic_analyser.y"
+#line 375 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1957,7 +1962,7 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 378 "semantic_analyser.y"
+#line 383 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -1968,7 +1973,7 @@ yyreduce:
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 386 "semantic_analyser.y"
+#line 391 "semantic_analyser.y"
     {
 						if(symbolTable.addIDEN((yyvsp[(1) - (1)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
@@ -1983,7 +1988,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 397 "semantic_analyser.y"
+#line 402 "semantic_analyser.y"
     {
 						if(symbolTable.addIDEN((yyvsp[(1) - (3)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
@@ -1998,7 +2003,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 408 "semantic_analyser.y"
+#line 413 "semantic_analyser.y"
     {	
 						if(symbolTable.addIDEN((yyvsp[(3) - (3)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
@@ -2013,7 +2018,7 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 419 "semantic_analyser.y"
+#line 424 "semantic_analyser.y"
     {
 						if(symbolTable.addIDEN((yyvsp[(3) - (5)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
 							const char *s = "Identifier with this value already exists";
@@ -2028,7 +2033,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 431 "semantic_analyser.y"
+#line 436 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2039,7 +2044,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 438 "semantic_analyser.y"
+#line 443 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2050,7 +2055,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 446 "semantic_analyser.y"
+#line 451 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2061,7 +2066,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 453 "semantic_analyser.y"
+#line 458 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2072,7 +2077,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 460 "semantic_analyser.y"
+#line 465 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2083,7 +2088,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 467 "semantic_analyser.y"
+#line 472 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2094,7 +2099,7 @@ yyreduce:
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 474 "semantic_analyser.y"
+#line 479 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2105,7 +2110,7 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 481 "semantic_analyser.y"
+#line 486 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2116,7 +2121,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 489 "semantic_analyser.y"
+#line 494 "semantic_analyser.y"
     {
                         
 						if(DEBUG_CODE == 1)
@@ -2127,7 +2132,7 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 496 "semantic_analyser.y"
+#line 501 "semantic_analyser.y"
     {
                         
 						if(DEBUG_CODE == 1)
@@ -2138,7 +2143,7 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 504 "semantic_analyser.y"
+#line 509 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2149,7 +2154,7 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 511 "semantic_analyser.y"
+#line 516 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2160,7 +2165,7 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 519 "semantic_analyser.y"
+#line 524 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2171,7 +2176,7 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 526 "semantic_analyser.y"
+#line 531 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2182,7 +2187,7 @@ yyreduce:
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 533 "semantic_analyser.y"
+#line 538 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2193,7 +2198,7 @@ yyreduce:
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 541 "semantic_analyser.y"
+#line 546 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2204,7 +2209,7 @@ yyreduce:
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 548 "semantic_analyser.y"
+#line 553 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2215,7 +2220,7 @@ yyreduce:
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 555 "semantic_analyser.y"
+#line 560 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2226,7 +2231,7 @@ yyreduce:
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 562 "semantic_analyser.y"
+#line 567 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2237,7 +2242,7 @@ yyreduce:
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 569 "semantic_analyser.y"
+#line 574 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2248,7 +2253,7 @@ yyreduce:
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 577 "semantic_analyser.y"
+#line 582 "semantic_analyser.y"
     {
                                 
 								if(DEBUG_CODE == 1)
@@ -2259,7 +2264,7 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 584 "semantic_analyser.y"
+#line 589 "semantic_analyser.y"
     {
                                 
 								if(DEBUG_CODE == 1)
@@ -2270,7 +2275,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 591 "semantic_analyser.y"
+#line 596 "semantic_analyser.y"
     {
                                 
 								if(DEBUG_CODE == 1)
@@ -2281,7 +2286,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 599 "semantic_analyser.y"
+#line 604 "semantic_analyser.y"
     {
                                         
 										if(DEBUG_CODE == 1)
@@ -2292,7 +2297,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 606 "semantic_analyser.y"
+#line 611 "semantic_analyser.y"
     {
                                         
 										if(DEBUG_CODE == 1)
@@ -2303,7 +2308,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 613 "semantic_analyser.y"
+#line 618 "semantic_analyser.y"
     {
                                         
 										if(DEBUG_CODE == 1)
@@ -2314,7 +2319,7 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 620 "semantic_analyser.y"
+#line 625 "semantic_analyser.y"
     {
                                         
 										if(DEBUG_CODE == 1)
@@ -2325,7 +2330,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 628 "semantic_analyser.y"
+#line 633 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2336,7 +2341,7 @@ yyreduce:
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 635 "semantic_analyser.y"
+#line 640 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2347,7 +2352,7 @@ yyreduce:
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 643 "semantic_analyser.y"
+#line 648 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2358,7 +2363,7 @@ yyreduce:
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 650 "semantic_analyser.y"
+#line 655 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2369,7 +2374,7 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 657 "semantic_analyser.y"
+#line 662 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2380,7 +2385,7 @@ yyreduce:
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 664 "semantic_analyser.y"
+#line 669 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2391,7 +2396,7 @@ yyreduce:
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 672 "semantic_analyser.y"
+#line 677 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2402,7 +2407,7 @@ yyreduce:
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 680 "semantic_analyser.y"
+#line 685 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2413,7 +2418,7 @@ yyreduce:
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 687 "semantic_analyser.y"
+#line 692 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2424,7 +2429,7 @@ yyreduce:
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 695 "semantic_analyser.y"
+#line 700 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2435,7 +2440,7 @@ yyreduce:
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 703 "semantic_analyser.y"
+#line 708 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -2446,7 +2451,7 @@ yyreduce:
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 711 "semantic_analyser.y"
+#line 716 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -2457,7 +2462,7 @@ yyreduce:
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 719 "semantic_analyser.y"
+#line 724 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2468,7 +2473,7 @@ yyreduce:
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 726 "semantic_analyser.y"
+#line 731 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2479,7 +2484,7 @@ yyreduce:
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 733 "semantic_analyser.y"
+#line 738 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2490,7 +2495,7 @@ yyreduce:
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 740 "semantic_analyser.y"
+#line 745 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2501,7 +2506,7 @@ yyreduce:
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 747 "semantic_analyser.y"
+#line 752 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2512,7 +2517,7 @@ yyreduce:
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 754 "semantic_analyser.y"
+#line 759 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2523,7 +2528,7 @@ yyreduce:
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 761 "semantic_analyser.y"
+#line 766 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2534,7 +2539,7 @@ yyreduce:
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 768 "semantic_analyser.y"
+#line 773 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2545,7 +2550,7 @@ yyreduce:
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 776 "semantic_analyser.y"
+#line 781 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -2556,7 +2561,7 @@ yyreduce:
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 783 "semantic_analyser.y"
+#line 788 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -2567,7 +2572,7 @@ yyreduce:
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 791 "semantic_analyser.y"
+#line 796 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2578,7 +2583,7 @@ yyreduce:
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 798 "semantic_analyser.y"
+#line 803 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2589,7 +2594,7 @@ yyreduce:
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 806 "semantic_analyser.y"
+#line 811 "semantic_analyser.y"
     {	
 					DATA_TYPE = 1;
 					
@@ -2601,7 +2606,7 @@ yyreduce:
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 814 "semantic_analyser.y"
+#line 819 "semantic_analyser.y"
     {
 					DATA_TYPE = 2;
 					
@@ -2613,7 +2618,7 @@ yyreduce:
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 822 "semantic_analyser.y"
+#line 827 "semantic_analyser.y"
     {	
 					DATA_TYPE = 3;
 					
@@ -2625,7 +2630,7 @@ yyreduce:
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 830 "semantic_analyser.y"
+#line 835 "semantic_analyser.y"
     {
 					DATA_TYPE = 4;
 					
@@ -2637,7 +2642,7 @@ yyreduce:
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 839 "semantic_analyser.y"
+#line 844 "semantic_analyser.y"
     {	
 					SCOPE++;
 					currentScope.push(SCOPE);
@@ -2650,7 +2655,7 @@ yyreduce:
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 849 "semantic_analyser.y"
+#line 854 "semantic_analyser.y"
     {	
 					SCOPE--;
 					currentScope.pop();
@@ -2663,7 +2668,7 @@ yyreduce:
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 859 "semantic_analyser.y"
+#line 864 "semantic_analyser.y"
     {	
 					SCOPE++;
 					currentScope.push(SCOPE);
@@ -2676,7 +2681,7 @@ yyreduce:
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 869 "semantic_analyser.y"
+#line 874 "semantic_analyser.y"
     {	
 					currentScope.pop();
 					
@@ -2688,7 +2693,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2692 "gm.cc"
+#line 2697 "gm.cc"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2900,7 +2905,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 876 "semantic_analyser.y"
+#line 881 "semantic_analyser.y"
 
 
 // ./parser ./exmp/arithmetic.xvgs

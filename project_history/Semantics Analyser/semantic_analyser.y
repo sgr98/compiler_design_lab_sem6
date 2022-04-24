@@ -36,6 +36,7 @@
 	int DATA_TYPE = 0;
 	int SCOPE = 0;
 	int FUNCTION = 1;
+	int NARGS = 0;
 	stack<int> currentScope;
 
 	// SYMBOL TABLE
@@ -232,6 +233,7 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 1\n");
@@ -240,10 +242,11 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 					|	VOID IDENTIFIER left_paran params right_paran block
 						{
 							FUNCTION++;
-							if(symbolTable.addIDEN($2, 0, -1, -8, FUNCTION - 1, true) == -1) {
+							if(symbolTable.addIDEN($2, 0, -1, NARGS, FUNCTION - 1, true) == -1) {
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 2\n");
@@ -256,6 +259,7 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 3\n");
@@ -264,10 +268,11 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 					|	data_type IDENTIFIER left_paran params right_paran block
 						{
 							FUNCTION++;
-							if(symbolTable.addIDEN($2, DATA_TYPE, -1, -8, FUNCTION - 1, true) == -1) {
+							if(symbolTable.addIDEN($2, DATA_TYPE, -1, NARGS, FUNCTION - 1, true) == -1) {
 								const char *s = "FUNCTION Identifier with this value already exists";
 								yyerror(s);
 							}
+							NARGS = 0;
 
 							if(DEBUG_CODE == 1)
 								printf("function_declaration 4\n");
@@ -276,14 +281,14 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 
 params:		param
 			{
-				
+				NARGS++;
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			}
 
 		|	params COMMA param
 			{
-				
+				NARGS++;
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			}
