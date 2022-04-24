@@ -6,6 +6,7 @@
 	#include <ctype.h>
 	#include <string.h>
 	#include <vector>
+	#include <stack>
 	#include <fstream>
 
 	using namespace std;
@@ -26,24 +27,28 @@
 	}
 
 	// DEBUG CODE 
-	int DEBUG_CODE = -1;
+	int DEBUG_CODE = 1;
 
 	// THREE ADDRESS CODE
 	string TAC = "";
 
 	// IMPORTANT GLOBAL VARIABLES
-	int DATA_TYPE;
-	int SCOPE;
+	int DATA_TYPE = 0;
+	int SCOPE = 0;
+	stack<int> currentScope;
 
+	// SYMBOL TABLE
 	class SymbolTableNode {
 		public:
 			string IDEN;
 			int type;
+			int scopeIn;
 			int scope;
 
-			SymbolTableNode(string iden, int tp, int scp) {
+			SymbolTableNode(string iden, int tp, int scpIn, int scp) {
 				IDEN = iden;
 				type = tp;
+				scopeIn = scpIn;
 				scope = scp;
 			}
 	};
@@ -66,39 +71,63 @@
 				return false;
 			}
 
-			bool IDENExists(string IDEN, int scope) {
+			bool IDENExists(string IDEN, int scopeIn) {
 				int n = internalSymbolTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalSymbolTable[i].IDEN) == 0 
-					&& scope == internalSymbolTable[i].scope)
+					&& scopeIn == internalSymbolTable[i].scopeIn)
 						return true;
 				}
 				return false;
 			}
 
-			int addIDEN(string IDEN, int type, int scope) {
-				if(IDENExists(IDEN, scope))
+			int addIDEN(string IDEN, int type, int scopeIn, int scope) {
+				if(IDENExists(IDEN, scopeIn))
 					return -1;
-				SymbolTableNode stn(IDEN, type, scope);
+				SymbolTableNode stn(IDEN, type, scopeIn, scope);
 				internalSymbolTable.push_back(stn);
 				return 1;
 			}
 
 			void printTable() {
 				int n = internalSymbolTable.size();
-				cout << "IDENTIFIER\t|\tTYPE\t|\tSCOPE\n";
-				cout << "----------------|---------------|-------------\n";
+				cout << "IDEN\t| TYPE\t| SCPIN\t| SCOPE\n";
+				cout << "--------|-------|-------|--------\n";
 				for(int i = 0; i < n; i++) {
-					cout << internalSymbolTable[i].IDEN << "\t|\t"
-						<< internalSymbolTable[i].type << "\t|\t"
+					cout << internalSymbolTable[i].IDEN << "\t| "
+						<< internalSymbolTable[i].type << "\t| "
+						<< internalSymbolTable[i].scopeIn << "\t| "
 						<< internalSymbolTable[i].scope << "\n";
 				}
 			}
-
-
 	};
-
 	SymbolTable symbolTable;
+
+	// FUNCTION TABLE
+
+	// class FunctionTableNode {
+	// 	public:
+	// 		string IDEN;
+	// 		int returntype;
+	// 		int scope;
+
+	// 		FunctionTableNode(string iden, int tp, int scp) {
+	// 			IDEN = iden;
+	// 			type = tp;
+	// 			scope = scp;
+	// 		}
+	// };
+
+	// class FunctionTable {
+	// 	private:
+	// 		vector<FunctionTableNode> internalFunctionTable;
+
+	// 	public:
+	// 		FunctionTable() {
+
+	// 		}
+	// };
+	// FunctionTable functionTable;
 %}
 
 %start program_start
@@ -154,7 +183,7 @@ functions:		function_declaration
 				}
             ;
 
-function_declaration:	VOID IDENTIFIER LP RP block
+function_declaration:	VOID IDENTIFIER left_paran right_paran block
 						{
 							if(symbolTable.functionIDENExists($2)) {
 								const char *s = "Identifier with this value already exists";
@@ -165,7 +194,7 @@ function_declaration:	VOID IDENTIFIER LP RP block
 								printf("function_declaration 1\n");
 						}
 
-					|	VOID IDENTIFIER LP params RP block
+					|	VOID IDENTIFIER left_paran params right_paran block
 						{
 							if(symbolTable.functionIDENExists($2)) {
 								const char *s = "Identifier with this value already exists";
@@ -176,7 +205,7 @@ function_declaration:	VOID IDENTIFIER LP RP block
 								printf("function_declaration 2\n");
 						}
 
-					|	data_type IDENTIFIER LP RP block
+					|	data_type IDENTIFIER left_paran right_paran block
 						{
 							if(symbolTable.functionIDENExists($2)) {
 								const char *s = "Identifier with this value already exists";
@@ -187,7 +216,7 @@ function_declaration:	VOID IDENTIFIER LP RP block
 								printf("function_declaration 3\n");
 						}
 
-					|	data_type IDENTIFIER LP params RP block
+					|	data_type IDENTIFIER left_paran params right_paran block
 						{
 							if(symbolTable.functionIDENExists($2)) {
 								const char *s = "Identifier with this value already exists";
@@ -216,20 +245,24 @@ params:		param
 
 param:		data_type IDENTIFIER
 			{
+				if(symbolTable.addIDEN($2, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
+					const char *s = "Identifier with this value already exists";
+					yyerror(s);
+				}
 				
 				if(DEBUG_CODE == 1)
 					printf("param \n");
 			}
     	;
 
-block:		LC RC
+block:		left_curl right_curl
 			{
 				
 				if(DEBUG_CODE == 1)
 					printf("block 1\n");
 			}
 
-        |   LC statement_list RC
+        |   left_curl statement_list right_curl
 			{
 				
 				if(DEBUG_CODE == 1)
@@ -305,7 +338,7 @@ variable_declaration:	data_type variable_list
 
 variable_list:		IDENTIFIER
 					{
-						if(symbolTable.addIDEN($1, DATA_TYPE, 0) == -1) {
+						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -316,7 +349,7 @@ variable_list:		IDENTIFIER
 
 				|	IDENTIFIER ASSIGN_OP expression
 					{
-						if(symbolTable.addIDEN($1, DATA_TYPE, 0) == -1) {
+						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -327,7 +360,7 @@ variable_list:		IDENTIFIER
 
 				|	variable_list COMMA IDENTIFIER
 					{	
-						if(symbolTable.addIDEN($3, DATA_TYPE, 0) == -1) {
+						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -338,7 +371,7 @@ variable_list:		IDENTIFIER
 
 				|	variable_list COMMA IDENTIFIER ASSIGN_OP expression
 					{
-						if(symbolTable.addIDEN($3, DATA_TYPE, 0) == -1) {
+						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size()) == -1) {
 							const char *s = "Identifier with this value already exists";
 							yyerror(s);
 						}
@@ -589,7 +622,7 @@ conditional_statement:		simple_if
 							}
 						;
 
-simple_if:		IF LP op_or_expression RP block
+simple_if:		IF left_paran op_or_expression right_paran block
 				{
 					
 					if(DEBUG_CODE == 1)
@@ -597,14 +630,14 @@ simple_if:		IF LP op_or_expression RP block
 				}
 			;
 
-ladder_elif:	ELIF LP op_or_expression RP block
+ladder_elif:	ELIF left_paran op_or_expression right_paran block
 				{
 					
 					if(DEBUG_CODE == 1)
 						printf("ladder_elif 1 ");
 				}
 
-			|	ELIF LP op_or_expression RP block ladder_elif
+			|	ELIF left_paran op_or_expression right_paran block ladder_elif
 				{
 					
 					if(DEBUG_CODE == 1)
@@ -620,7 +653,7 @@ simple_else:	ELSE block
 				}
 			;
 
-loop_statement:		LOOP LP op_or_expression RP block
+loop_statement:		LOOP left_paran op_or_expression right_paran block
 					{
 						
 						if(DEBUG_CODE == 1)
@@ -753,6 +786,45 @@ data_type:		INT
 					
 					if(DEBUG_CODE == 1)
 						printf("data_type 4 ");
+				}
+			;
+
+left_paran:		LP
+				{	
+					SCOPE++;
+					currentScope.push(SCOPE);
+					
+					if(DEBUG_CODE == 1)
+						printf("LP ");
+				}
+			;
+
+right_paran:		RP
+				{	
+					SCOPE--;
+					currentScope.pop();
+					
+					if(DEBUG_CODE == 1)
+						printf("RP ");
+				}
+			;
+
+left_curl:		LC
+				{	
+					SCOPE++;
+					currentScope.push(SCOPE);
+					
+					if(DEBUG_CODE == 1)
+						printf("LC ");
+				}
+			;
+
+right_curl:		RC
+				{	
+					currentScope.pop();
+					
+					if(DEBUG_CODE == 1)
+						printf("RC ");
 				}
 			;
 %%
