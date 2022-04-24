@@ -1,9 +1,0 @@
-void add(int a, int b) {
-    return a + b;
-}
-
-main {
-    int x = 4;
-    int y = 6;
-    add(x, y);
-}
