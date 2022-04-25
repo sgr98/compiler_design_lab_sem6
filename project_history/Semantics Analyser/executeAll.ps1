@@ -2,8 +2,14 @@ Param (
     $val
 )
 
-Write-Host "||||||||||||||||||||||||||||||||||||||" -ForegroundColor Blue
-Write-Host "NON ERROR SCRIPTS" -ForegroundColor Blue
+# ########################################
+# Normal Programs
+# ########################################
+
+If(($val -ge 0) -and ($val -lt 100)) {
+    Write-Host "||||||||||||||||||||||||||||||||||||||" -ForegroundColor Blue
+    Write-Host "NON ERROR SCRIPTS" -ForegroundColor Blue
+}
 
 If(($val -eq 0) -or ($val -eq 1)) {
     Write-Host ""
@@ -74,27 +80,56 @@ If(($val -eq 0) -or ($val -eq 14)) {
     
 }
 
+# ########################################
+# Error Programs
+# ########################################
 
-
-Write-Host ""
-Write-Host "||||||||||||||||||||||||||||||||||||||" -ForegroundColor Red
-Write-Host "ERROR SCRIPTS" -ForegroundColor Red
+If($val -gt 100) {
+    Write-Host ""
+    Write-Host "||||||||||||||||||||||||||||||||||||||" -ForegroundColor Red
+    Write-Host "ERROR SCRIPTS" -ForegroundColor Red
+}
 
 If(($val -eq 0) -or ($val -eq 101)) {
     Write-Host ""
     Write-Host "e1.xvgs" -ForegroundColor Green
-    ./parser ./../../example_programs/our_language/Expression/e1.xvgs
+    ./parser ./../../example_programs/our_language/Error/e1.xvgs
 }
 If(($val -eq 0) -or ($val -eq 102)) {
     Write-Host ""
     Write-Host "arithmetic_err1.xvgs" -ForegroundColor Green
-    ./parser ./../../example_programs/our_language/Expression/arithmetic_err1.xvgs
+    ./parser ./../../example_programs/our_language/Error/arithmetic_err1.xvgs
 }
 If(($val -eq 0) -or ($val -eq 103)) {
     Write-Host ""
     Write-Host "normal_err1.xvgs" -ForegroundColor Green
-    ./parser ./../../example_programs/our_language/Expression/normal_err1.xvgs
+    ./parser ./../../example_programs/our_language/Error/normal_err1.xvgs
 }
 If(($val -eq 0) -or ($val -eq 104)) {
+    Write-Host ""
+    Write-Host "normal_err2.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/Error/normal_err2.xvgs
+}
+If(($val -eq 0) -or ($val -eq 105)) {
+    Write-Host ""
+    Write-Host "normal_err3.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/Error/normal_err3.xvgs
+}
+If(($val -eq 0) -or ($val -eq 106)) {
+    Write-Host ""
+    Write-Host "normal_err4.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/Error/normal_err4.xvgs
+}
+If(($val -eq 0) -or ($val -eq 107)) {
+    Write-Host ""
+    Write-Host "normal_err5.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/Error/normal_err5.xvgs
+}
+If(($val -eq 0) -or ($val -eq 108)) {
+    Write-Host ""
+    Write-Host "normal_err6.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/Error/normal_err6.xvgs
+}
+If(($val -eq 0) -or ($val -eq 109)) {
     
 }

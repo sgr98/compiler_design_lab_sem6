@@ -37,6 +37,7 @@
 	int SCOPE = 0;
 	int FUNCTION = 1;
 	int NARGS = 0;
+	int ERROR = 0;
 	stack<int> currentScope;
 
 	// SYMBOL TABLE
@@ -193,9 +194,14 @@
 
 program_start:  program
 				{
-					symbolTable.printTable();
-					TAC = constructTACHeader() + TAC;
-					generateTACFile("file");
+					if(ERROR > 0) {
+						cout << "\n~~~~~~~~ERROR OCCURED~~~~~~~~\n";	
+					}
+					else if(ERROR == 0) {
+						symbolTable.printTable();
+						TAC = constructTACHeader() + TAC;
+						generateTACFile("file");
+					}
 					
 					if(DEBUG_CODE == 1)
 						printf("program_start\n");
@@ -222,6 +228,7 @@ main_term:		MAIN
 					FUNCTION = 0;
 					int m = symbolTable.addIDEN("main", -1, -1, -1, FUNCTION, true);
 					if(m < 0) {
+						ERROR = 1;
 						const char *s = "\nERROR CODE(02200): FUNCTION Identifier with this value already exists";
 						yyerror(s);
 					}
@@ -991,6 +998,7 @@ void IDENAlreadyExistsError(int m, int errNo) {
 		}
 	}
 
+	ERROR = 1;
 	const char *s = t.c_str();
 	yyerror(s);
 }

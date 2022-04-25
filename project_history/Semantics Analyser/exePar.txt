@@ -17,3 +17,8 @@
 101 -   e1
 102 -   arithmetic_err1.xvgs
 103 -   normal_err1.xvgs
+104 -   normal_err2.xvgs
+105 -   normal_err3.xvgs
+106 -   normal_err4.xvgs
+107 -   normal_err5.xvgs
+108 -   normal_err6.xvgs

@@ -1,0 +1,7 @@
+void f(int a, int f) {
+    a - f;
+}
+
+main {
+    f(5, 9);
+}
