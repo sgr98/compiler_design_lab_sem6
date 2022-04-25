@@ -19,7 +19,7 @@
 		int yylex();
 		void yyerror(const char* s) {
 			fprintf (stderr, "%s\n", s);
-			exit(EXIT_SUCCESS);
+			// exit(EXIT_SUCCESS);
 		}
 		int yywrap() {
 			return 1;
@@ -90,50 +90,52 @@
 				return internalFunctionTable;
 			}
 
-			bool functionIDENExists(string IDEN) {
+			int functionIDENExists(string IDEN) {
 				int n = internalFunctionTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalFunctionTable[i].IDEN) == 0)
-						return true;
+						return -2;
 				}
 				
 				n = internalSymbolTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalSymbolTable[i].IDEN) == 0)
-						return true;
+						return -1;
 				}
-				return false;
+				return 1;
 			}
 
-			bool IDENExists(string IDEN, int scopeIn) {
+			int IDENExists(string IDEN, int scopeIn) {
 				int n = internalFunctionTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalFunctionTable[i].IDEN) == 0)
-						return true;
+						return -2;
 				}
 
 				n = internalSymbolTable.size();
 				for(int i = 0; i < n; i++) {
 					if(IDEN.compare(internalSymbolTable[i].IDEN) == 0 
 					&& scopeIn == internalSymbolTable[i].scopeIn)
-						return true;
+						return -1;
 				}
-				return false;
+				return 1;
 			}
 
 			int addIDEN(string IDEN, int type, int scopeIn, int scope, int fIndex, bool isFun) {
 				if(isFun) {
 					// type: return type
 					// scope: nargs
-					if(functionIDENExists(IDEN))
-						return -1;
+					int m = functionIDENExists(IDEN);
+					if(m < 0)
+						return m;
 					FunctionTableNode ftn(IDEN, type, scope, fIndex);
 					internalFunctionTable.push_back(ftn);
 					return 1;
 				}
 				else {
-					if(IDENExists(IDEN, scopeIn))
-						return -1;
+					int m = IDENExists(IDEN, scopeIn);
+					if(m < 0)
+						return m;
 					SymbolTableNode stn(IDEN, type, scopeIn, scope, fIndex);
 					internalSymbolTable.push_back(stn);
 					return 1;
@@ -169,7 +171,10 @@
 
 	// FUNCTION DECLARATIONS
 	string constructTACHeader();
-	void generateTACFile();
+	void generateTACFile(string fileName);
+
+	// ERROR FUNCTIONS
+	void IDENAlreadyExistsError(int m, int errNo);
 %}
 
 %start program_start
@@ -189,8 +194,8 @@
 program_start:  program
 				{
 					symbolTable.printTable();
-					TAC += constructTACHeader();
-					generateTACFile();
+					TAC = constructTACHeader() + TAC;
+					generateTACFile("file");
 					
 					if(DEBUG_CODE == 1)
 						printf("program_start\n");
@@ -215,8 +220,9 @@ program:	main_term block
 main_term:		MAIN
 				{
 					FUNCTION = 0;
-					if(symbolTable.addIDEN("main", -1, -1, -1, FUNCTION, true) == -1) {
-						const char *s = "FUNCTION Identifier with this value already exists";
+					int m = symbolTable.addIDEN("main", -1, -1, -1, FUNCTION, true);
+					if(m < 0) {
+						const char *s = "\nERROR CODE(02200): FUNCTION Identifier with this value already exists";
 						yyerror(s);
 					}
 
@@ -243,9 +249,9 @@ functions:		function_declaration
 function_declaration:	VOID IDENTIFIER left_paran right_paran block
 						{
 							FUNCTION++;
-							if(symbolTable.addIDEN($2, 0, -1, 0, FUNCTION - 1, true) == -1) {
-								const char *s = "FUNCTION Identifier with this value already exists";
-								yyerror(s);
+							int m = symbolTable.addIDEN($2, 0, -1, 0, FUNCTION -1, true);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 1);
 							}
 							NARGS = 0;
 
@@ -256,9 +262,9 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 					|	VOID IDENTIFIER left_paran params right_paran block
 						{
 							FUNCTION++;
-							if(symbolTable.addIDEN($2, 0, -1, NARGS, FUNCTION - 1, true) == -1) {
-								const char *s = "FUNCTION Identifier with this value already exists";
-								yyerror(s);
+							int m = symbolTable.addIDEN($2, 0, -1, NARGS, FUNCTION - 1, true);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 2);
 							}
 							NARGS = 0;
 
@@ -269,9 +275,9 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 					|	data_type IDENTIFIER left_paran right_paran block
 						{
 							FUNCTION++;
-							if(symbolTable.addIDEN($2, DATA_TYPE, -1, 0, FUNCTION - 1, true) == -1) {
-								const char *s = "FUNCTION Identifier with this value already exists";
-								yyerror(s);
+							int m = symbolTable.addIDEN($2, DATA_TYPE, -1, 0, FUNCTION - 1, true);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 3);
 							}
 							NARGS = 0;
 
@@ -282,9 +288,9 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 					|	data_type IDENTIFIER left_paran params right_paran block
 						{
 							FUNCTION++;
-							if(symbolTable.addIDEN($2, DATA_TYPE, -1, NARGS, FUNCTION - 1, true) == -1) {
-								const char *s = "FUNCTION Identifier with this value already exists";
-								yyerror(s);
+							int m = symbolTable.addIDEN($2, DATA_TYPE, -1, NARGS, FUNCTION - 1, true);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 4);
 							}
 							NARGS = 0;
 
@@ -312,9 +318,9 @@ params:		param
 
 param:		data_type IDENTIFIER
 			{
-				if(symbolTable.addIDEN($2, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
-					const char *s = "Identifier with this value already exists";
-					yyerror(s);
+				int m = symbolTable.addIDEN($2, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+				if(m < 0) {
+					IDENAlreadyExistsError(m, 5);
 				}
 				
 				if(DEBUG_CODE == 1)
@@ -405,9 +411,9 @@ variable_declaration:	data_type variable_list
 
 variable_list:		IDENTIFIER
 					{
-						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
-							const char *s = "Identifier with this value already exists";
-							yyerror(s);
+						int m = symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						if(m < 0) {
+							IDENAlreadyExistsError(m, 6);
 						}
 						
 						if(DEBUG_CODE == 1)
@@ -416,9 +422,9 @@ variable_list:		IDENTIFIER
 
 				|	IDENTIFIER ASSIGN_OP expression
 					{
-						if(symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
-							const char *s = "Identifier with this value already exists";
-							yyerror(s);
+						int m = symbolTable.addIDEN($1, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						if(m < 0) {
+							IDENAlreadyExistsError(m, 7);
 						}
 						
 						if(DEBUG_CODE == 1)
@@ -426,10 +432,10 @@ variable_list:		IDENTIFIER
 					}
 
 				|	variable_list COMMA IDENTIFIER
-					{	
-						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
-							const char *s = "Identifier with this value already exists";
-							yyerror(s);
+					{
+						int m = symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						if(m < 0) {
+							IDENAlreadyExistsError(m, 8);
 						}
 						
 						if(DEBUG_CODE == 1)
@@ -438,9 +444,9 @@ variable_list:		IDENTIFIER
 
 				|	variable_list COMMA IDENTIFIER ASSIGN_OP expression
 					{
-						if(symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false) == -1) {
-							const char *s = "Identifier with this value already exists";
-							yyerror(s);
+						int m = symbolTable.addIDEN($3, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						if(m < 0) {
+							IDENAlreadyExistsError(m, 9);
 						}
 						
 						if(DEBUG_CODE == 1)
@@ -866,7 +872,7 @@ left_paran:		LP
 				}
 			;
 
-right_paran:		RP
+right_paran:	RP
 				{	
 					SCOPE--;
 					currentScope.pop();
@@ -926,10 +932,67 @@ string constructTACHeader() {
 	return header;
 }
 
-void generateTACFile() {
-	ofstream tacFile("file.tac");
+void generateTACFile(string fileName) {
+	fileName += ".tac";
+	ofstream tacFile(fileName);
 	tacFile << TAC;
 	tacFile.close();
+}
+
+void IDENAlreadyExistsError(int m, int errNo) {
+	// errNo:
+	// 1-4	:	Function Declaration
+	// 5	:	Function parameter declaration
+	// 6-9	:	Variable Declaration
+
+	int k = errNo * 2;
+	string t = "";
+
+	if(errNo >= 1 && errNo <= 4) {
+		if(m == -1) {
+			k = 2000 + k - 1;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): Illegal Function declaration. Identifier with this value is already declared.";
+		}
+		else if(m == -2) {
+			k = 2000 + k;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): Illegal Function declaration. Functional Identifier with this value is already declared.";
+		}
+	}
+	else if(errNo == 5) {
+		if(m == -1) {
+			k = 2000 + k - 1;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): Illegal Parameter declaration. Identifier with this value is already declared.";
+		}
+		else if(m == -2) {
+			k = 2000 + k;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): Illegal Parameter declaration. Functional Identifier with this value is already declared.";
+		}
+	}
+	else if(errNo >= 6 && errNo <= 9) {
+		if(m == -1) {
+			k = 2000 + k - 1;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): Illegal Variable declaration. Identifier with this value is already declared.";
+		}
+		else if(m == -2) {
+			k = 2000 + k;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): Illegal Variable declaration. Functional Identifier with this value is already declared.";
+		}
+	}
+
+	const char *s = t.c_str();
+	yyerror(s);
 }
 
 int main(int argc, char *argv[]) {

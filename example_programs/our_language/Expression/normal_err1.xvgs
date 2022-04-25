@@ -1,0 +1,7 @@
+main {
+    int x = 4;
+    int y = 6;
+    int n = add(x, y);
+    char main;
+    n = sub(n, x);
+}

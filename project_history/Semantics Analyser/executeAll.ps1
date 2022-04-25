@@ -88,11 +88,13 @@ If(($val -eq 0) -or ($val -eq 101)) {
 If(($val -eq 0) -or ($val -eq 102)) {
     Write-Host ""
     Write-Host "arithmetic_err1.xvgs" -ForegroundColor Green
-    ./parser ./../../example_programs/our_language/Expression/arithmetic_err1.xvgs   
+    ./parser ./../../example_programs/our_language/Expression/arithmetic_err1.xvgs
 }
 If(($val -eq 0) -or ($val -eq 103)) {
-    
+    Write-Host ""
+    Write-Host "normal_err1.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/Expression/normal_err1.xvgs
 }
-If(($val -eq 0) -or ($val -eq 103)) {
+If(($val -eq 0) -or ($val -eq 104)) {
     
 }
