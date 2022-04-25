@@ -27,7 +27,7 @@
 	}
 
 	// DEBUG CODE 
-	int DEBUG_CODE = 1;
+	int DEBUG_CODE = -1;
 
 	// THREE ADDRESS CODE
 	string TAC = "";
@@ -80,6 +80,14 @@
 		public:
 			SymbolTable() {
 
+			}
+
+			vector<SymbolTableNode> getSymbolTable() {
+				return internalSymbolTable;
+			}
+
+			vector<FunctionTableNode> getFunctionTable() {
+				return internalFunctionTable;
 			}
 
 			bool functionIDENExists(string IDEN) {
@@ -158,6 +166,10 @@
 			}
 	};
 	SymbolTable symbolTable;
+
+	// FUNCTION DECLARATIONS
+	string constructTACHeader();
+	void generateTACFile();
 %}
 
 %start program_start
@@ -177,6 +189,8 @@
 program_start:  program
 				{
 					symbolTable.printTable();
+					TAC += constructTACHeader();
+					generateTACFile();
 					
 					if(DEBUG_CODE == 1)
 						printf("program_start\n");
@@ -282,6 +296,7 @@ function_declaration:	VOID IDENTIFIER left_paran right_paran block
 params:		param
 			{
 				NARGS++;
+
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			}
@@ -289,6 +304,7 @@ params:		param
 		|	params COMMA param
 			{
 				NARGS++;
+
 				if(DEBUG_CODE == 1)
 					printf("params 2\n");
 			}
@@ -880,7 +896,42 @@ right_curl:		RC
 			;
 %%
 
-// ./parser ./exmp/arithmetic.xvgs
+string constructTACHeader() {
+	string header = "";
+	vector<SymbolTableNode> internalSymbolTable = symbolTable.getSymbolTable();
+	vector<FunctionTableNode> internalFunctionTable = symbolTable.getFunctionTable();
+
+	int n;
+	n = internalSymbolTable.size();
+	header += to_string(n) + "\n";
+	for(int i = 0; i < n; i++) {
+		header += "$";
+		header += internalSymbolTable[i].IDEN + ".";
+		header += to_string(internalSymbolTable[i].type) + ".";
+		header += to_string(internalSymbolTable[i].scopeIn) + ".";
+		header += to_string(internalSymbolTable[i].scope) + ".";
+		header += to_string(internalSymbolTable[i].fIndex) + "\n";
+	}
+
+	n = internalFunctionTable.size();
+	header += to_string(n) + "\n";
+	for(int i = 0; i < n; i++) {
+		header += "#";
+		header += internalFunctionTable[i].IDEN + ".";
+		header += to_string(internalFunctionTable[i].returnType) + ".";
+		header += to_string(internalFunctionTable[i].nArgs) + ".";
+		header += to_string(internalFunctionTable[i].fnIndex) + "\n";
+	}
+
+	return header;
+}
+
+void generateTACFile() {
+	ofstream tacFile("file.tac");
+	tacFile << TAC;
+	tacFile.close();
+}
+
 int main(int argc, char *argv[]) {
     if(argc > 1) {
         FILE *fp = fopen(argv[1], "r");
