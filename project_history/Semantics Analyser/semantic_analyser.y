@@ -27,7 +27,7 @@
 	}
 
 	// DEBUG CODE 
-	int DEBUG_CODE = -1;
+	int DEBUG_CODE = 1;
 
 	// THREE ADDRESS CODE
 	string TAC = "";
@@ -199,6 +199,7 @@
 
 	// FUNCTION DECLARATIONS
 	string constructTACHeader();
+	void input_output_TAC(int ind, string iden);
 	void assignValToTAC(int typ, string val, int dtype);
 	string getBinaryOperator(int op);
 	void binaryTAC_expression(int op);
@@ -216,6 +217,7 @@
 
 %token MAIN VOID RETURN INT FLOAT CHAR BOOLEAN
 %token IF ELIF ELSE LOOP BREAK CONTINUE
+%token INPUT OUTPUT
 %token <str> IDENTIFIER BOOLEAN_LIT FLOAT_LIT INT_LIT CHAR_LIT
 %token SEMICOLON COMMA LP RP LC RC
 %token ADD_ASSIGN_OP SUB_ASSIGN_OP MUL_ASSIGN_OP DIV_ASSIGN_OP REM_ASSIGN_OP
@@ -433,11 +435,18 @@ statement:		variable_declaration SEMICOLON
 						printf("statement 5\n");
 				}
 
-			|	SEMICOLON
+			|	input_output_statement SEMICOLON
 				{
 					
 					if(DEBUG_CODE == 1)
 						printf("statement 6\n");
+				}
+
+			|	SEMICOLON
+				{
+					
+					if(DEBUG_CODE == 1)
+						printf("statement 7\n");
 				}
             ;
 
@@ -878,6 +887,39 @@ return_statement:	RETURN op_or_expression
 					}
 				;
 
+input_output_statement:		IDENTIFIER ASSIGN_OP INPUT
+							{
+								string iden = string($1);
+								int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+								if(m < 0) {
+									IDENAlreadyExistsError(m, 12);
+								} 	
+								else {
+									iden += "_" + to_string(m);
+									input_output_TAC(1, iden);
+								}
+						
+								if(DEBUG_CODE == 1)
+									printf("input_output_statement 1 ");
+							}
+
+						|	OUTPUT ASSIGN_OP IDENTIFIER
+							{
+								string iden = string($3);
+								int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+								if(m < 0) {
+									IDENAlreadyExistsError(m, 12);
+								} 	
+								else {
+									iden += "_" + to_string(m);
+									input_output_TAC(2, iden);
+								}
+						
+								if(DEBUG_CODE == 1)
+									printf("input_output_statement 2 ");
+							}
+						;
+
 factor:		term
 			{
 				
@@ -1087,6 +1129,18 @@ string constructTACHeader() {
 	}
 
 	return header;
+}
+
+void input_output_TAC(int ind, string iden) {
+	// ind = 1	:	INPUT
+	// ind = 2	:	OUTPUT
+	
+	if(ind == 1) {
+		TAC += "@input = $" + iden + "\n";
+	}
+	else if(ind == 2) {
+		TAC += "@output = $" + iden + "\n";
+	}
 }
 
 void assignValToTAC(int typ, string val, int dtype) {

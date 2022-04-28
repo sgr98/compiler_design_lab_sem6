@@ -102,12 +102,27 @@ If(($val -eq 0) -or ($val -eq 15)) {
     ./parser ./../../example_programs/our_language/Conditional/normal2.xvgs
 }
 If(($val -eq 0) -or ($val -eq 16)) {
-    
+    Write-Host ""
+    Write-Host "16" -ForegroundColor Green
+    Write-Host "io1.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/IO/io1.xvgs
 }
 If(($val -eq 0) -or ($val -eq 17)) {
-    
+    Write-Host ""
+    Write-Host "17" -ForegroundColor Green
+    Write-Host "io2.xvgs" -ForegroundColor Green
+    ./parser ./../../example_programs/our_language/IO/io2.xvgs
 }
 If(($val -eq 0) -or ($val -eq 18)) {
+    
+}
+If(($val -eq 0) -or ($val -eq 19)) {
+    
+}
+If(($val -eq 0) -or ($val -eq 20)) {
+    
+}
+If(($val -eq 0) -or ($val -eq 21)) {
     
 }
 

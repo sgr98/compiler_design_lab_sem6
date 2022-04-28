@@ -52,37 +52,39 @@
      LOOP = 268,
      BREAK = 269,
      CONTINUE = 270,
-     IDENTIFIER = 271,
-     BOOLEAN_LIT = 272,
-     FLOAT_LIT = 273,
-     INT_LIT = 274,
-     CHAR_LIT = 275,
-     SEMICOLON = 276,
-     COMMA = 277,
-     LP = 278,
-     RP = 279,
-     LC = 280,
-     RC = 281,
-     ADD_ASSIGN_OP = 282,
-     SUB_ASSIGN_OP = 283,
-     MUL_ASSIGN_OP = 284,
-     DIV_ASSIGN_OP = 285,
-     REM_ASSIGN_OP = 286,
-     EQUAL_OP = 287,
-     NOT_EQUAL_OP = 288,
-     MRTE = 289,
-     LSTE = 290,
-     MRT = 291,
-     LST = 292,
-     LOGICAL_AND_OP = 293,
-     LOGICAL_OR_OP = 294,
-     EXCLAMATION_OP = 295,
-     ASSIGN_OP = 296,
-     ADD_OP = 297,
-     SUB_OP = 298,
-     MUL_OP = 299,
-     DIV_OP = 300,
-     REM_OP = 301
+     INPUT = 271,
+     OUTPUT = 272,
+     IDENTIFIER = 273,
+     BOOLEAN_LIT = 274,
+     FLOAT_LIT = 275,
+     INT_LIT = 276,
+     CHAR_LIT = 277,
+     SEMICOLON = 278,
+     COMMA = 279,
+     LP = 280,
+     RP = 281,
+     LC = 282,
+     RC = 283,
+     ADD_ASSIGN_OP = 284,
+     SUB_ASSIGN_OP = 285,
+     MUL_ASSIGN_OP = 286,
+     DIV_ASSIGN_OP = 287,
+     REM_ASSIGN_OP = 288,
+     EQUAL_OP = 289,
+     NOT_EQUAL_OP = 290,
+     MRTE = 291,
+     LSTE = 292,
+     MRT = 293,
+     LST = 294,
+     LOGICAL_AND_OP = 295,
+     LOGICAL_OR_OP = 296,
+     EXCLAMATION_OP = 297,
+     ASSIGN_OP = 298,
+     ADD_OP = 299,
+     SUB_OP = 300,
+     MUL_OP = 301,
+     DIV_OP = 302,
+     REM_OP = 303
    };
 #endif
 /* Tokens.  */
@@ -99,37 +101,39 @@
 #define LOOP 268
 #define BREAK 269
 #define CONTINUE 270
-#define IDENTIFIER 271
-#define BOOLEAN_LIT 272
-#define FLOAT_LIT 273
-#define INT_LIT 274
-#define CHAR_LIT 275
-#define SEMICOLON 276
-#define COMMA 277
-#define LP 278
-#define RP 279
-#define LC 280
-#define RC 281
-#define ADD_ASSIGN_OP 282
-#define SUB_ASSIGN_OP 283
-#define MUL_ASSIGN_OP 284
-#define DIV_ASSIGN_OP 285
-#define REM_ASSIGN_OP 286
-#define EQUAL_OP 287
-#define NOT_EQUAL_OP 288
-#define MRTE 289
-#define LSTE 290
-#define MRT 291
-#define LST 292
-#define LOGICAL_AND_OP 293
-#define LOGICAL_OR_OP 294
-#define EXCLAMATION_OP 295
-#define ASSIGN_OP 296
-#define ADD_OP 297
-#define SUB_OP 298
-#define MUL_OP 299
-#define DIV_OP 300
-#define REM_OP 301
+#define INPUT 271
+#define OUTPUT 272
+#define IDENTIFIER 273
+#define BOOLEAN_LIT 274
+#define FLOAT_LIT 275
+#define INT_LIT 276
+#define CHAR_LIT 277
+#define SEMICOLON 278
+#define COMMA 279
+#define LP 280
+#define RP 281
+#define LC 282
+#define RC 283
+#define ADD_ASSIGN_OP 284
+#define SUB_ASSIGN_OP 285
+#define MUL_ASSIGN_OP 286
+#define DIV_ASSIGN_OP 287
+#define REM_ASSIGN_OP 288
+#define EQUAL_OP 289
+#define NOT_EQUAL_OP 290
+#define MRTE 291
+#define LSTE 292
+#define MRT 293
+#define LST 294
+#define LOGICAL_AND_OP 295
+#define LOGICAL_OR_OP 296
+#define EXCLAMATION_OP 297
+#define ASSIGN_OP 298
+#define ADD_OP 299
+#define SUB_OP 300
+#define MUL_OP 301
+#define DIV_OP 302
+#define REM_OP 303
 
 
 
@@ -139,12 +143,12 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 215 "semantic_analyser.y"
+#line 216 "semantic_analyser.y"
 char *str; int type;
 
 
 /* Line 1676 of yacc.c  */
-#line 148 "y.tab.h"
+#line 152 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

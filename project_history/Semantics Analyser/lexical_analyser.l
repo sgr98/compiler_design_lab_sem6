@@ -60,6 +60,9 @@ identifier          [a-zA-Z][a-zA-Z_0-9]*
 "char"                  {return CHAR;}
 "boolean"               {return BOOLEAN;}
 
+"input()"               {return INPUT;}
+"output()"              {return OUTPUT;}
+
 {boolean_literal}       {yylval.str = strdup(yytext); return BOOLEAN_LIT;}
 {float_literal}         {yylval.str = strdup(yytext); return FLOAT_LIT;}
 {int_literal}           {yylval.str = strdup(yytext); return INT_LIT;}
