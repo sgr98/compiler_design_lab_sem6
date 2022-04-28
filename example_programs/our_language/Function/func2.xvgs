@@ -7,7 +7,7 @@ int sub(int a, int b) {
 }
 
 char str(int n, char c) {
-    char d = c + n;
+    char d = c;
     return d;
 }
 
