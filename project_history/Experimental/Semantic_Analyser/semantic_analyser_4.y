@@ -186,25 +186,14 @@
 				}
 				return -1;
 			}
-
-			int getVarDataType(int in) {
-				return internalSymbolTable[in].type;
-			}
-
-			int getSymbolTableSize() {
-				return internalSymbolTable.size();
-			}
 	};
 	SymbolTable symbolTable;
 
 	// FUNCTION DECLARATIONS
 	string constructTACHeader();
-	void assignValToTAC(int typ, string val, int dtype);
-	string getBinaryOperator(int op);
-	void binaryTAC_expression(int op);
-	void assign_expression_TAC(int ind, string iden, int type);
+	void assignValToTAC(int typ, string val);
+	void binaryTAC_expression(string op);
 	void generateTACFile(string fileName);
-	void printTAC(pair<int, int> temptac);
 
 	// ERROR FUNCTIONS
 	void IDENAlreadyExistsError(int m, int errNo);
@@ -460,18 +449,12 @@ variable_list:		IDENTIFIER
 							printf("variable_list 1 ");
 					}
 
-				|	IDENTIFIER ASSIGN_OP op_or_expression
+				|	IDENTIFIER ASSIGN_OP expression
 					{
-						string iden = string($1);
-						int m = symbolTable.addIDEN(iden, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						int m = symbolTable.addIDEN(string($1), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 						if(m < 0) {
 							IDENAlreadyExistsError(m, 7);
 						}
-						else {
-							iden += "_" + to_string(symbolTable.getSymbolTableSize() - 1);
-							assign_expression_TAC(1, iden, DATA_TYPE);
-						}
-							
 						
 						if(DEBUG_CODE == 1)
 							printf("variable_list 2 ");
@@ -488,16 +471,11 @@ variable_list:		IDENTIFIER
 							printf("variable_list 3 ");
 					}
 
-				|	variable_list COMMA IDENTIFIER ASSIGN_OP op_or_expression
+				|	variable_list COMMA IDENTIFIER ASSIGN_OP expression
 					{
-						string iden = string($3);
-						int m = symbolTable.addIDEN(iden, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						int m = symbolTable.addIDEN(string($3), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 						if(m < 0) {
 							IDENAlreadyExistsError(m, 9);
-						}
-						else {
-							iden += "_" + to_string(symbolTable.getSymbolTableSize() - 1);
-							assign_expression_TAC(1, iden, DATA_TYPE);
 						}
 						
 						if(DEBUG_CODE == 1)
@@ -522,15 +500,6 @@ expression:		assign_expression
 
 assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 						{
-							string iden = string($1);
-							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
-							if(m < 0) {
-								IDENAlreadyExistsError(m, 12);
-							}
-							else {
-								iden += "_" + to_string(m);
-								assign_expression_TAC(1, iden, symbolTable.getVarDataType(m));
-							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 1 ");
@@ -538,15 +507,6 @@ assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 
 					|	IDENTIFIER ADD_ASSIGN_OP op_or_expression
 						{
-							string iden = string($1);
-							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
-							if(m < 0) {
-								IDENAlreadyExistsError(m, 12);
-							}
-							else {
-								iden += "_" + to_string(m);
-								assign_expression_TAC(2, iden, symbolTable.getVarDataType(m));
-							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 2 ");
@@ -554,15 +514,6 @@ assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 
 					|	IDENTIFIER SUB_ASSIGN_OP op_or_expression
 						{
-							string iden = string($1);
-							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
-							if(m < 0) {
-								IDENAlreadyExistsError(m, 12);
-							}
-							else {
-								iden += "_" + to_string(m);
-								assign_expression_TAC(3, iden, symbolTable.getVarDataType(m));
-							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 3 ");
@@ -570,15 +521,6 @@ assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 
 					|	IDENTIFIER MUL_ASSIGN_OP op_or_expression
 						{
-							string iden = string($1);
-							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
-							if(m < 0) {
-								IDENAlreadyExistsError(m, 12);
-							}
-							else {
-								iden += "_" + to_string(m);
-								assign_expression_TAC(4, iden, symbolTable.getVarDataType(m));
-							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 4 ");
@@ -586,15 +528,6 @@ assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 
 					|	IDENTIFIER DIV_ASSIGN_OP op_or_expression
 						{
-							string iden = string($1);
-							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
-							if(m < 0) {
-								IDENAlreadyExistsError(m, 12);
-							}
-							else {
-								iden += "_" + to_string(m);
-								assign_expression_TAC(5, iden, symbolTable.getVarDataType(m));
-							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 5 ");
@@ -602,15 +535,6 @@ assign_expression:		IDENTIFIER ASSIGN_OP op_or_expression
 
 					|	IDENTIFIER REM_ASSIGN_OP op_or_expression
 						{
-							string iden = string($1);
-							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
-							if(m < 0) {
-								IDENAlreadyExistsError(m, 12);
-							}
-							else {
-								iden += "_" + to_string(m);
-								assign_expression_TAC(6, iden, symbolTable.getVarDataType(m));
-							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 6 ");
@@ -626,7 +550,6 @@ op_or_expression:   op_and_expression
 
                 |	op_or_expression LOGICAL_OR_OP op_and_expression
                     {
-						binaryTAC_expression(1);
                         
 						if(DEBUG_CODE == 1)
 							printf("op_or_expression 2 ");
@@ -642,7 +565,6 @@ op_and_expression:      op_rel_expression
 
                     |	op_and_expression LOGICAL_AND_OP op_rel_expression
                         {
-							binaryTAC_expression(2);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_and_expression 2 ");
@@ -658,7 +580,6 @@ op_rel_expression:      op_condt_expression
 
                     |	op_rel_expression EQUAL_OP op_condt_expression
                         {
-							binaryTAC_expression(3);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_rel_expression 2 ");
@@ -666,7 +587,6 @@ op_rel_expression:      op_condt_expression
                     
                     |	op_rel_expression NOT_EQUAL_OP op_condt_expression
                         {
-							binaryTAC_expression(4);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_rel_expression 3 ");
@@ -682,7 +602,6 @@ op_condt_expression:    op_additive_expression
 
                     |	op_condt_expression LST op_additive_expression
                         {
-							binaryTAC_expression(5);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 2 ");
@@ -690,7 +609,6 @@ op_condt_expression:    op_additive_expression
 
                     |	op_condt_expression LSTE op_additive_expression
                         {
-							binaryTAC_expression(6);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 3 ");
@@ -698,7 +616,6 @@ op_condt_expression:    op_additive_expression
 
                     |	op_condt_expression MRT op_additive_expression
                         {
-							binaryTAC_expression(7);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 4 ");
@@ -706,7 +623,6 @@ op_condt_expression:    op_additive_expression
 
                     |	op_condt_expression MRTE op_additive_expression
                         {
-							binaryTAC_expression(8);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 5 ");
@@ -722,7 +638,6 @@ op_additive_expression:     op_multiplicative_expression
 
                         |	op_additive_expression ADD_OP op_multiplicative_expression
                             {
-								binaryTAC_expression(9);
                                 
 								if(DEBUG_CODE == 1)
 									printf("op_additive_expression 2 ");
@@ -730,7 +645,6 @@ op_additive_expression:     op_multiplicative_expression
 
                         |	op_additive_expression SUB_OP op_multiplicative_expression
                             {
-								binaryTAC_expression(10);
                                 
 								if(DEBUG_CODE == 1)
 									printf("op_additive_expression 3 ");
@@ -746,7 +660,6 @@ op_multiplicative_expression:       op_neg_expression
 
                                 |	op_multiplicative_expression MUL_OP op_neg_expression
                                     {
-										binaryTAC_expression(11);
                                         
 										if(DEBUG_CODE == 1)
 											printf("op_multiplicative_expression 2 ");
@@ -754,7 +667,6 @@ op_multiplicative_expression:       op_neg_expression
 
                                 |	op_multiplicative_expression DIV_OP op_neg_expression
                                     {
-										binaryTAC_expression(12);
                                         
 										if(DEBUG_CODE == 1)
 											printf("op_multiplicative_expression 3 ");
@@ -762,7 +674,6 @@ op_multiplicative_expression:       op_neg_expression
                                 
                                 |	op_multiplicative_expression REM_OP op_neg_expression
                                     {
-										binaryTAC_expression(13);
                                         
 										if(DEBUG_CODE == 1)
 											printf("op_multiplicative_expression 4 ");
@@ -782,7 +693,7 @@ op_neg_expression:      factor
 								pair<int, int> tempTac = currentTAC.top();
 								currentTAC.pop();
 								if(tempTac.second != 4) {
-									expressionErrors(14);
+									// HANDLE ERROR
 								}
 								else {
 									TAC += "t" + to_string(CURRENT_TAC_INDEX);
@@ -791,7 +702,6 @@ op_neg_expression:      factor
 									pair<int, int> newTac;
 									newTac.first = CURRENT_TAC_INDEX;
 									newTac.second = tempTac.second;
-									// printTAC(newTac);
 									currentTAC.push(newTac);
 									CURRENT_TAC_INDEX++;
 								}
@@ -894,7 +804,7 @@ factor:		term
 		;
 term:		BOOLEAN_LIT
 			{
-				assignValToTAC(4, string($1), 4);
+				assignValToTAC(4, string($1));
 
 				if(DEBUG_CODE == 1)
 					printf("term 1 ");
@@ -902,7 +812,7 @@ term:		BOOLEAN_LIT
 
 		|	FLOAT_LIT
 			{
-				assignValToTAC(2, string($1), 2);
+				assignValToTAC(2, string($1));
 				
 				if(DEBUG_CODE == 1)
 					printf("term 2 ");
@@ -910,7 +820,7 @@ term:		BOOLEAN_LIT
 
 		|	INT_LIT
 			{
-				assignValToTAC(1, string($1), 1);
+				assignValToTAC(1, string($1));
 
 				if(DEBUG_CODE == 1)
 					printf("term 3 ");
@@ -918,7 +828,7 @@ term:		BOOLEAN_LIT
 
 		|	CHAR_LIT
 			{
-				assignValToTAC(3, string($1), 3);
+				assignValToTAC(3, string($1));
 				
 				if(DEBUG_CODE == 1)
 					printf("term 4 ");
@@ -940,7 +850,7 @@ term:		BOOLEAN_LIT
 				}
 				else {
 					iden += "_" + to_string(m);
-					assignValToTAC(0, iden, symbolTable.getVarDataType(m));
+					assignValToTAC(0, iden);
 				}
 				
 				if(DEBUG_CODE == 1)
@@ -1089,174 +999,42 @@ string constructTACHeader() {
 	return header;
 }
 
-void assignValToTAC(int typ, string val, int dtype) {
-	pair<int, int> newTac;
+void assignValToTAC(int typ, string val) {
 	if(typ == 0) {
 		TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = $" + val + "\n";
-		newTac.second = dtype;
 	}
 	else if(typ >= 1 && typ <= 4) {
 		TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = " + val + "\n";
+	}
+	pair<int, int> newTac;
+		newTac.first = CURRENT_TAC_INDEX;
 		newTac.second = typ;
-	}
-	newTac.first = CURRENT_TAC_INDEX;
-	// printTAC(newTac);
-	currentTAC.push(newTac);
-	CURRENT_TAC_INDEX++;
+		currentTAC.push(newTac);
+		CURRENT_TAC_INDEX++;
 }
 
-string getBinaryOperator(int op) {
-	switch(op) {
-		case 1:
-			return "||";
-		case 2:
-			return "&&";
-		case 3:
-			return "==";
-		case 4:
-			return "!=";
-		case 5:
-			return "<";
-		case 6:
-			return "<=";
-		case 7:
-			return ">";
-		case 8:
-			return ">=";
-		case 9:
-			return "+";
-		case 10:
-			return "-";
-		case 11:
-			return "*";
-		case 12:
-			return "/";
-		case 13:
-			return "%";
-		default:
-			return "";
-	}
-}
-
-void binaryTAC_expression(int op) {
+void binaryTAC_expression(string op) {
 	if(currentTAC.size() >= 2) {
-		string opr = getBinaryOperator(op);
-
 		pair<int, int> tempTac1 = currentTAC.top();
 		currentTAC.pop();
 		pair<int, int> tempTac2 = currentTAC.top();
 		currentTAC.pop();
-
-		bool errorOccured = false;
-		switch(op) {
-			case 1:
-			case 2:
-				errorOccured = tempTac1.second != 4;
-				errorOccured = errorOccured || tempTac1.second != tempTac2.second;
-				break;
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				errorOccured = tempTac1.second != tempTac2.second;
-				break;
-			case 9:
-			case 10:
-			case 11:
-			case 12:
-			case 13:
-				errorOccured = tempTac1.second == 4;
-				errorOccured = errorOccured || tempTac1.second != tempTac2.second;
-				break;
-			default:
-				break;
-		}
-
-		if(errorOccured) {
-			expressionErrors(op);
-			return;
-		}
-
-		TAC += "t" + to_string(CURRENT_TAC_INDEX);
-		TAC += " = ";
-		TAC += "t" + to_string(tempTac2.first);
-		TAC += " " + opr + " ";
-		TAC += "t" + to_string(tempTac1.first) + "\n";
-
-		pair<int, int> newTac;
-		newTac.first = CURRENT_TAC_INDEX;
-		if(op >= 3 && op <= 8) {
-			newTac.second = 4;
+		if(tempTac1.second != tempTac2.second || tempTac1.second != 4) {
+			// HANDLE ERROR
+			expressionErrors(0);
 		}
 		else {
+			TAC += "t" + to_string(CURRENT_TAC_INDEX);
+			TAC += " = ";
+			TAC += "t" + to_string(tempTac2.first);
+			TAC += " " + op + " ";
+			TAC += "t" + to_string(tempTac1.first) + "\n";
+
+			pair<int, int> newTac;
+			newTac.first = CURRENT_TAC_INDEX;
 			newTac.second = tempTac1.second;
-		}
-		// printTAC(newTac);
-		currentTAC.push(newTac);
-		CURRENT_TAC_INDEX++;
-	}
-}
-
-void assign_expression_TAC(int ind, string iden, int type) {
-	if(currentTAC.size() >= 1) {
-		pair<int, int> tempTac = currentTAC.top();
-		currentTAC.pop();
-
-		if(type == 2) {
-			if(!(tempTac.second == 2 || tempTac.second == 1)) {
-				// cout << "ee\n";
-				expressionErrors(0);
-				return;
-			}
-		}
-		else {
-			if(type != tempTac.second) {
-				// cout << "dd\n";
-				expressionErrors(0);
-				return;
-			}
-		}
-
-		if(ind == 1) {
-			TAC += "$" + iden;
-			TAC += " = ";
-			TAC += "t" + to_string(tempTac.first) + "\n";
-		}
-		else if(ind >= 2 && ind <= 6) {
-			if(!(type == 1 || type == 2)) {
-				expressionErrors(0);
-				return;
-			}
-
-			TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = $" + iden + "\n";
-			CURRENT_TAC_INDEX++;
-
-			TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = ";
-
-			if(ind == 2) {
-				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " + ";
-			}
-			else if(ind == 3) {
-				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " - ";
-			}
-			else if(ind == 4) {
-				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " * ";
-			}
-			else if(ind == 5) {
-				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " / ";
-			}
-			else if(ind == 6) {
-				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " % ";
-			}
-			
-			TAC += "t" + to_string(tempTac.first) + "\n";
-			CURRENT_TAC_INDEX++;
-
-			TAC += "$" + iden;
-			TAC += " = ";
-			TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + "\n";
+			currentTAC.push(newTac);
+			CURRENT_TAC_INDEX++;	
 		}
 	}
 }
@@ -1266,10 +1044,6 @@ void generateTACFile(string fileName) {
 	ofstream tacFile(fileName);
 	tacFile << TAC;
 	tacFile.close();
-}
-
-void printTAC(pair<int, int> temptac) {
-	cout << "TAC: " << temptac.first << "." << temptac.second << endl;
 }
 
 void IDENAlreadyExistsError(int m, int errNo) {
@@ -1361,56 +1135,6 @@ void IDENAlreadyExistsError(int m, int errNo) {
 
 void expressionErrors(int errNo) {
 	string t = "";
-
-	switch(errNo) {
-		case 0:
-			t = "\nERROR CODE(02025): Incorrect data types for assignment";
-			break;
-		case 1:
-			t = "\nERROR CODE(02026): Error occured with ||";
-			break;
-		case 2:
-			t = "\nERROR CODE(02027): Error occured with &&";
-			break;
-		case 3:
-			t = "\nERROR CODE(02028): Error occured with ==";
-			break;
-		case 4:
-			t = "\nERROR CODE(02029): Error occured with !=";
-			break;
-		case 5:
-			t = "\nERROR CODE(02030): Error occured with <";
-			break;
-		case 6:
-			t = "\nERROR CODE(02031): Error occured with <=";
-			break;
-		case 7:
-			t = "\nERROR CODE(02032): Error occured with >";
-			break;
-		case 8:
-			t = "\nERROR CODE(02033): Error occured with >=";
-			break;
-		case 9:
-			t = "\nERROR CODE(02034): Error occured with +";
-			break;
-		case 10:
-			t = "\nERROR CODE(02035): Error occured with -";
-			break;
-		case 11:
-			t = "\nERROR CODE(02036): Error occured with *";
-			break;
-		case 12:
-			t = "\nERROR CODE(02037): Error occured with /";
-			break;
-		case 13:
-			t = "\nERROR CODE(02038): Error occured with %";
-			break;
-		case 14:
-			t = "\nERROR CODE(02039): Error occured with !";
-			break;
-		default:
-			break;
-	}
 
 	ERROR = 1;
 	const char *s = t.c_str();

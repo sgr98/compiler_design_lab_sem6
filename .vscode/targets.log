@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Apr 15 20:14:34 2022
+# Make data base, printed on Thu Apr 28 14:04:54 2022
 
 # Variables
 
@@ -27,7 +27,7 @@ VBOX_MSI_INSTALL_PATH = D:\Program files(for my)\Oracle_Virtual_Box\Oracle_Virtu
 # environment
 LOCALAPPDATA = C:\Users\Sagar Singh\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-a99f798b-e308-47e5-af57-6b6bc6145b1f-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-1f8b9946-fc87-4690-8636-bc2cc312ae27-sock
 # environment
 VSCODE_CWD = D:\Program files(for my)\Visual Studio code\Microsoft VS Code
 # environment
@@ -43,7 +43,7 @@ MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19244_LZGPTNXEMLPXWHXX
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17748_EECCLAJTABHWCVDA
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -59,7 +59,7 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\Sagar Singh\AppData\Roaming\Code\CachedData\8dfae7a5cd50421d10cd99cb873990460525a898
+VSCODE_CODE_CACHE_PATH = C:\Users\Sagar Singh\AppData\Roaming\Code\CachedData\dfd34e8260c270da74b5c2d86d61aee4b6d56977
 # environment
 LANG = C
 # default
@@ -99,7 +99,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 19244
+VSCODE_PID = 17748
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -131,7 +131,7 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = D:\Program files(for my)\JDK\Java\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows\sqlite-tools-win32-x86-3330000;D:\Python\Scripts;D:\Python;C:\Python38\Scripts\;C:\Python38\;D:\Program files(for my)\Scripts\;D:\Program files(for my)\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;D:\Program files(for my)\brackets\command;D:\Program files(for my)\Matlab r2020a\bin;D:\Program files(for my)\Codeblocks(for MinGW)\CodeBlocks\MinGW\bin;C:\ProgramData\chocolatey\bin;D:\Program files(for my)\Verilog\iverilog\bin;D:\Program files(for my)\NodeJS\;C:\Program Files\Git\cmd;D:\Program files(for my)\MongoDB\Mongodb\bin;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows;D:\Program files(for my)\nasm\nasm-2.14.02;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\GnuWin32\GnuWin32\bin;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;D:\Program files(for my)\Visual Studio code\Microsoft VS Code\bin;C:\Users\Sagar Singh\AppData\Local\GitHubDesktop\bin;C:\Users\Sagar Singh\AppData\Roaming\npm;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;C:\Users\Sagar Singh\AppData\Roaming\Python\Python38\Scripts;D:\NonSpaceApplication\FGPAModelSim\intelFGPA_pro\21.1\modelsim_ase\win32aloem;D:\Program files(for my)\Miktex\Miktex\miktex\bin\x64\;D:\Program files(for my)\Heroku\Heroku\bin
+PATH = D:\Program files(for my)\JDK\Java\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows\sqlite-tools-win32-x86-3330000;D:\Python\Scripts;D:\Python;C:\Python38\Scripts\;C:\Python38\;D:\Program files(for my)\Scripts\;D:\Program files(for my)\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;D:\Program files(for my)\brackets\command;D:\Program files(for my)\Matlab r2020a\bin;D:\Program files(for my)\Codeblocks(for MinGW)\CodeBlocks\MinGW\bin;C:\ProgramData\chocolatey\bin;D:\Program files(for my)\Verilog\iverilog\bin;D:\Program files(for my)\NodeJS\;C:\Program Files\Git\cmd;D:\Program files(for my)\MongoDB\Mongodb\bin;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows;D:\Program files(for my)\nasm\nasm-2.14.02;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\GnuWin32\GnuWin32\bin;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;D:\Program files(for my)\Visual Studio code\Microsoft VS Code\bin;C:\Users\Sagar Singh\AppData\Local\GitHubDesktop\bin;C:\Users\Sagar Singh\AppData\Roaming\npm;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;C:\Users\Sagar Singh\AppData\Roaming\Python\Python38\Scripts;D:\NonSpaceApplication\FGPAModelSim\intelFGPA_pro\21.1\modelsim_ase\win32aloem;D:\Program files(for my)\Miktex\Miktex\miktex\bin\x64\;D:\Program files(for my)\Heroku\Heroku\bin;D:\Program files(for my)\SWI Prolog\SWI Prolog\swipl\bin
 # environment
 COMPUTERNAME = LAPTOP-SNORG805
 # default
@@ -197,7 +197,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 TEMP = C:\Users\SAGARS~1\AppData\Local\Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\2d1bd7037cd89a30c234f26be1ebfdd2-1.66.1-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\2d1bd7037cd89a30c234f26be1ebfdd2-1.66.2-main-sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -223,9 +223,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1647882237): 9 files, no impossibilities.
+# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1650394810): 10 files, no impossibilities.
 
-# 9 files, no impossibilities in 1 directories.
+# 10 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -282,12 +282,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 16 / storage = 146 B / avg = 9 B
-# current buf: size = 8174 B / used = 146 B / count = 16 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 17 / storage = 150 B / avg = 8 B
+# current buf: size = 8174 B / used = 150 B / count = 17 / avg = 8 B
 
-# strcache performance: lookups = 19 / hit rate = 15%
+# strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
-# Load=16/8192=0%, Rehash=0, Collisions=0/19=0%
-# Finished Make data base on Fri Apr 15 20:14:34 2022
+# Load=17/8192=0%, Rehash=0, Collisions=0/20=0%
+# Finished Make data base on Thu Apr 28 14:04:54 2022
 
  

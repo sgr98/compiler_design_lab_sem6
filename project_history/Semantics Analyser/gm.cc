@@ -106,10 +106,12 @@
 	// IMPORTANT GLOBAL VARIABLES
 	int DATA_TYPE = 0;
 	int SCOPE = 0;
+	stack<int> currentScope;
 	int FUNCTION = 1;
 	int NARGS = 0;
 	int ERROR = 0;
-	stack<int> currentScope;
+	int CURRENT_TAC_INDEX = 1;
+	stack<pair<int, int>> currentTAC;	// first = tac_index, second = tac_data_type
 
 	// SYMBOL TABLE
 	class SymbolTableNode {
@@ -238,19 +240,50 @@
 						<< internalFunctionTable[i].fnIndex << "\n";
 				}
 			}
+
+			int idenDeclared(string IDEN, int scope, int fIndex) {
+				int n = internalFunctionTable.size();
+				for(int i = 0; i < n; i++) {
+					if(IDEN.compare(internalFunctionTable[i].IDEN) == 0)
+						return -2;
+				}
+
+				n = internalSymbolTable.size();
+				for(int i = n - 1; i >= 0; i--) {
+					if(fIndex == internalSymbolTable[i].fIndex
+					&& IDEN.compare(internalSymbolTable[i].IDEN) == 0
+					&& scope >= internalSymbolTable[i].scope)
+						return i;
+				}
+				return -1;
+			}
+
+			int getVarDataType(int in) {
+				return internalSymbolTable[in].type;
+			}
+
+			int getSymbolTableSize() {
+				return internalSymbolTable.size();
+			}
 	};
 	SymbolTable symbolTable;
 
 	// FUNCTION DECLARATIONS
 	string constructTACHeader();
+	void assignValToTAC(int typ, string val, int dtype);
+	string getBinaryOperator(int op);
+	void binaryTAC_expression(int op);
+	void assign_expression_TAC(int ind, string iden, int type);
 	void generateTACFile(string fileName);
+	void printTAC(pair<int, int> temptac);
 
 	// ERROR FUNCTIONS
 	void IDENAlreadyExistsError(int m, int errNo);
+	void expressionErrors(int errNo);
 
 
 /* Line 189 of yacc.c  */
-#line 254 "gm.cc"
+#line 287 "gm.cc"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -331,12 +364,12 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 182 "semantic_analyser.y"
+#line 215 "semantic_analyser.y"
 char *str; int type;
 
 
 /* Line 214 of yacc.c  */
-#line 340 "gm.cc"
+#line 373 "gm.cc"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -348,7 +381,7 @@ char *str; int type;
 
 
 /* Line 264 of yacc.c  */
-#line 352 "gm.cc"
+#line 385 "gm.cc"
 
 #ifdef short
 # undef short
@@ -563,7 +596,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  14
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   168
+#define YYLAST   159
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  47
@@ -644,8 +677,8 @@ static const yytype_int8 yyrhs[] =
       -1,    79,    16,    -1,    82,    83,    -1,    82,    56,    83,
       -1,    57,    -1,    56,    57,    -1,    58,    21,    -1,    60,
       21,    -1,    69,    -1,    73,    -1,    74,    21,    -1,    21,
-      -1,    79,    59,    -1,    16,    -1,    16,    41,    60,    -1,
-      59,    22,    16,    -1,    59,    22,    16,    41,    60,    -1,
+      -1,    79,    59,    -1,    16,    -1,    16,    41,    62,    -1,
+      59,    22,    16,    -1,    59,    22,    16,    41,    62,    -1,
       61,    -1,    62,    -1,    16,    41,    62,    -1,    16,    27,
       62,    -1,    16,    28,    62,    -1,    16,    29,    62,    -1,
       16,    30,    62,    -1,    16,    31,    62,    -1,    63,    -1,
@@ -662,23 +695,23 @@ static const yytype_int8 yyrhs[] =
       -1,    13,    80,    62,    81,    55,    -1,     5,    62,    -1,
       76,    -1,    23,    62,    24,    -1,    17,    -1,    18,    -1,
       19,    -1,    20,    -1,    77,    -1,    16,    -1,    16,    23,
-      24,    -1,    16,    23,    78,    24,    -1,    76,    -1,    78,
-      22,    76,    -1,     6,    -1,     7,    -1,     8,    -1,     9,
+      24,    -1,    16,    23,    78,    24,    -1,    62,    -1,    78,
+      22,    62,    -1,     6,    -1,     7,    -1,     8,    -1,     9,
       -1,    23,    -1,    24,    -1,    25,    -1,    26,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   195,   195,   211,   218,   226,   241,   248,   256,   269,
-     282,   295,   309,   317,   326,   338,   345,   353,   360,   368,
-     375,   382,   389,   396,   403,   411,   419,   430,   441,   452,
-     464,   471,   479,   486,   493,   500,   507,   514,   522,   529,
-     537,   544,   552,   559,   566,   574,   581,   588,   595,   602,
-     610,   617,   624,   632,   639,   646,   653,   661,   668,   676,
-     683,   690,   697,   705,   713,   720,   728,   736,   744,   752,
-     759,   766,   773,   780,   787,   794,   801,   809,   816,   824,
-     831,   839,   847,   855,   863,   872,   882,   892,   902
+       0,   228,   228,   244,   251,   259,   274,   281,   289,   302,
+     315,   328,   342,   350,   359,   371,   378,   386,   393,   401,
+     408,   415,   422,   429,   436,   444,   452,   463,   480,   491,
+     508,   515,   523,   539,   555,   571,   587,   603,   620,   627,
+     636,   643,   652,   659,   667,   676,   683,   691,   699,   707,
+     716,   723,   731,   740,   747,   755,   763,   772,   779,   805,
+     812,   819,   826,   834,   842,   849,   857,   865,   873,   881,
+     888,   895,   903,   911,   919,   927,   934,   951,   962,   974,
+     981,   989,   997,  1005,  1013,  1022,  1032,  1042,  1052
 };
 #endif
 
@@ -783,34 +816,34 @@ static const yytype_int8 yydefgoto[] =
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -127
+#define YYPACT_NINF -90
 static const yytype_int16 yypact[] =
 {
-     131,  -127,   -12,  -127,  -127,  -127,  -127,    10,  -127,    12,
-     131,  -127,    23,    20,  -127,  -127,  -127,    15,    12,  -127,
-      20,  -127,   100,    50,    20,    20,    74,  -127,  -127,  -127,
-    -127,  -127,    50,  -127,   109,    15,  -127,    54,    70,  -127,
-      45,    79,    39,    22,    71,    18,  -127,  -127,   108,  -127,
-     115,  -127,  -127,  -127,    84,  -127,  -127,   100,  -127,   -15,
-    -127,   105,    12,   126,    45,    50,    50,    62,    50,    50,
-      50,    50,    50,    50,   -10,  -127,  -127,  -127,  -127,  -127,
-      50,    50,    50,    50,    50,    50,    50,    50,    50,    50,
-      50,    50,    50,    20,    12,   138,  -127,  -127,   112,   132,
-     -15,    12,   135,    12,  -127,  -127,     3,     3,  -127,  -127,
-      88,    45,    45,    45,    45,    45,    45,  -127,    79,    39,
-      22,    22,    71,    71,    71,    71,    18,    18,  -127,  -127,
-    -127,    50,  -127,  -127,    76,   139,    12,  -127,  -127,  -127,
-      12,    12,    -1,  -127,     3,  -127,   116,  -127,  -127,  -127,
-    -127,    12,    76,   145,  -127,  -127
+      63,   -90,   -11,   -90,   -90,   -90,   -90,     7,   -90,     5,
+      63,   -90,    25,    20,   -90,   -90,   -90,    19,     5,   -90,
+      20,   -90,   100,    80,    20,    20,   -10,   -90,   -90,   -90,
+     -90,   -90,    80,   -90,   111,    19,   -90,    39,    65,   -90,
+      26,    54,     1,    44,   -20,   -34,   -90,   -90,    62,   -90,
+      81,   -90,   -90,   -90,    97,   -90,   -90,   100,   -90,    60,
+     -90,   103,     5,    98,    26,    80,    80,    71,    80,    80,
+      80,    80,    80,    80,    22,   -90,   -90,   -90,   -90,   -90,
+      80,    80,    80,    80,    80,    80,    80,    80,    80,    80,
+      80,    80,    80,    20,     5,   114,   -90,   -90,    91,   122,
+      60,     5,   130,     5,   -90,   -90,    23,    23,   -90,    26,
+      88,    26,    26,    26,    26,    26,    26,   -90,    54,     1,
+      44,    44,   -20,   -20,   -20,   -20,   -34,   -34,   -90,   -90,
+     -90,    80,   -90,   -90,    80,   129,     5,   -90,   -90,   -90,
+       5,     5,    80,   -90,    23,    26,   105,   -90,   -90,   -90,
+      26,     5,    80,   136,    26,   -90
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -127,  -127,  -127,   148,  -127,   149,   103,    59,   -18,  -127,
-     127,  -127,  -127,  -126,  -127,   -20,    83,    85,    48,    61,
-      63,    -3,  -127,  -127,    11,    72,  -127,  -127,   134,   -65,
-    -127,  -127,    30,   -19,   -46,  -127,   130
+     -90,   -90,   -90,   138,   -90,   139,    93,    49,   -18,   -90,
+     117,   -90,   -90,   -90,   -90,   -17,    73,    74,    33,    56,
+      16,   -89,   -90,   -90,     3,    59,   -90,   -90,   123,   -90,
+     -90,   -90,    58,   -16,   -43,   -90,   124
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -820,44 +853,42 @@ static const yytype_int16 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      56,    57,   109,    64,    13,    65,    66,   102,   145,    58,
-      14,   101,    74,   103,   117,    63,    27,    28,    29,    30,
-      23,     3,     4,     5,     6,    24,   154,    58,    25,    80,
-      12,    26,    27,    28,    29,    30,    31,    15,    32,    20,
-      12,    33,    80,    21,   105,   106,   107,    54,   111,   112,
-     113,   114,   115,   116,   136,    34,    84,    85,    86,    87,
-     140,   141,    90,    91,    92,    54,    63,    27,    28,    29,
-      30,    82,    83,    32,   131,    78,   132,   150,    63,    27,
-      28,    29,    30,   137,    80,   139,   108,   128,   129,   130,
-      34,    79,    26,    27,    28,    29,    30,    67,   151,    32,
-      98,    68,    69,    70,    71,    72,     3,     4,     5,     6,
-     142,   144,   143,    88,    89,    73,    34,    81,   147,    93,
-      94,   104,   148,   149,    58,    63,    27,    28,    29,    30,
-     120,   121,    32,   153,     1,     2,    97,     3,     4,     5,
-       6,     3,     4,     5,     6,   122,   123,   124,   125,    67,
-      94,   126,   127,   134,   135,   146,    93,   152,    18,    19,
-     100,   138,    76,   118,   155,    77,   119,   133,    75
+      56,   128,   129,   130,    57,    13,    64,    14,    65,    66,
+      90,    91,    92,    67,   101,    74,   103,    68,    69,    70,
+      71,    72,    88,    89,    23,     3,     4,     5,     6,    24,
+      15,    73,    25,    82,    83,    26,    27,    28,    29,    30,
+      31,    20,    32,    21,   105,    33,   117,    58,   106,   107,
+     109,   111,   112,   113,   114,   115,   116,   136,    12,    34,
+      78,    80,    80,   140,   141,    80,     1,     2,    12,     3,
+       4,     5,     6,    93,    94,    54,   132,   131,    84,    85,
+      86,    87,   102,   137,    58,   139,    79,    63,    27,    28,
+      29,    30,    81,    54,    32,   108,    63,    27,    28,    29,
+      30,   151,    97,    32,   126,   127,     3,     4,     5,     6,
+     142,    34,   143,    98,   144,   120,   121,   145,   147,   104,
+      34,    67,   148,   149,    58,   150,    94,    63,    27,    28,
+      29,    30,   134,   153,    32,   154,     3,     4,     5,     6,
+     122,   123,   124,   125,   135,   146,   152,    93,    18,    19,
+     100,   138,    76,   118,   133,   119,   155,    75,     0,    77
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int16 yycheck[] =
 {
-      18,    20,    67,    23,    16,    24,    25,    22,   134,    24,
-       0,    57,    32,    59,    24,    16,    17,    18,    19,    20,
-       5,     6,     7,     8,     9,    10,   152,    24,    13,    39,
-       0,    16,    17,    18,    19,    20,    21,    25,    23,    16,
-      10,    26,    39,    23,    62,    65,    66,    17,    68,    69,
-      70,    71,    72,    73,   100,    40,    34,    35,    36,    37,
-     106,   107,    44,    45,    46,    35,    16,    17,    18,    19,
-      20,    32,    33,    23,    93,    21,    94,   142,    16,    17,
-      18,    19,    20,   101,    39,   103,    24,    90,    91,    92,
-      40,    21,    16,    17,    18,    19,    20,    23,   144,    23,
-      16,    27,    28,    29,    30,    31,     6,     7,     8,     9,
-      22,   131,    24,    42,    43,    41,    40,    38,   136,    11,
-      12,    16,   140,   141,    24,    16,    17,    18,    19,    20,
-      82,    83,    23,   151,     3,     4,    21,     6,     7,     8,
-       9,     6,     7,     8,     9,    84,    85,    86,    87,    23,
-      12,    88,    89,    41,    22,    16,    11,    41,    10,    10,
-      57,   102,    35,    80,   153,    35,    81,    95,    34
+      18,    90,    91,    92,    20,    16,    23,     0,    24,    25,
+      44,    45,    46,    23,    57,    32,    59,    27,    28,    29,
+      30,    31,    42,    43,     5,     6,     7,     8,     9,    10,
+      25,    41,    13,    32,    33,    16,    17,    18,    19,    20,
+      21,    16,    23,    23,    62,    26,    24,    24,    65,    66,
+      67,    68,    69,    70,    71,    72,    73,   100,     0,    40,
+      21,    39,    39,   106,   107,    39,     3,     4,    10,     6,
+       7,     8,     9,    11,    12,    17,    94,    93,    34,    35,
+      36,    37,    22,   101,    24,   103,    21,    16,    17,    18,
+      19,    20,    38,    35,    23,    24,    16,    17,    18,    19,
+      20,   144,    21,    23,    88,    89,     6,     7,     8,     9,
+      22,    40,    24,    16,   131,    82,    83,   134,   136,    16,
+      40,    23,   140,   141,    24,   142,    12,    16,    17,    18,
+      19,    20,    41,   151,    23,   152,     6,     7,     8,     9,
+      84,    85,    86,    87,    22,    16,    41,    11,    10,    10,
+      57,   102,    35,    80,    95,    81,   153,    34,    -1,    35
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -874,12 +905,12 @@ static const yytype_uint8 yystos[] =
       29,    30,    31,    41,    62,    75,    57,    83,    21,    21,
       39,    38,    32,    33,    34,    35,    36,    37,    42,    43,
       44,    45,    46,    11,    12,    71,    72,    21,    16,    59,
-      53,    81,    22,    81,    16,    55,    62,    62,    24,    76,
+      53,    81,    22,    81,    16,    55,    62,    62,    24,    62,
       78,    62,    62,    62,    62,    62,    62,    24,    63,    64,
       65,    65,    66,    66,    66,    66,    67,    67,    68,    68,
       68,    80,    55,    72,    41,    22,    81,    55,    54,    55,
-      81,    81,    22,    24,    62,    60,    16,    55,    55,    55,
-      76,    81,    41,    55,    60,    71
+      81,    81,    22,    24,    62,    62,    16,    55,    55,    55,
+      62,    81,    41,    55,    62,    71
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1693,7 +1724,7 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 196 "semantic_analyser.y"
+#line 229 "semantic_analyser.y"
     {
 					if(ERROR > 0) {
 						cout << "\n~~~~~~~~ERROR OCCURED~~~~~~~~\n";	
@@ -1712,7 +1743,7 @@ yyreduce:
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 212 "semantic_analyser.y"
+#line 245 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1723,7 +1754,7 @@ yyreduce:
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 219 "semantic_analyser.y"
+#line 252 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1734,7 +1765,7 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 227 "semantic_analyser.y"
+#line 260 "semantic_analyser.y"
     {
 					FUNCTION = 0;
 					int m = symbolTable.addIDEN("main", -1, -1, -1, FUNCTION, true);
@@ -1752,7 +1783,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 242 "semantic_analyser.y"
+#line 275 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1763,7 +1794,7 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 249 "semantic_analyser.y"
+#line 282 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1774,10 +1805,10 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 257 "semantic_analyser.y"
+#line 290 "semantic_analyser.y"
     {
 							FUNCTION++;
-							int m = symbolTable.addIDEN((yyvsp[(2) - (5)].str), 0, -1, 0, FUNCTION -1, true);
+							int m = symbolTable.addIDEN(string((yyvsp[(2) - (5)].str)), 0, -1, 0, FUNCTION -1, true);
 							if(m < 0) {
 								IDENAlreadyExistsError(m, 1);
 							}
@@ -1791,10 +1822,10 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 270 "semantic_analyser.y"
+#line 303 "semantic_analyser.y"
     {
 							FUNCTION++;
-							int m = symbolTable.addIDEN((yyvsp[(2) - (6)].str), 0, -1, NARGS, FUNCTION - 1, true);
+							int m = symbolTable.addIDEN(string((yyvsp[(2) - (6)].str)), 0, -1, NARGS, FUNCTION - 1, true);
 							if(m < 0) {
 								IDENAlreadyExistsError(m, 2);
 							}
@@ -1808,10 +1839,10 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 283 "semantic_analyser.y"
+#line 316 "semantic_analyser.y"
     {
 							FUNCTION++;
-							int m = symbolTable.addIDEN((yyvsp[(2) - (5)].str), DATA_TYPE, -1, 0, FUNCTION - 1, true);
+							int m = symbolTable.addIDEN(string((yyvsp[(2) - (5)].str)), DATA_TYPE, -1, 0, FUNCTION - 1, true);
 							if(m < 0) {
 								IDENAlreadyExistsError(m, 3);
 							}
@@ -1825,10 +1856,10 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 296 "semantic_analyser.y"
+#line 329 "semantic_analyser.y"
     {
 							FUNCTION++;
-							int m = symbolTable.addIDEN((yyvsp[(2) - (6)].str), DATA_TYPE, -1, NARGS, FUNCTION - 1, true);
+							int m = symbolTable.addIDEN(string((yyvsp[(2) - (6)].str)), DATA_TYPE, -1, NARGS, FUNCTION - 1, true);
 							if(m < 0) {
 								IDENAlreadyExistsError(m, 4);
 							}
@@ -1842,7 +1873,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 310 "semantic_analyser.y"
+#line 343 "semantic_analyser.y"
     {
 				NARGS++;
 
@@ -1854,7 +1885,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 318 "semantic_analyser.y"
+#line 351 "semantic_analyser.y"
     {
 				NARGS++;
 
@@ -1866,9 +1897,9 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 327 "semantic_analyser.y"
+#line 360 "semantic_analyser.y"
     {
-				int m = symbolTable.addIDEN((yyvsp[(2) - (2)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+				int m = symbolTable.addIDEN(string((yyvsp[(2) - (2)].str)), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 				if(m < 0) {
 					IDENAlreadyExistsError(m, 5);
 				}
@@ -1881,7 +1912,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 339 "semantic_analyser.y"
+#line 372 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1892,7 +1923,7 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 346 "semantic_analyser.y"
+#line 379 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -1903,7 +1934,7 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 354 "semantic_analyser.y"
+#line 387 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -1914,7 +1945,7 @@ yyreduce:
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 361 "semantic_analyser.y"
+#line 394 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -1925,7 +1956,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 369 "semantic_analyser.y"
+#line 402 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1936,7 +1967,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 376 "semantic_analyser.y"
+#line 409 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1947,7 +1978,7 @@ yyreduce:
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 383 "semantic_analyser.y"
+#line 416 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1958,7 +1989,7 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 390 "semantic_analyser.y"
+#line 423 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1969,7 +2000,7 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 397 "semantic_analyser.y"
+#line 430 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1980,7 +2011,7 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 404 "semantic_analyser.y"
+#line 437 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -1991,7 +2022,7 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 412 "semantic_analyser.y"
+#line 445 "semantic_analyser.y"
     {
 							
 							if(DEBUG_CODE == 1)
@@ -2002,9 +2033,9 @@ yyreduce:
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 420 "semantic_analyser.y"
+#line 453 "semantic_analyser.y"
     {
-						int m = symbolTable.addIDEN((yyvsp[(1) - (1)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						int m = symbolTable.addIDEN(string((yyvsp[(1) - (1)].str)), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 						if(m < 0) {
 							IDENAlreadyExistsError(m, 6);
 						}
@@ -2017,12 +2048,18 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 431 "semantic_analyser.y"
+#line 464 "semantic_analyser.y"
     {
-						int m = symbolTable.addIDEN((yyvsp[(1) - (3)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						string iden = string((yyvsp[(1) - (3)].str));
+						int m = symbolTable.addIDEN(iden, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 						if(m < 0) {
 							IDENAlreadyExistsError(m, 7);
 						}
+						else {
+							iden += "_" + to_string(symbolTable.getSymbolTableSize() - 1);
+							assign_expression_TAC(1, iden, DATA_TYPE);
+						}
+							
 						
 						if(DEBUG_CODE == 1)
 							printf("variable_list 2 ");
@@ -2032,9 +2069,9 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 442 "semantic_analyser.y"
+#line 481 "semantic_analyser.y"
     {
-						int m = symbolTable.addIDEN((yyvsp[(3) - (3)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						int m = symbolTable.addIDEN(string((yyvsp[(3) - (3)].str)), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 						if(m < 0) {
 							IDENAlreadyExistsError(m, 8);
 						}
@@ -2047,11 +2084,16 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 453 "semantic_analyser.y"
+#line 492 "semantic_analyser.y"
     {
-						int m = symbolTable.addIDEN((yyvsp[(3) - (5)].str), DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
+						string iden = string((yyvsp[(3) - (5)].str));
+						int m = symbolTable.addIDEN(iden, DATA_TYPE, currentScope.top(), currentScope.size(), FUNCTION, false);
 						if(m < 0) {
 							IDENAlreadyExistsError(m, 9);
+						}
+						else {
+							iden += "_" + to_string(symbolTable.getSymbolTableSize() - 1);
+							assign_expression_TAC(1, iden, DATA_TYPE);
 						}
 						
 						if(DEBUG_CODE == 1)
@@ -2062,7 +2104,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 465 "semantic_analyser.y"
+#line 509 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2073,7 +2115,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 472 "semantic_analyser.y"
+#line 516 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2084,8 +2126,17 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 480 "semantic_analyser.y"
+#line 524 "semantic_analyser.y"
     {
+							string iden = string((yyvsp[(1) - (3)].str));
+							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 12);
+							}
+							else {
+								iden += "_" + to_string(m);
+								assign_expression_TAC(1, iden, symbolTable.getVarDataType(m));
+							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 1 ");
@@ -2095,8 +2146,17 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 487 "semantic_analyser.y"
+#line 540 "semantic_analyser.y"
     {
+							string iden = string((yyvsp[(1) - (3)].str));
+							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 12);
+							}
+							else {
+								iden += "_" + to_string(m);
+								assign_expression_TAC(2, iden, symbolTable.getVarDataType(m));
+							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 2 ");
@@ -2106,8 +2166,17 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 494 "semantic_analyser.y"
+#line 556 "semantic_analyser.y"
     {
+							string iden = string((yyvsp[(1) - (3)].str));
+							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 12);
+							}
+							else {
+								iden += "_" + to_string(m);
+								assign_expression_TAC(3, iden, symbolTable.getVarDataType(m));
+							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 3 ");
@@ -2117,8 +2186,17 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 501 "semantic_analyser.y"
+#line 572 "semantic_analyser.y"
     {
+							string iden = string((yyvsp[(1) - (3)].str));
+							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 12);
+							}
+							else {
+								iden += "_" + to_string(m);
+								assign_expression_TAC(4, iden, symbolTable.getVarDataType(m));
+							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 4 ");
@@ -2128,8 +2206,17 @@ yyreduce:
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 508 "semantic_analyser.y"
+#line 588 "semantic_analyser.y"
     {
+							string iden = string((yyvsp[(1) - (3)].str));
+							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 12);
+							}
+							else {
+								iden += "_" + to_string(m);
+								assign_expression_TAC(5, iden, symbolTable.getVarDataType(m));
+							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 5 ");
@@ -2139,8 +2226,17 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 515 "semantic_analyser.y"
+#line 604 "semantic_analyser.y"
     {
+							string iden = string((yyvsp[(1) - (3)].str));
+							int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+							if(m < 0) {
+								IDENAlreadyExistsError(m, 12);
+							}
+							else {
+								iden += "_" + to_string(m);
+								assign_expression_TAC(6, iden, symbolTable.getVarDataType(m));
+							}
 							
 							if(DEBUG_CODE == 1)
 								printf("assign_expression 6 ");
@@ -2150,7 +2246,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 523 "semantic_analyser.y"
+#line 621 "semantic_analyser.y"
     {
                         
 						if(DEBUG_CODE == 1)
@@ -2161,8 +2257,9 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 530 "semantic_analyser.y"
+#line 628 "semantic_analyser.y"
     {
+						binaryTAC_expression(1);
                         
 						if(DEBUG_CODE == 1)
 							printf("op_or_expression 2 ");
@@ -2172,7 +2269,7 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 538 "semantic_analyser.y"
+#line 637 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2183,8 +2280,9 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 545 "semantic_analyser.y"
+#line 644 "semantic_analyser.y"
     {
+							binaryTAC_expression(2);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_and_expression 2 ");
@@ -2194,7 +2292,7 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 553 "semantic_analyser.y"
+#line 653 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2205,8 +2303,9 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 560 "semantic_analyser.y"
+#line 660 "semantic_analyser.y"
     {
+							binaryTAC_expression(3);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_rel_expression 2 ");
@@ -2216,8 +2315,9 @@ yyreduce:
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 567 "semantic_analyser.y"
+#line 668 "semantic_analyser.y"
     {
+							binaryTAC_expression(4);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_rel_expression 3 ");
@@ -2227,7 +2327,7 @@ yyreduce:
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 575 "semantic_analyser.y"
+#line 677 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2238,8 +2338,9 @@ yyreduce:
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 582 "semantic_analyser.y"
+#line 684 "semantic_analyser.y"
     {
+							binaryTAC_expression(5);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 2 ");
@@ -2249,8 +2350,9 @@ yyreduce:
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 589 "semantic_analyser.y"
+#line 692 "semantic_analyser.y"
     {
+							binaryTAC_expression(6);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 3 ");
@@ -2260,8 +2362,9 @@ yyreduce:
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 596 "semantic_analyser.y"
+#line 700 "semantic_analyser.y"
     {
+							binaryTAC_expression(7);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 4 ");
@@ -2271,8 +2374,9 @@ yyreduce:
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 603 "semantic_analyser.y"
+#line 708 "semantic_analyser.y"
     {
+							binaryTAC_expression(8);
                             
 							if(DEBUG_CODE == 1)
 								printf("op_condt_expression 5 ");
@@ -2282,7 +2386,7 @@ yyreduce:
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 611 "semantic_analyser.y"
+#line 717 "semantic_analyser.y"
     {
                                 
 								if(DEBUG_CODE == 1)
@@ -2293,8 +2397,9 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 618 "semantic_analyser.y"
+#line 724 "semantic_analyser.y"
     {
+								binaryTAC_expression(9);
                                 
 								if(DEBUG_CODE == 1)
 									printf("op_additive_expression 2 ");
@@ -2304,8 +2409,9 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 625 "semantic_analyser.y"
+#line 732 "semantic_analyser.y"
     {
+								binaryTAC_expression(10);
                                 
 								if(DEBUG_CODE == 1)
 									printf("op_additive_expression 3 ");
@@ -2315,7 +2421,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 633 "semantic_analyser.y"
+#line 741 "semantic_analyser.y"
     {
                                         
 										if(DEBUG_CODE == 1)
@@ -2326,8 +2432,9 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 640 "semantic_analyser.y"
+#line 748 "semantic_analyser.y"
     {
+										binaryTAC_expression(11);
                                         
 										if(DEBUG_CODE == 1)
 											printf("op_multiplicative_expression 2 ");
@@ -2337,8 +2444,9 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 647 "semantic_analyser.y"
+#line 756 "semantic_analyser.y"
     {
+										binaryTAC_expression(12);
                                         
 										if(DEBUG_CODE == 1)
 											printf("op_multiplicative_expression 3 ");
@@ -2348,8 +2456,9 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 654 "semantic_analyser.y"
+#line 764 "semantic_analyser.y"
     {
+										binaryTAC_expression(13);
                                         
 										if(DEBUG_CODE == 1)
 											printf("op_multiplicative_expression 4 ");
@@ -2359,7 +2468,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 662 "semantic_analyser.y"
+#line 773 "semantic_analyser.y"
     {
                             
 							if(DEBUG_CODE == 1)
@@ -2370,9 +2479,27 @@ yyreduce:
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 669 "semantic_analyser.y"
+#line 780 "semantic_analyser.y"
     {
-                            
+							if(currentTAC.size() >= 1) {
+								pair<int, int> tempTac = currentTAC.top();
+								currentTAC.pop();
+								if(tempTac.second != 4) {
+									expressionErrors(14);
+								}
+								else {
+									TAC += "t" + to_string(CURRENT_TAC_INDEX);
+									TAC += " = ! ";
+									TAC += "t" + to_string(tempTac.first) + "\n";
+									pair<int, int> newTac;
+									newTac.first = CURRENT_TAC_INDEX;
+									newTac.second = tempTac.second;
+									// printTAC(newTac);
+									currentTAC.push(newTac);
+									CURRENT_TAC_INDEX++;
+								}
+							}
+							
 							if(DEBUG_CODE == 1)
 								printf("op_neg_expression 2 ");
                         ;}
@@ -2381,7 +2508,7 @@ yyreduce:
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 677 "semantic_analyser.y"
+#line 806 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2392,7 +2519,7 @@ yyreduce:
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 684 "semantic_analyser.y"
+#line 813 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2403,7 +2530,7 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 691 "semantic_analyser.y"
+#line 820 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2414,7 +2541,7 @@ yyreduce:
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 698 "semantic_analyser.y"
+#line 827 "semantic_analyser.y"
     {
 								
 								if(DEBUG_CODE == 1)
@@ -2425,7 +2552,7 @@ yyreduce:
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 706 "semantic_analyser.y"
+#line 835 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2436,7 +2563,7 @@ yyreduce:
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 714 "semantic_analyser.y"
+#line 843 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2447,7 +2574,7 @@ yyreduce:
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 721 "semantic_analyser.y"
+#line 850 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2458,7 +2585,7 @@ yyreduce:
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 729 "semantic_analyser.y"
+#line 858 "semantic_analyser.y"
     {
 					
 					if(DEBUG_CODE == 1)
@@ -2469,7 +2596,7 @@ yyreduce:
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 737 "semantic_analyser.y"
+#line 866 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -2480,7 +2607,7 @@ yyreduce:
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 745 "semantic_analyser.y"
+#line 874 "semantic_analyser.y"
     {
 						
 						if(DEBUG_CODE == 1)
@@ -2491,7 +2618,7 @@ yyreduce:
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 753 "semantic_analyser.y"
+#line 882 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2502,7 +2629,7 @@ yyreduce:
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 760 "semantic_analyser.y"
+#line 889 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2513,9 +2640,10 @@ yyreduce:
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 767 "semantic_analyser.y"
+#line 896 "semantic_analyser.y"
     {
-				
+				assignValToTAC(4, string((yyvsp[(1) - (1)].str)), 4);
+
 				if(DEBUG_CODE == 1)
 					printf("term 1 ");
 			;}
@@ -2524,8 +2652,9 @@ yyreduce:
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 774 "semantic_analyser.y"
+#line 904 "semantic_analyser.y"
     {
+				assignValToTAC(2, string((yyvsp[(1) - (1)].str)), 2);
 				
 				if(DEBUG_CODE == 1)
 					printf("term 2 ");
@@ -2535,9 +2664,10 @@ yyreduce:
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 781 "semantic_analyser.y"
+#line 912 "semantic_analyser.y"
     {
-				
+				assignValToTAC(1, string((yyvsp[(1) - (1)].str)), 1);
+
 				if(DEBUG_CODE == 1)
 					printf("term 3 ");
 			;}
@@ -2546,8 +2676,9 @@ yyreduce:
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 788 "semantic_analyser.y"
+#line 920 "semantic_analyser.y"
     {
+				assignValToTAC(3, string((yyvsp[(1) - (1)].str)), 3);
 				
 				if(DEBUG_CODE == 1)
 					printf("term 4 ");
@@ -2557,7 +2688,7 @@ yyreduce:
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 795 "semantic_analyser.y"
+#line 928 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2568,8 +2699,17 @@ yyreduce:
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 802 "semantic_analyser.y"
+#line 935 "semantic_analyser.y"
     {
+				string iden = string((yyvsp[(1) - (1)].str));
+				int m = symbolTable.idenDeclared(iden, currentScope.size(), FUNCTION);
+				if(m < 0) {
+					IDENAlreadyExistsError(m, 12);
+				}
+				else {
+					iden += "_" + to_string(m);
+					assignValToTAC(0, iden, symbolTable.getVarDataType(m));
+				}
 				
 				if(DEBUG_CODE == 1)
 					printf("term 6 ");
@@ -2579,8 +2719,12 @@ yyreduce:
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 810 "semantic_analyser.y"
+#line 952 "semantic_analyser.y"
     {
+						int m = symbolTable.functionIDENExists(string((yyvsp[(1) - (3)].str)));
+						if(m != -2) {
+							IDENAlreadyExistsError(m, 10);
+						}
 						
 						if(DEBUG_CODE == 1)
 							printf("functional_call 1 ");
@@ -2590,8 +2734,12 @@ yyreduce:
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 817 "semantic_analyser.y"
+#line 963 "semantic_analyser.y"
     {
+						int m = symbolTable.functionIDENExists(string((yyvsp[(1) - (4)].str)));
+						if(m != -2) {
+							IDENAlreadyExistsError(m, 11);
+						}
 						
 						if(DEBUG_CODE == 1)
 							printf("functional_call 2 ");
@@ -2601,7 +2749,7 @@ yyreduce:
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 825 "semantic_analyser.y"
+#line 975 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2612,7 +2760,7 @@ yyreduce:
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 832 "semantic_analyser.y"
+#line 982 "semantic_analyser.y"
     {
 				
 				if(DEBUG_CODE == 1)
@@ -2623,7 +2771,7 @@ yyreduce:
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 840 "semantic_analyser.y"
+#line 990 "semantic_analyser.y"
     {	
 					DATA_TYPE = 1;
 					
@@ -2635,7 +2783,7 @@ yyreduce:
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 848 "semantic_analyser.y"
+#line 998 "semantic_analyser.y"
     {
 					DATA_TYPE = 2;
 					
@@ -2647,7 +2795,7 @@ yyreduce:
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 856 "semantic_analyser.y"
+#line 1006 "semantic_analyser.y"
     {	
 					DATA_TYPE = 3;
 					
@@ -2659,7 +2807,7 @@ yyreduce:
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 864 "semantic_analyser.y"
+#line 1014 "semantic_analyser.y"
     {
 					DATA_TYPE = 4;
 					
@@ -2671,7 +2819,7 @@ yyreduce:
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 873 "semantic_analyser.y"
+#line 1023 "semantic_analyser.y"
     {	
 					SCOPE++;
 					currentScope.push(SCOPE);
@@ -2684,7 +2832,7 @@ yyreduce:
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 883 "semantic_analyser.y"
+#line 1033 "semantic_analyser.y"
     {	
 					SCOPE--;
 					currentScope.pop();
@@ -2697,7 +2845,7 @@ yyreduce:
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 893 "semantic_analyser.y"
+#line 1043 "semantic_analyser.y"
     {	
 					SCOPE++;
 					currentScope.push(SCOPE);
@@ -2710,7 +2858,7 @@ yyreduce:
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 903 "semantic_analyser.y"
+#line 1053 "semantic_analyser.y"
     {	
 					currentScope.pop();
 					
@@ -2722,7 +2870,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2726 "gm.cc"
+#line 2874 "gm.cc"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2934,7 +3082,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 910 "semantic_analyser.y"
+#line 1060 "semantic_analyser.y"
 
 
 string constructTACHeader() {
@@ -2947,7 +3095,7 @@ string constructTACHeader() {
 	header += to_string(n) + "\n";
 	for(int i = 0; i < n; i++) {
 		header += "$";
-		header += internalSymbolTable[i].IDEN + ".";
+		header += internalSymbolTable[i].IDEN + "_" + to_string(i) + ".";
 		header += to_string(internalSymbolTable[i].type) + ".";
 		header += to_string(internalSymbolTable[i].scopeIn) + ".";
 		header += to_string(internalSymbolTable[i].scope) + ".";
@@ -2967,6 +3115,178 @@ string constructTACHeader() {
 	return header;
 }
 
+void assignValToTAC(int typ, string val, int dtype) {
+	pair<int, int> newTac;
+	if(typ == 0) {
+		TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = $" + val + "\n";
+		newTac.second = dtype;
+	}
+	else if(typ >= 1 && typ <= 4) {
+		TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = " + val + "\n";
+		newTac.second = typ;
+	}
+	newTac.first = CURRENT_TAC_INDEX;
+	// printTAC(newTac);
+	currentTAC.push(newTac);
+	CURRENT_TAC_INDEX++;
+}
+
+string getBinaryOperator(int op) {
+	switch(op) {
+		case 1:
+			return "||";
+		case 2:
+			return "&&";
+		case 3:
+			return "==";
+		case 4:
+			return "!=";
+		case 5:
+			return "<";
+		case 6:
+			return "<=";
+		case 7:
+			return ">";
+		case 8:
+			return ">=";
+		case 9:
+			return "+";
+		case 10:
+			return "-";
+		case 11:
+			return "*";
+		case 12:
+			return "/";
+		case 13:
+			return "%";
+		default:
+			return "";
+	}
+}
+
+void binaryTAC_expression(int op) {
+	if(currentTAC.size() >= 2) {
+		string opr = getBinaryOperator(op);
+
+		pair<int, int> tempTac1 = currentTAC.top();
+		currentTAC.pop();
+		pair<int, int> tempTac2 = currentTAC.top();
+		currentTAC.pop();
+
+		bool errorOccured = false;
+		switch(op) {
+			case 1:
+			case 2:
+				errorOccured = tempTac1.second != 4;
+				errorOccured = errorOccured || tempTac1.second != tempTac2.second;
+				break;
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+				errorOccured = tempTac1.second != tempTac2.second;
+				break;
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+				errorOccured = tempTac1.second == 4;
+				errorOccured = errorOccured || tempTac1.second != tempTac2.second;
+				break;
+			default:
+				break;
+		}
+
+		if(errorOccured) {
+			expressionErrors(op);
+			return;
+		}
+
+		TAC += "t" + to_string(CURRENT_TAC_INDEX);
+		TAC += " = ";
+		TAC += "t" + to_string(tempTac2.first);
+		TAC += " " + opr + " ";
+		TAC += "t" + to_string(tempTac1.first) + "\n";
+
+		pair<int, int> newTac;
+		newTac.first = CURRENT_TAC_INDEX;
+		if(op >= 3 && op <= 8) {
+			newTac.second = 4;
+		}
+		else {
+			newTac.second = tempTac1.second;
+		}
+		// printTAC(newTac);
+		currentTAC.push(newTac);
+		CURRENT_TAC_INDEX++;
+	}
+}
+
+void assign_expression_TAC(int ind, string iden, int type) {
+	if(currentTAC.size() >= 1) {
+		pair<int, int> tempTac = currentTAC.top();
+		currentTAC.pop();
+
+		if(type == 2) {
+			if(!(tempTac.second == 2 || tempTac.second == 1)) {
+				// cout << "ee\n";
+				expressionErrors(0);
+				return;
+			}
+		}
+		else {
+			if(type != tempTac.second) {
+				// cout << "dd\n";
+				expressionErrors(0);
+				return;
+			}
+		}
+
+		if(ind == 1) {
+			TAC += "$" + iden;
+			TAC += " = ";
+			TAC += "t" + to_string(tempTac.first) + "\n";
+		}
+		else if(ind >= 2 && ind <= 6) {
+			if(!(type == 1 || type == 2)) {
+				expressionErrors(0);
+				return;
+			}
+
+			TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = $" + iden + "\n";
+			CURRENT_TAC_INDEX++;
+
+			TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = ";
+
+			if(ind == 2) {
+				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " + ";
+			}
+			else if(ind == 3) {
+				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " - ";
+			}
+			else if(ind == 4) {
+				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " * ";
+			}
+			else if(ind == 5) {
+				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " / ";
+			}
+			else if(ind == 6) {
+				TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + " % ";
+			}
+			
+			TAC += "t" + to_string(tempTac.first) + "\n";
+			CURRENT_TAC_INDEX++;
+
+			TAC += "$" + iden;
+			TAC += " = ";
+			TAC += "t" + to_string(CURRENT_TAC_INDEX - 1) + "\n";
+		}
+	}
+}
+
 void generateTACFile(string fileName) {
 	fileName += ".tac";
 	ofstream tacFile(fileName);
@@ -2974,11 +3294,17 @@ void generateTACFile(string fileName) {
 	tacFile.close();
 }
 
+void printTAC(pair<int, int> temptac) {
+	cout << "TAC: " << temptac.first << "." << temptac.second << endl;
+}
+
 void IDENAlreadyExistsError(int m, int errNo) {
 	// errNo:
-	// 1-4	:	Function Declaration
-	// 5	:	Function parameter declaration
-	// 6-9	:	Variable Declaration
+	// 1-4		:	Function Declaration
+	// 5		:	Function parameter declaration
+	// 6-9		:	Variable Declaration
+	// 10-11	:	Function Call
+	// 12		:	Variable Call
 
 	int k = errNo * 2;
 	string t = "";
@@ -3024,6 +3350,92 @@ void IDENAlreadyExistsError(int m, int errNo) {
 			t += to_string(k);
 			t += "): Illegal Variable declaration. Functional Identifier with this value is already declared.";
 		}
+	}
+	else if(errNo >= 10 && errNo <= 11) {
+		if(m == -1) {
+			k = 2000 + k - 1;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): No function was declared with this Identifier. A variable was.";
+		}
+		else if(m == 1) {
+			k = 2000 + k;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): No function was declared with this Identifier.";
+		}
+	}
+	else if(errNo == 12) {
+		if(m == -2) {
+			k = 2000 + k - 1;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): No variable was declared with this Identifier. A function was.";
+		}
+		else if(m == -1) {
+			k = 2000 + k;
+			t = "\nERROR CODE(0";
+			t += to_string(k);
+			t += "): No variable was declared with this Identifier.";
+		}
+	}
+
+	ERROR = 1;
+	const char *s = t.c_str();
+	yyerror(s);
+}
+
+void expressionErrors(int errNo) {
+	string t = "";
+
+	switch(errNo) {
+		case 0:
+			t = "\nERROR CODE(02025): Incorrect data types for assignment";
+			break;
+		case 1:
+			t = "\nERROR CODE(02026): Error occured with ||";
+			break;
+		case 2:
+			t = "\nERROR CODE(02027): Error occured with &&";
+			break;
+		case 3:
+			t = "\nERROR CODE(02028): Error occured with ==";
+			break;
+		case 4:
+			t = "\nERROR CODE(02029): Error occured with !=";
+			break;
+		case 5:
+			t = "\nERROR CODE(02030): Error occured with <";
+			break;
+		case 6:
+			t = "\nERROR CODE(02031): Error occured with <=";
+			break;
+		case 7:
+			t = "\nERROR CODE(02032): Error occured with >";
+			break;
+		case 8:
+			t = "\nERROR CODE(02033): Error occured with >=";
+			break;
+		case 9:
+			t = "\nERROR CODE(02034): Error occured with +";
+			break;
+		case 10:
+			t = "\nERROR CODE(02035): Error occured with -";
+			break;
+		case 11:
+			t = "\nERROR CODE(02036): Error occured with *";
+			break;
+		case 12:
+			t = "\nERROR CODE(02037): Error occured with /";
+			break;
+		case 13:
+			t = "\nERROR CODE(02038): Error occured with %";
+			break;
+		case 14:
+			t = "\nERROR CODE(02039): Error occured with !";
+			break;
+		default:
+			break;
 	}
 
 	ERROR = 1;

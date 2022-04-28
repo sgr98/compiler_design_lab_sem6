@@ -13,6 +13,8 @@
 11  -   loop
 12  -   cond5
 13  -   func3
+14  -   normal1.xvgs
+15  -   normal2.xvgs
 
 101 -   e1
 102 -   arithmetic_err1.xvgs
