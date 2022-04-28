@@ -1274,6 +1274,14 @@ void binaryTAC_expression(int op) {
 			case 12:
 			case 13:
 				errorOccured = tempTac1.second == 4;
+				// if(tempTac1.second != tempTac2.second) {
+				// 	if((tempTac1.second == 3 && tempTac2.second == 1)
+				// 	|| (tempTac1.second == 1 && tempTac2.second == 3)) {
+
+				// 	}
+				// 	else
+				// 		errorOccured = true;
+				// }
 				errorOccured = errorOccured || tempTac1.second != tempTac2.second;
 				break;
 			default:
@@ -1588,4 +1596,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);} 
+void yyerror (char *s) {fprintf (stderr, "%s\n", s);}

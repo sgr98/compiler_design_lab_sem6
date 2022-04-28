@@ -3,6 +3,6 @@ main {
     char c;
     x = input();
     c = input();
-    output() = y;
+    output() = c;
     output() = x;
 }
