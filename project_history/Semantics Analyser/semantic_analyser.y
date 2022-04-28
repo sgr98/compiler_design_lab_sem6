@@ -27,7 +27,7 @@
 	}
 
 	// DEBUG CODE 
-	int DEBUG_CODE = 1;
+	int DEBUG_CODE = -1;
 
 	// THREE ADDRESS CODE
 	string TAC = "";
@@ -41,6 +41,12 @@
 	int ERROR = 0;
 	int CURRENT_TAC_INDEX = 1;
 	stack<pair<int, int>> currentTAC;	// first = tac_index, second = tac_data_type
+	int LABEL = 1;
+	stack<int> currentLabel;
+	int END_LABEL = 1;
+	stack<int> currentEndLabel;
+	int LOOP_LABEL = 1;
+	stack<int> currentLoopLabel;
 
 	// SYMBOL TABLE
 	class SymbolTableNode {
@@ -205,6 +211,7 @@
 	void binaryTAC_expression(int op);
 	void assign_expression_TAC(int ind, string iden, int type);
 	void generateTACFile(string fileName);
+	void conditional_expression_TAC(int type);
 	void printTAC(pair<int, int> temptac);
 
 	// ERROR FUNCTIONS
@@ -813,6 +820,7 @@ op_neg_expression:      factor
 
 conditional_statement:		simple_if
 							{
+								conditional_expression_TAC(4);
 								
 								if(DEBUG_CODE == 1)
 									printf("conditional_statement 1 ");
@@ -820,6 +828,7 @@ conditional_statement:		simple_if
 
 						|	simple_if simple_else
 							{
+								conditional_expression_TAC(3);
 								
 								if(DEBUG_CODE == 1)
 									printf("conditional_statement 2 ");
@@ -827,6 +836,7 @@ conditional_statement:		simple_if
 
 						|	simple_if ladder_elif
 							{
+								conditional_expression_TAC(3);
 								
 								if(DEBUG_CODE == 1)
 									printf("conditional_statement 3 ");
@@ -834,28 +844,29 @@ conditional_statement:		simple_if
 
 						|	simple_if ladder_elif simple_else
 							{
+								conditional_expression_TAC(3);
 								
 								if(DEBUG_CODE == 1)
 									printf("conditional_statement 4 ");
 							}
 						;
 
-simple_if:		IF left_paran op_or_expression right_paran block
+simple_if:		IF left_paran op_or_expression right_paran_cond block
 				{
-					
+
 					if(DEBUG_CODE == 1)
 						printf("simple_if ");
 				}
 			;
 
-ladder_elif:	ELIF left_paran op_or_expression right_paran block
+ladder_elif:	elif_term left_paran op_or_expression right_paran_cond block
 				{
 					
 					if(DEBUG_CODE == 1)
 						printf("ladder_elif 1 ");
 				}
 
-			|	ELIF left_paran op_or_expression right_paran block ladder_elif
+			|	elif_term left_paran op_or_expression right_paran_cond block ladder_elif
 				{
 					
 					if(DEBUG_CODE == 1)
@@ -863,7 +874,7 @@ ladder_elif:	ELIF left_paran op_or_expression right_paran block
 				}
 			;
 
-simple_else:	ELSE block
+simple_else:	else_term block
 				{
 					
 					if(DEBUG_CODE == 1)
@@ -871,13 +882,54 @@ simple_else:	ELSE block
 				}
 			;
 
-loop_statement:		LOOP left_paran op_or_expression right_paran block
+elif_term:		ELIF
+				{
+					conditional_expression_TAC(2);
+
+					if(DEBUG_CODE == 1)
+						printf("ELIF ");
+				}
+			;
+
+else_term:		ELSE
+				{
+					conditional_expression_TAC(2);
+
+					if(DEBUG_CODE == 1)
+						printf("ELSE ");	
+				}
+			;
+
+loop_statement:		loop_term left_paran op_or_expression right_paran_cond block
 					{
+						conditional_expression_TAC(6);
+						conditional_expression_TAC(4);
 						
 						if(DEBUG_CODE == 1)
 							printf("loop_statement ");
 					}
 				;
+
+loop_term:		LOOP 
+				{
+					conditional_expression_TAC(5);
+					
+					if(DEBUG_CODE == 1)
+						printf("loop_statement ");
+				}
+			;
+
+right_paran_cond:		RP
+						{	
+							SCOPE--;
+							currentScope.pop();
+
+							conditional_expression_TAC(1);
+							
+							if(DEBUG_CODE == 1)
+								printf("RP ");
+						}
+					;
 
 return_statement:	RETURN op_or_expression
 					{
@@ -1320,6 +1372,57 @@ void generateTACFile(string fileName) {
 	ofstream tacFile(fileName);
 	tacFile << TAC;
 	tacFile.close();
+}
+
+void conditional_expression_TAC(int type) {
+	if(type == 1) {
+		if(currentTAC.size() >= 1) {
+			pair<int, int> tempTac = currentTAC.top();
+			currentTAC.pop();
+
+			TAC += "@if = t" + to_string(tempTac.first);
+			TAC += " ^ LABEL" + to_string(LABEL) + "\n";
+
+			currentLabel.push(LABEL);
+			LABEL++;
+		}
+	}
+	else if(type == 2) {
+		TAC += "JUMP ^ END" + to_string(END_LABEL) + "\n";
+		currentEndLabel.push(END_LABEL);
+		END_LABEL++;
+
+		if(currentLabel.size() >= 1) {
+			TAC += "LABEL" + to_string(currentLabel.top()) + ":\n";
+			currentLabel.pop();
+		}
+	}
+	else if(type == 3) {
+		if(currentEndLabel.size() >= 1) {
+			TAC += "END" + to_string(currentEndLabel.top()) + ":\n";
+			currentEndLabel.pop();
+		}
+	}
+	else if(type == 4) {
+		if(currentLabel.size() >= 1) {
+			TAC += "LABEL" + to_string(currentLabel.top()) + ":\n";
+			currentLabel.pop();
+		}
+	}
+	else if(type == 5) {
+		TAC += "LOOP_LABEL" + to_string(LOOP_LABEL) + ":\n";
+		currentLoopLabel.push(LOOP_LABEL);
+		LOOP_LABEL++;
+	}
+	else if(type == 6) {
+		if(currentLoopLabel.size() >= 1) {
+			TAC += "JUMP ^ LOOP_LABEL" + to_string(currentLoopLabel.top()) + "\n";
+			currentLoopLabel.pop();
+		}
+	}
+
+	// int LOOP_LABEL = 1;
+	// stack<int> currentLoopLabel;
 }
 
 void printTAC(pair<int, int> temptac) {
