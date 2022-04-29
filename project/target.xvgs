@@ -1,15 +1,22 @@
-int fact(int n) {
-    int i = 1;
-    int mul = 1;
-    loop(i <= n) {
-        mul *= i;
-        i += 1;
-    }
-    return mul;
-}
 main {
-    int n;
-    n = input();
-    int mul = fact(n);
-    output() = mul;
+    int a = 0;
+    int b = 1;
+    if(a < b) {
+        int d = 10;
+        loop(d <= 20) {
+            d += 1;
+            int l = 5;
+        }
+        a = -1;
+        output() = d;
+        output() = a;
+    }
+    else {
+        int e = 20;
+        a = -1;
+        b = -1;
+    }
+    if(a < b) {
+        a -= 1;
+    }
 }
