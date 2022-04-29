@@ -149,19 +149,12 @@ class AssemblyInstruction{
                 bool bitwiseflag = checkBitwiseExpression(line);
                 bool functionflag = checkFunctionExpression(line);
                 bool mainflag = checkMainExpression(line);
-                bool v1flag = checkV1(line);
+                bool v1flag = checkV1Expression(line);
                 if(mainflag){
                     output = output + "main:\n";
                 }else if(v1flag){
-                    int equalpos = line.find("=");
-                    string address1 = line.substr(equalpos+1,line.size()-equalpos);
-                    address1 = removeSpace(address1);
-                    string instruction;
-                    int register1 = checkTemporaryRegister(address1);
-                    address1 = "$t" + to_string(register1);
-                    instruction = "li $v1," + address1;
-                    cout<<instruction;
-                    output = output + "\t" + instruction + "\n";
+                    string buffer = createV1Expression(line);
+                    output = output + "\t" + buffer + "\n";
                 }else if(operatorflag){
                     string buffer = createOperatorExpression(line);
                     output = output + "\t" + buffer + "\n";
@@ -203,7 +196,7 @@ class AssemblyInstruction{
                 return false;
             }
 
-            bool checkV1(string line){
+            bool checkV1Expression(string line){
                 if(line.find("v1")!=string::npos){
                     return true;
                 }
@@ -259,7 +252,8 @@ class AssemblyInstruction{
             }
 
             bool checkControlExpression(string line){
-                if(line.find("JUMP")!=string::npos || line.find("JAL")!=string::npos){
+                if(line.find("JUMP")!=string::npos || line.find("JAL")!=string::npos ||
+                   line.find("JR")!=string::npos){
                     //cout<<"Enter"<<endl;
                     return true;
                 }
@@ -339,9 +333,9 @@ class AssemblyInstruction{
                     return instruction;
                 }else if(line.find("/")!=string::npos){
                     operatorpos = line.find("/");
-                    address2 = line.substr(equalpos+1,operatorpos-1);
+                    address2 = line.substr(equalpos+1,operatorpos-equalpos-1);
                     address2 = removeSpace(address2);
-                    address3 = line.substr(operatorpos+1,line.size());
+                    address3 = line.substr(operatorpos+1,line.size()-operatorpos+1);
                     address3 = removeSpace(address3);
 
                     int register1 = getTemporaryRegister(address1);
@@ -532,7 +526,7 @@ class AssemblyInstruction{
                     //cout<<endl<<address1<<endl;
                     address1 = removeSpace(address1);
                     
-                    string address2 = line.substr(equalpos+1,relationalpos-equalpos);
+                    string address2 = line.substr(equalpos+1,relationalpos-equalpos-1);
                     address2 = removeSpace(address2);
                     //cout<<endl<<address2<<endl;
                     string address3 = line.substr(relationalpos+1, line.size()-relationalpos);
@@ -563,7 +557,7 @@ class AssemblyInstruction{
                     //cout<<endl<<address1<<endl;
                     address1 = removeSpace(address1);
                     
-                    string address2 = line.substr(equalpos+1,relationalpos-equalpos);
+                    string address2 = line.substr(equalpos+1,relationalpos-equalpos-1);
                     address2 = removeSpace(address2);
                     //cout<<endl<<address2<<endl;
                     string address3 = line.substr(relationalpos+1, line.size()-relationalpos);
@@ -594,10 +588,10 @@ class AssemblyInstruction{
                     //cout<<endl<<address1<<endl;
                     address1 = removeSpace(address1);
                     
-                    string address2 = line.substr(equalpos+1,relationalpos-equalpos);
+                    string address2 = line.substr(equalpos+1,relationalpos-equalpos-1);
                     address2 = removeSpace(address2);
                     //cout<<endl<<address2<<endl;
-                    string address3 = line.substr(relationalpos+1, line.size()-relationalpos);
+                    string address3 = line.substr(relationalpos+2, line.size()-relationalpos);
                     address3 = removeSpace(address3);
                     //cout<<endl<<address3<<endl;
 
@@ -659,8 +653,19 @@ class AssemblyInstruction{
                 if(line.find("JUMP")!=string::npos){
                     int arrowpos = instruction.find("^");
                     instruction = instruction.substr(arrowpos+1,instruction.size()-arrowpos);
-                    instruction = "j " + instruction + "\n";
+                    instruction = removeSpace(instruction);
+                    instruction = "\tj " + instruction + "\n";
                     cout<<instruction<<endl;
+                    return instruction;
+                }else if(line.find("JAL")!=string::npos){
+                    int arrowpos = instruction.find("^");
+                    instruction = instruction.substr(arrowpos+1,instruction.size()-arrowpos);
+                    instruction = removeSpace(instruction);
+                    instruction = "jal " + instruction;
+                    cout<<instruction<<endl;
+                    return instruction;
+                }else if(line.find("JR")!=string::npos){
+                    string instruction = "jr &ra";
                     return instruction;
                 }
                 return "\0";
@@ -671,7 +676,7 @@ class AssemblyInstruction{
                 int arrowpos = line.find("^");
                 instruction = instruction.substr(arrowpos+1,instruction.size()-arrowpos);
                 instruction = removeSpace(instruction);
-                cout<<instruction<<endl;
+                //cout<<instruction<<endl;
                 return instruction;
             }
 
@@ -729,12 +734,12 @@ class AssemblyInstruction{
                     int equalpos = line.find("=");
                     int relationalpos = line.find("!");
                     string address1 = line.substr(0,equalpos);
-                    cout<<endl<<address1<<endl;
+                    //cout<<endl<<address1<<endl;
                     address1 = removeSpace(address1);
                     
                     string address2 = line.substr(relationalpos+1,line.size() - relationalpos);
                     address2 = removeSpace(address2);
-                    cout<<endl<<address2<<endl;
+                    //cout<<endl<<address2<<endl;
 
                     int register1 = getTemporaryRegister(address1);
                     address1 = "$t" + to_string(register1);
@@ -742,8 +747,31 @@ class AssemblyInstruction{
                     address2 = "$t" + to_string(register1);
 
 
-                    string instruction = "not " + address1 + "," + address2 + "\n";
+                    string instruction = "not " + address1 + "," + address2;
                     //cout<<instruction<<endl;
+                    return instruction;
+                }
+                return "\0";
+            }
+
+            string createV1Expression(string line){
+                int equalpos = line.find("=");
+                string instruction;
+                //cout<<line<<endl;
+                string address1 = line.substr(0,equalpos-1);
+                address1 = removeSpace(address1);
+                string address2 = line.substr(equalpos+1,line.size()-equalpos);
+                address2 = removeSpace(address2);
+                //cout<<address1<<" "<<address2<<endl;
+                if(address1.find("v1")!=string::npos){
+                    int register1 = checkTemporaryRegister(address2);
+                    instruction = "move $v1,$t" + to_string(register1);
+                    //cout<<"address1:"<<instruction<<endl;
+                    return instruction;
+                }else if(address2.find("v1")!=string::npos){
+                    int register1 = getTemporaryRegister(address1);
+                    instruction = "move $t" + to_string(register1) + ",$v1";
+                    //cout<<"address2:"<<instruction<<endl;
                     return instruction;
                 }
                 return "\0";
@@ -810,16 +838,17 @@ int main(){
         SymbolTableNode Node = Symbol_Table.getIdentifierVariable(i);
         Assembly_output.variable_declaration(Node);
     }
-    Assembly_output.addInstruction(".text\n.global main\n");
-    int i =0;
+    Assembly_output.addInstruction(".text\n.globl main\n");
+
     while(fin){
         if(line_buffer=="\0")
             break;
         getline(fin,line_buffer);
         //cout<<line_buffer;
         Assembly_output.addExpression(line_buffer);
-        i++;
     }
+
+    Assembly_output.addInstruction("\tli $v0,10\n\tsyscall");
 
     string output = Assembly_output.get_output();
 
