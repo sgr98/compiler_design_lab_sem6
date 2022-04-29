@@ -1401,24 +1401,24 @@ void conditional_expression_TAC(int type) {
 		END_LABEL++;
 
 		if(currentLabel.size() >= 1) {
-			TAC += "LABEL" + to_string(currentLabel.top()) + ":\n";
+			TAC += "^ LABEL" + to_string(currentLabel.top()) + ":\n";
 			currentLabel.pop();
 		}
 	}
 	else if(type == 3) {
 		if(currentEndLabel.size() >= 1) {
-			TAC += "END" + to_string(currentEndLabel.top()) + ":\n";
+			TAC += "^ END" + to_string(currentEndLabel.top()) + ":\n";
 			currentEndLabel.pop();
 		}
 	}
 	else if(type == 4) {
 		if(currentLabel.size() >= 1) {
-			TAC += "LABEL" + to_string(currentLabel.top()) + ":\n";
+			TAC += "^ LABEL" + to_string(currentLabel.top()) + ":\n";
 			currentLabel.pop();
 		}
 	}
 	else if(type == 5) {
-		TAC += "LOOP_LABEL" + to_string(LOOP_LABEL) + ":\n";
+		TAC += "^ LOOP_LABEL" + to_string(LOOP_LABEL) + ":\n";
 		currentLoopLabel.push(LOOP_LABEL);
 		LOOP_LABEL++;
 	}
