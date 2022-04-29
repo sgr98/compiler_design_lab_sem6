@@ -2,21 +2,13 @@ main {
     int a = 0;
     int b = 1;
     if(a < b) {
-        int d = 10;
-        loop(d == 20) {
-            d += 1;
-            int l = 5;
-        }
         a = -1;
-        output() = d;
-        output() = a;
     }
-    else {
-        int e = 20;
-        a = -1;
+    if(a > b) {
         b = -1;
     }
-    if(a < b) {
-        a -= 1;
+    int c = 5;
+    if(a > c) {
+        c = -1;
     }
 }

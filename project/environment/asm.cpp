@@ -492,15 +492,15 @@ class AssemblyInstruction{
                     int equalpos = line.find("=");
                     int relationalpos = line.find("==");
                     string address1 = line.substr(0,equalpos);
-                    //cout<<endl<<address1<<endl;
+                    cout<<endl<<address1<<endl;
                     address1 = removeSpace(address1);
                     
                     string address2 = line.substr(equalpos+1,relationalpos-equalpos-1);
                     address2 = removeSpace(address2);
-                    //cout<<endl<<address2<<endl;
+                    cout<<endl<<address2<<endl;
                     string address3 = line.substr(relationalpos+2, line.size()-relationalpos+1);
                     address3 = removeSpace(address3);
-                    //cout<<endl<<address3<<endl;
+                    cout<<endl<<address3<<endl;
 
                     int register1 = getTemporaryRegister(address1);
                     address1 = "$t" + to_string(register1);
@@ -509,7 +509,7 @@ class AssemblyInstruction{
                     register1 = checkTemporaryRegister(address3);
                     address3 = "$t" + to_string(register1);
 
-                    instruction = "bge " + address2 + "," + address3 +",L" + to_string(relationalLabelCount) + "\n";
+                    instruction = "beq " + address2 + "," + address3 +",L" + to_string(relationalLabelCount) + "\n";
                     instruction = instruction + "\tli " + address1 + ",0\n";
                     instruction = instruction + "\tj L" + to_string(relationalLabelCount+1) + "\n";
                     instruction = instruction + "\tL" + to_string(relationalLabelCount) + ":\n";
@@ -655,7 +655,7 @@ class AssemblyInstruction{
                     instruction = instruction.substr(arrowpos+1,instruction.size()-arrowpos);
                     instruction = removeSpace(instruction);
                     instruction = "\tj " + instruction + "\n";
-                    cout<<instruction<<endl;
+                    //cout<<instruction<<endl;
                     return instruction;
                 }else if(line.find("JAL")!=string::npos){
                     int arrowpos = instruction.find("^");
