@@ -20,7 +20,7 @@ $d_2 = t6
 ^ LOOP_LABEL1:
 t7 = $d_2
 t8 = 20
-t9 = t7 < t8
+t9 = t7 == t8
 @if = t9 ^ LABEL2
 t10 = 1
 t11 = $d_2
