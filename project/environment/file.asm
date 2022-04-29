@@ -16,7 +16,7 @@
 .globl main
 	li $t0,1
 	li $t1,3
-	bne $t0,$t1,L1
+	bge $t0,$t1,L1
 	li $t2,0
 	j L2
 	L1:
