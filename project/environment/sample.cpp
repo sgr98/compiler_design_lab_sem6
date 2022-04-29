@@ -9,7 +9,7 @@ using namespace std;
 // error_arithmetic_1.xvgs
 
 int main(int argc, char *argv[]) {
-    string fileName = "./exmp/arithmetic_1.xvgs";
+    string fileName = "file.xvgs";
     string processedFileName = "target.xvgs";
 
     if(argc > 2) {

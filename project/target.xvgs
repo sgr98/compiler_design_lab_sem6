@@ -1,20 +1,11 @@
 main {
-    int a = 0;
-    int b = 1;
-    if(a < b) {
-        int d = 10;
-        loop(d < 20) {
-            d += 1;
-            int l = 5;
-        }
-        a = -1;
+    int i = 2;
+    int n;
+    n = input();
+    int sum = 0;
+    loop(i <= n) {
+        sum += i;
+        i += 1;
     }
-    else {
-        int e = 20;
-        a = -1;
-        b = -1;
-    }
-    if(a < b) {
-        a -= 1;
-    }
+    output() = sum;
 }

@@ -6,6 +6,7 @@
         "xstring": "cpp",
         "utility": "cpp",
         "vector": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "iosfwd": "cpp"
     }
 }
