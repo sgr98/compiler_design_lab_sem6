@@ -8,7 +8,8 @@ parser: semantic_analyser.y lexical_analyser.l
 preprocess: sample.cpp preprocessor.cpp
 	g++ sample.cpp preprocessor.cpp -o sample
 
-asm: 
+asm: asm.cpp
+	g++ asm.cpp -o asm.exe
 
 clean:
 	rm y.tab.c y.tab.h lex.yy.c lex.yy.o gm.cc parser.exe

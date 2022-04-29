@@ -7,9 +7,8 @@ make: *** No rule to make target 'all'.  Stop.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Fri Apr 29 11:45:30 2022
+# Make data base, printed on Fri Apr 29 11:56:09 2022
 
 # Variables
 
@@ -42,8 +41,7 @@ PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\Wi
 # default
 MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # automatic
-@D = $(patsubs 
-t %/,%,$(patsubst %\,%,$(dir $@)))
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
 CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17748_EECCLAJTABHWCVDA
 # environment
@@ -133,8 +131,7 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = D:\Program files(for my)\JDK\Java\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows\sqlite-tools-win32-x86-3330000;D:\Python\Scripts;D:\Python;C:\Python38\Scripts\;C:\Python38\;D:\Program files(for my)\Scripts\;D:\Program files(for my)\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;D:\Program files(for my)\brackets\command;D:\Program files(for my)\Matlab r2020a\bin;D:\Program files(for my)\Codeblocks(for MinGW)\CodeBlocks\MinGW\bin;C:\ProgramData\chocolatey\bin;D:\Program files(for my)\Verilog\iverilog\bin;D:\Program files(for my)\NodeJS\;C:\Program Files\Git\cmd;D:\Program files(for my)\MongoDB\Mongodb\bin;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows;D:\Program files(for my)\nasm\nasm-2.14.02;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\GnuWin32\GnuWin32\bin;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;D:\Program files(for my)\Visual Studio code\Microsoft VS Code\bin;C:\Users\Sagar Singh\AppData\Local\GitHubDesktop\bin;C:\Users\Sagar Singh\AppData\Roaming\npm;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;C:\Users\Sagar Singh\AppData\Roaming\Python\ 
-Python38\Scripts;D:\NonSpaceApplication\FGPAModelSim\intelFGPA_pro\21.1\modelsim_ase\win32aloem;D:\Program files(for my)\Miktex\Miktex\miktex\bin\x64\;D:\Program files(for my)\Heroku\Heroku\bin;D:\Program files(for my)\SWI Prolog\SWI Prolog\swipl\bin
+PATH = D:\Program files(for my)\JDK\Java\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows\sqlite-tools-win32-x86-3330000;D:\Python\Scripts;D:\Python;C:\Python38\Scripts\;C:\Python38\;D:\Program files(for my)\Scripts\;D:\Program files(for my)\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;D:\Program files(for my)\brackets\command;D:\Program files(for my)\Matlab r2020a\bin;D:\Program files(for my)\Codeblocks(for MinGW)\CodeBlocks\MinGW\bin;C:\ProgramData\chocolatey\bin;D:\Program files(for my)\Verilog\iverilog\bin;D:\Program files(for my)\NodeJS\;C:\Program Files\Git\cmd;D:\Program files(for my)\MongoDB\Mongodb\bin;D:\Program files(for my)\SQLite\Precompiled Binaries for Windows;D:\Program files(for my)\nasm\nasm-2.14.02;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\GnuWin32\GnuWin32\bin;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;D:\Program files(for my)\PyCharm Community Edition 2019.3.1\bin;D:\Program files(for my)\Visual Studio code\Microsoft VS Code\bin;C:\Users\Sagar Singh\AppData\Local\GitHubDesktop\bin;C:\Users\Sagar Singh\AppData\Roaming\npm;C:\Users\Sagar Singh\AppData\Local\Microsoft\WindowsApps;C:\Users\Sagar Singh\AppData\Roaming\Python\Python38\Scripts;D:\NonSpaceApplication\FGPAModelSim\intelFGPA_pro\21.1\modelsim_ase\win32aloem;D:\Program files(for my)\Miktex\Miktex\miktex\bin\x64\;D:\Program files(for my)\Heroku\Heroku\bin;D:\Program files(for my)\SWI Prolog\SWI Prolog\swipl\bin
 # environment
 COMPUTERNAME = LAPTOP-SNORG805
 # default
@@ -227,10 +224,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/WORK/IIT TP/6th  
-Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1650394810): 10 files, no impossibilities.
+# . (key d:/WORK/IIT TP/6th Sem/Lab/Compiler Design Laboratory/Projects/development/Compiler/compiler_design_lab_sem6, mtime 1651213462): 11 files, no impossibilities.
 
-# 10 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -287,12 +283,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 17 / storage = 150 B / avg = 8 B
-# current buf: size = 8174 B / used = 150 B / count = 17 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 18 / storage = 160 B / avg = 8 B
+# current buf: size = 8174 B / used = 160 B / count = 18 / avg = 8 B
 
-# strcache performance: lookups = 20 / hit rate = 15%
+# strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
-# Load=17/8192=0%, Rehash=0, Collisions=0/20=0%
-# Finished Make data base on Fri Apr 29 11:45:30 2022
+# Load=18/8192=0%, Rehash=0, Collisions=0/21=0%
+# Finished Make data base on Fri Apr 29 11:56:09 2022
 
  

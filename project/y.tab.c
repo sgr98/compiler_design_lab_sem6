@@ -1843,7 +1843,7 @@ yyreduce:
 						cout << "\n~~~~~~~~ERROR OCCURED~~~~~~~~\n";	
 					}
 					else if(ERROR == 0) {
-						symbolTable.printTable();
+						// symbolTable.printTable();
 						TAC = constructTACHeader() + TAC;
 						generateTACFile("file");
 					}
