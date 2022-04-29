@@ -47,6 +47,7 @@
 	stack<int> currentEndLabel;
 	int LOOP_LABEL = 1;
 	stack<int> currentLoopLabel;
+	bool isIF = true;
 
 	// SYMBOL TABLE
 	class SymbolTableNode {
@@ -891,7 +892,7 @@ conditional_statement:		simple_if
 							}
 						;
 
-simple_if:		IF left_paran op_or_expression right_paran_cond block
+simple_if:		if_term left_paran op_or_expression right_paran_cond block
 				{
 
 					if(DEBUG_CODE == 1)
@@ -922,8 +923,18 @@ simple_else:	else_term block
 				}
 			;
 
+if_term:		IF
+				{
+					isIF = true;
+
+					if(DEBUG_CODE == 1)
+						printf("IF ");
+				}
+			;
+
 elif_term:		ELIF
 				{
+					isIF = false;
 					conditional_expression_TAC(2);
 
 					if(DEBUG_CODE == 1)
@@ -933,6 +944,7 @@ elif_term:		ELIF
 
 else_term:		ELSE
 				{
+					isIF = false;
 					conditional_expression_TAC(2);
 
 					if(DEBUG_CODE == 1)
@@ -1440,13 +1452,17 @@ void conditional_expression_TAC(int type) {
 
 			currentLabel.push(LABEL);
 			LABEL++;
+
+			if(isIF) {
+				currentEndLabel.push(END_LABEL);
+				END_LABEL++;
+			}
 		}
 	}
 	else if(type == 2) {
-		TAC += "JUMP ^ END" + to_string(END_LABEL) + "\n";
-		currentEndLabel.push(END_LABEL);
-		END_LABEL++;
-
+		if(currentEndLabel.size() >= 1) {
+			TAC += "JUMP ^ END" + to_string(currentEndLabel.top()) + "\n";
+		}
 		// FIX THIS
 
 		if(currentLabel.size() >= 1) {
