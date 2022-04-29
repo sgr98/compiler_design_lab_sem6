@@ -128,10 +128,28 @@ If(($val -eq 0) -or ($val -eq 19)) {
 If(($val -eq 0) -or ($val -eq 20)) {
     Write-Host ""
     Write-Host "20" -ForegroundColor Green
-    Write-Host "sum.xvgs" -ForegroundColor Green
-    ./compile.ps1 ./program/sum.xvgs
+    Write-Host "sum_n.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/SHOW/sum_n.xvgs
 }
 If(($val -eq 0) -or ($val -eq 21)) {
+    Write-Host ""
+    Write-Host "21" -ForegroundColor Green
+    Write-Host "sum_2.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/SHOW/sum_2.xvgs
+}
+If(($val -eq 0) -or ($val -eq 22)) {
+    Write-Host ""
+    Write-Host "22" -ForegroundColor Green
+    Write-Host "sum_n.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/SHOW/sum_n.xvgs
+}
+If(($val -eq 0) -or ($val -eq 23)) {
+    
+}
+If(($val -eq 0) -or ($val -eq 24)) {
+    
+}
+If(($val -eq 0) -or ($val -eq 25)) {
     
 }
 

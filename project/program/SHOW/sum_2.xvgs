@@ -1,0 +1,7 @@
+main {
+    int a = 6;
+    int b;
+    b = input();
+    int sum = a + b;
+    output() = sum;
+}

@@ -224,7 +224,7 @@ class AssemblyInstruction{
                     return false;
             }
             bool checkIOExpression(string line){
-                if(line.find("@Input")!=string::npos||line.find("@Output")!=string::npos){
+                if(line.find("@input")!=string::npos||line.find("@output")!=string::npos){
                     return true;
                 }
                 return false;
@@ -404,7 +404,7 @@ class AssemblyInstruction{
 
             string createIOExpression(string line){
                 string instruction;
-                if(line.find("@Input")!=string::npos){
+                if(line.find("@input")!=string::npos){
                     int dollarpos = line.find("$");
                     string address1 = line.substr(dollarpos,line.size()-dollarpos);
                     address1 = removedollar(address1);
@@ -413,7 +413,7 @@ class AssemblyInstruction{
                     instruction = instruction + "\tsw $v0," + address1;
                     //cout<<instruction<<endl; 
                     return instruction;
-                }else if(line.find("@Output")!=string::npos){
+                }else if(line.find("@output")!=string::npos){
                     int dollarpos = line.find("$");
                     string address1 = line.substr(dollarpos,line.size()-dollarpos);
                     address1 = removedollar(address1);
@@ -633,7 +633,7 @@ class AssemblyInstruction{
                 
                 int register1 = checkTemporaryRegister(address1);
                 address1 = "$t" + to_string(register1);
-                instruction = "bge " + address1 + ",$zero," + address2;
+                instruction = "ble " + address1 + ",$zero," + address2;
                 //cout<<instruction<<endl;
                 return instruction;
             }

@@ -9,6 +9,8 @@ main {
             int l = 5;
         }
         a = -1;
+        output() = d;
+        output() = a;
     }
     else {
         int e = 20;
