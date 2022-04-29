@@ -3511,6 +3511,15 @@ void generateTACFile(string fileName) {
 }
 
 void conditional_expression_TAC(int type) {
+	//	1	-	@if = t39 ^ LABEL1
+	//	2	-	JUMP ^ END1
+	//			^ LABEL1:
+	//	3	-	^ END1:
+	//	4	-	^ LABEL1:
+	//	5	-	^ LOOP_LABEL1:
+	//	6	-	JUMP ^ LOOP_LABEL1
+	//	7	-	^ FUNC_LABEL1:
+
 	if(type == 1) {
 		if(currentTAC.size() >= 1) {
 			pair<int, int> tempTac = currentTAC.top();
@@ -3549,6 +3558,9 @@ void conditional_expression_TAC(int type) {
 		if(currentLabel.size() >= 1) {
 			TAC += "^ LABEL" + to_string(currentLabel.top()) + ":\n";
 			currentLabel.pop();
+		}
+		if(currentEndLabel.size() >= 1) {
+			currentEndLabel.pop();
 		}
 	}
 	else if(type == 5) {
@@ -3801,4 +3813,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);} 
+void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
