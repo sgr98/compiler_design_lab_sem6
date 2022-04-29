@@ -99,6 +99,42 @@
 				return internalFunctionTable;
 			}
 
+			int getArgs(int fInd) {
+				return internalFunctionTable[fInd - 1].nArgs;
+			}
+
+			int getReturnType(int fInd) {
+				return internalFunctionTable[fInd - 1].returnType;
+			}
+
+			vector<SymbolTableNode> getFunctionTable(int fInd) {
+				int nargs = getArgs(fInd);
+				int k = 0;
+
+				vector<SymbolTableNode> fVar;
+				int n = internalSymbolTable.size();
+				for(int i = 0; i < n; i++) {
+					if(k >= nargs)
+						break;
+					if(fInd == internalSymbolTable[i].fIndex) {
+						string iden = internalSymbolTable[i].IDEN + "_" + to_string(i);
+						SymbolTableNode stn(iden, internalSymbolTable[i].type, internalSymbolTable[i].scopeIn, internalSymbolTable[i].scope, internalSymbolTable[i].fIndex);
+						fVar.push_back(stn);
+						k++;
+					}
+				}
+				return fVar;
+			}
+
+			int getFIndex(string IDEN) {
+				int n = internalFunctionTable.size();
+				for(int i = 0; i < n; i++) {
+					if(IDEN.compare(internalFunctionTable[i].IDEN) == 0)
+						return i + 1;
+				}
+				return -1;
+			}
+
 			int functionIDENExists(string IDEN) {
 				int n = internalFunctionTable.size();
 				for(int i = 0; i < n; i++) {
@@ -212,6 +248,8 @@
 	void assign_expression_TAC(int ind, string iden, int type);
 	void generateTACFile(string fileName);
 	void conditional_expression_TAC(int type);
+	void functional_expression_TAC(int type, string IDEN);
+	void return_expression_TAC(int fIndex);
 	void printTAC(pair<int, int> temptac);
 
 	// ERROR FUNCTIONS
@@ -274,6 +312,8 @@ main_term:		MAIN
 						const char *s = "\nERROR CODE(02200): FUNCTION Identifier with this value already exists";
 						yyerror(s);
 					}
+
+					TAC += "^ main:\n";
 
 					if(DEBUG_CODE == 1)
 						printf("main_term\n");
@@ -933,6 +973,7 @@ right_paran_cond:		RP
 
 return_statement:	RETURN op_or_expression
 					{
+						return_expression_TAC(FUNCTION - 1);
 						
 						if(DEBUG_CODE == 1)
 							printf("return_statement ");
@@ -1048,6 +1089,8 @@ functional_call:	IDENTIFIER LP RP
 						if(m != -2) {
 							IDENAlreadyExistsError(m, 10);
 						}
+
+						functional_expression_TAC(1, string($1));
 						
 						if(DEBUG_CODE == 1)
 							printf("functional_call 1 ");
@@ -1059,6 +1102,8 @@ functional_call:	IDENTIFIER LP RP
 						if(m != -2) {
 							IDENAlreadyExistsError(m, 11);
 						}
+
+						functional_expression_TAC(2, string($1));
 						
 						if(DEBUG_CODE == 1)
 							printf("functional_call 2 ");
@@ -1127,6 +1172,8 @@ right_paran:	RP
 				{	
 					SCOPE--;
 					currentScope.pop();
+
+					conditional_expression_TAC(7);
 					
 					if(DEBUG_CODE == 1)
 						printf("RP ");
@@ -1400,6 +1447,8 @@ void conditional_expression_TAC(int type) {
 		currentEndLabel.push(END_LABEL);
 		END_LABEL++;
 
+		// FIX THIS
+
 		if(currentLabel.size() >= 1) {
 			TAC += "^ LABEL" + to_string(currentLabel.top()) + ":\n";
 			currentLabel.pop();
@@ -1428,9 +1477,80 @@ void conditional_expression_TAC(int type) {
 			currentLoopLabel.pop();
 		}
 	}
+	else if(type == 7) {
+		TAC += "^ FUNC_LABEL" + to_string(FUNCTION) + ":\n";
+	}
+}
 
-	// int LOOP_LABEL = 1;
-	// stack<int> currentLoopLabel;
+void functional_expression_TAC(int type, string IDEN) {
+	int fInd = symbolTable.getFIndex(IDEN);
+
+	if(type == 1) {
+		TAC += "JAL ^ FUNC_LABEL" + to_string(fInd) + "\n";
+	}
+	else if(type == 2) {
+		int nargs = symbolTable.getArgs(fInd);
+		if(currentTAC.size() >= nargs) {
+			vector<SymbolTableNode> fVar = symbolTable.getFunctionTable(fInd);
+			for(int i = 0; i < nargs; i++) {
+				pair<int, int> tempTac = currentTAC.top();
+				currentTAC.pop();
+
+				TAC += "$" + fVar[nargs - i - 1].IDEN;
+				TAC += " = ";
+				TAC += "t" + to_string(tempTac.first) + "\n";
+			}
+		}
+		else {
+			string t = "\nERROR CODE(02040): Unequal number of arguments in function call";
+			
+			ERROR = 1;
+			const char *s = t.c_str();
+			yyerror(s);
+			return;
+		}
+		TAC += "JAL ^ FUNC_LABEL" + to_string(fInd) + "\n";
+		
+		pair<int, int> newTac;
+		TAC += "t" + to_string(CURRENT_TAC_INDEX) + " = v1\n";
+		newTac.first = CURRENT_TAC_INDEX;
+		newTac.second = symbolTable.getReturnType(fInd);
+		// printTAC(newTac);
+		currentTAC.push(newTac);
+		CURRENT_TAC_INDEX++;
+	}
+	else if(type == 3) {
+		
+	}
+}
+
+void return_expression_TAC(int fIndex) {
+	if(currentTAC.size() >= 1) {
+		// int retType = symbolTable.getReturnType(fIndex);
+		// if(retType == 0) {
+		// 	string t = "\nERROR CODE(02041): VOID return type function trying to return a value.\n";
+			
+		// 	ERROR = 1;
+		// 	const char *s = t.c_str();
+		// 	yyerror(s);
+		// 	return;
+		// }
+
+		pair<int, int> tempTac = currentTAC.top();
+
+		// if(retType != tempTac.second) {
+		// 	string t = "\nERROR CODE(02042): Return type of function does not match returned value.\n";
+			
+		// 	ERROR = 1;
+		// 	const char *s = t.c_str();
+		// 	yyerror(s);
+		// 	return;
+		// }
+
+		currentTAC.pop();
+		TAC += "v1 = t" + to_string(tempTac.first) + "\n";
+		TAC += "JR ^ RA\n";
+	}
 }
 
 void printTAC(pair<int, int> temptac) {
