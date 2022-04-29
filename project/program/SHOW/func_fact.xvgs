@@ -1,15 +1,20 @@
 int fact(int n) {
     int i = 1;
+
     int mul = 1;
     loop(i <= n) {
         mul *= i;
         i += 1;
     }
+
     return mul;
 }
+
 main {
     int n;
     n = input();
+
     int mul = fact(n);
+
     output() = mul;
 }

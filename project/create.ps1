@@ -150,10 +150,16 @@ If(($val -eq 0) -or ($val -eq 23)) {
     ./compile.ps1 ./program/Loop/loop2.xvgs
 }
 If(($val -eq 0) -or ($val -eq 24)) {
-    
+    Write-Host ""
+    Write-Host "24" -ForegroundColor Green
+    Write-Host "func_sum.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/SHOW/func_sum.xvgs
 }
 If(($val -eq 0) -or ($val -eq 25)) {
-    
+    Write-Host ""
+    Write-Host "25" -ForegroundColor Green
+    Write-Host "func_fact.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/SHOW/func_fact.xvgs
 }
 
 # ########################################
