@@ -143,7 +143,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 262 "semantic_analyser.y"
+#line 263 "semantic_analyser.y"
 char *str; int type;
 
 

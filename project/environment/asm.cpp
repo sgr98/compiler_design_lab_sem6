@@ -665,7 +665,7 @@ class AssemblyInstruction{
                     cout<<instruction<<endl;
                     return instruction;
                 }else if(line.find("JR")!=string::npos){
-                    string instruction = "jr &ra";
+                    string instruction = "jr $ra";
                     return instruction;
                 }
                 return "\0";
@@ -838,7 +838,7 @@ int main(){
         SymbolTableNode Node = Symbol_Table.getIdentifierVariable(i);
         Assembly_output.variable_declaration(Node);
     }
-    Assembly_output.addInstruction(".text\n.globl main\n");
+    Assembly_output.addInstruction(".text\n.globl main\n\tj main\n");
 
     while(fin){
         if(line_buffer=="\0")

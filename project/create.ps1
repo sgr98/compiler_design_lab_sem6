@@ -144,7 +144,10 @@ If(($val -eq 0) -or ($val -eq 22)) {
     ./compile.ps1 ./program/SHOW/fact.xvgs
 }
 If(($val -eq 0) -or ($val -eq 23)) {
-    
+    Write-Host ""
+    Write-Host "23" -ForegroundColor Green
+    Write-Host "loop2.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/Loop/loop2.xvgs
 }
 If(($val -eq 0) -or ($val -eq 24)) {
     
