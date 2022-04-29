@@ -140,8 +140,8 @@ If(($val -eq 0) -or ($val -eq 21)) {
 If(($val -eq 0) -or ($val -eq 22)) {
     Write-Host ""
     Write-Host "22" -ForegroundColor Green
-    Write-Host "sum_n.xvgs" -ForegroundColor Green
-    ./compile.ps1 ./program/SHOW/sum_n.xvgs
+    Write-Host "fact.xvgs" -ForegroundColor Green
+    ./compile.ps1 ./program/SHOW/fact.xvgs
 }
 If(($val -eq 0) -or ($val -eq 23)) {
     

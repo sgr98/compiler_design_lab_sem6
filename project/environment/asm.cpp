@@ -323,9 +323,9 @@ class AssemblyInstruction{
                     return instruction;
                 }else if(line.find("*")!=string::npos){
                     operatorpos = line.find("*");
-                    address2 = line.substr(equalpos+1,operatorpos-1);
+                    address2 = line.substr(equalpos+1,operatorpos-equalpos-1);
                     address2 = removeSpace(address2);
-                    address3 = line.substr(operatorpos+1,line.size());
+                    address3 = line.substr(operatorpos+1,line.size()-operatorpos+1);
                     address3 = removeSpace(address3);
 
                     int register1 = getTemporaryRegister(address1);

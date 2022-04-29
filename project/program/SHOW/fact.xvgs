@@ -2,10 +2,13 @@ main {
     int i = 1;
     int n;
     n = input();
+
     int fact = 1;
+
     loop(i <= n) {
         fact *= i;
         i += 1;
     }
+
     output() = fact;
 }
