@@ -250,6 +250,7 @@
 	void generateTACFile(string fileName);
 	void conditional_expression_TAC(int type);
 	void functional_expression_TAC(int type, string IDEN);
+	void break_continue_expression_TAC(int ind);
 	void return_expression_TAC(int fIndex);
 	void printTAC(pair<int, int> temptac);
 
@@ -476,25 +477,32 @@ statement:		variable_declaration SEMICOLON
 						printf("statement 4\n");
 				}
 
-			|	return_statement SEMICOLON
+			|	break_continue_statement SEMICOLON
 				{
 					
 					if(DEBUG_CODE == 1)
 						printf("statement 5\n");
 				}
 
-			|	input_output_statement SEMICOLON
+			|	return_statement SEMICOLON
 				{
 					
 					if(DEBUG_CODE == 1)
 						printf("statement 6\n");
 				}
 
-			|	SEMICOLON
+			|	input_output_statement SEMICOLON
 				{
 					
 					if(DEBUG_CODE == 1)
 						printf("statement 7\n");
+				}
+
+			|	SEMICOLON
+				{
+					
+					if(DEBUG_CODE == 1)
+						printf("statement 8\n");
 				}
             ;
 
@@ -983,6 +991,23 @@ right_paran_cond:		RP
 						}
 					;
 
+break_continue_statement:		BREAK
+								{
+									break_continue_expression_TAC(1);
+									
+									if(DEBUG_CODE == 1)
+										printf("break_continue_statement 1 ");
+								}
+
+							|	CONTINUE
+								{
+									break_continue_expression_TAC(2);
+									
+									if(DEBUG_CODE == 1)
+										printf("break_continue_statement 2 ");
+								}
+							;
+
 return_statement:	RETURN op_or_expression
 					{
 						return_expression_TAC(FUNCTION - 1);
@@ -1442,6 +1467,15 @@ void generateTACFile(string fileName) {
 }
 
 void conditional_expression_TAC(int type) {
+	//	1	-	@if = t39 ^ LABEL1
+	//	2	-	JUMP ^ END1
+	//			^ LABEL1:
+	//	3	-	^ END1:
+	//	4	-	^ LABEL1:
+	//	5	-	^ LOOP_LABEL1:
+	//	6	-	JUMP ^ LOOP_LABEL1
+	//	7	-	^ FUNC_LABEL1:
+
 	if(type == 1) {
 		if(currentTAC.size() >= 1) {
 			pair<int, int> tempTac = currentTAC.top();
@@ -1463,7 +1497,6 @@ void conditional_expression_TAC(int type) {
 		if(currentEndLabel.size() >= 1) {
 			TAC += "JUMP ^ END" + to_string(currentEndLabel.top()) + "\n";
 		}
-		// FIX THIS
 
 		if(currentLabel.size() >= 1) {
 			TAC += "^ LABEL" + to_string(currentLabel.top()) + ":\n";
@@ -1480,6 +1513,9 @@ void conditional_expression_TAC(int type) {
 		if(currentLabel.size() >= 1) {
 			TAC += "^ LABEL" + to_string(currentLabel.top()) + ":\n";
 			currentLabel.pop();
+		}
+		if(currentEndLabel.size() >= 1) {
+			currentEndLabel.pop();
 		}
 	}
 	else if(type == 5) {
@@ -1537,6 +1573,27 @@ void functional_expression_TAC(int type, string IDEN) {
 	}
 	else if(type == 3) {
 		
+	}
+}
+
+void break_continue_expression_TAC(int ind) {
+	if(currentLoopLabel.size() >= 1) {
+		if(ind == 1) {
+			if(currentLabel.size() >= 1) {
+				TAC += "JUMP ^ LABEL" + to_string(currentLabel.top()) + "\n";
+			}
+		}
+		else if(ind == 2) {
+			if(currentLoopLabel.size() >= 1) {
+				TAC += "JUMP ^ LOOP_LABEL" + to_string(currentLoopLabel.top()) + "\n";
+			}
+		}
+	}
+	else {
+		string t = "ERROR CODE(02042): No loop exists while using break or continue";
+		ERROR = 1;
+		const char *s = t.c_str();
+		yyerror(s);
 	}
 }
 
@@ -1732,4 +1789,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);} 
+void yyerror (char *s) {fprintf (stderr, "%s\n", s);}

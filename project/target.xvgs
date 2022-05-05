@@ -1,11 +1,22 @@
 main {
-    int i = 1;
-    int n;
-    n = input();
-    int fact = 1;
-    loop(i <= n) {
-        fact *= i;
-        i += 1;
+    int a = 0;
+    int b = 1;
+    if(a < b) {
+        int d = 10;
+        loop(d <= 20) {
+            d += 1;
+            int l = 5;
+        }
+        a = -1;
+        output() = d;
+        output() = a;
     }
-    output() = fact;
+    else {
+        int e = 20;
+        a = -1;
+        b = -1;
+    }
+    if(a < b) {
+        a -= 1;
+    }
 }

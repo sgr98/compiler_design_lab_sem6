@@ -665,7 +665,11 @@ class AssemblyInstruction{
                     cout<<instruction<<endl;
                     return instruction;
                 }else if(line.find("JR")!=string::npos){
+<<<<<<< HEAD
                     string instruction = "jr git$ra";
+=======
+                    string instruction = "jr $ra";
+>>>>>>> cbebaf2507a5719042eccbcd9625ed329fe4726b
                     return instruction;
                 }
                 return "\0";
@@ -838,7 +842,7 @@ int main(){
         SymbolTableNode Node = Symbol_Table.getIdentifierVariable(i);
         Assembly_output.variable_declaration(Node);
     }
-    Assembly_output.addInstruction(".text\n.globl main\n");
+    Assembly_output.addInstruction(".text\n.globl main\n\tj main\n");
 
     while(fin){
         if(line_buffer=="\0")

@@ -1,0 +1,20 @@
+int add(int n) {
+    int i = 1;
+
+    int sum = 0;
+    loop(i <= n) {
+        sum += i;
+        i += 1;
+    }
+
+    return sum;
+}
+
+main {
+    int n;
+    n = input();
+
+    int sum = add(n);
+
+    output() = sum;
+}

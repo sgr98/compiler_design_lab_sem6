@@ -15,4 +15,7 @@ main {
         a = -1;
         b = -1;
     }
+
+    output() = a;
+    output() = b;
 }

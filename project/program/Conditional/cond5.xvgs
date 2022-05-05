@@ -4,7 +4,7 @@ main {
     
     if(a < b) {
         int d = 10;
-        loop(d < 20) {
+        loop(d <= 20) {
             d += 1;
             int l = 5;
         }

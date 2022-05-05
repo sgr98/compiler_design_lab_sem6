@@ -22,9 +22,9 @@
 20  -   sum_n.xvgs
 21  -   sum_2.xvgs
 22  -   fact.xvgs
-23  -   
-24  -   
-25  -   
+23  -   loop2.xvgs
+24  -   func_sum.xvgs
+25  -   func_fact.xvgs
 
 101 -   e1
 102 -   arithmetic_err1.xvgs
