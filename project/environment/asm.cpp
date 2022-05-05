@@ -665,7 +665,7 @@ class AssemblyInstruction{
                     cout<<instruction<<endl;
                     return instruction;
                 }else if(line.find("JR")!=string::npos){
-                    string instruction = "jr &ra";
+                    string instruction = "jr git$ra";
                     return instruction;
                 }
                 return "\0";

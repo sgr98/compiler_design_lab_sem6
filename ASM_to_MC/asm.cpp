@@ -160,7 +160,7 @@ class AssemblyInstruction{
                     int register1 = checkTemporaryRegister(address1);
                     address1 = "$t" + to_string(register1);
                     instruction = "li $v1," + address1;
-                    cout<<instruction;
+                    //cout<<instruction;
                     output = output + "\t" + instruction + "\n";
                 }else if(operatorflag){
                     string buffer = createOperatorExpression(line);
@@ -685,11 +685,8 @@ class AssemblyInstruction{
                     
                     string address2 = line.substr(equalpos+1,relationalpos-equalpos-1);
                     address2 = removeSpace(address2);
-                    //cout<<endl<<address2<<endl;
                     string address3 = line.substr(relationalpos+2, line.size()-relationalpos);
                     address3 = removeSpace(address3);
-                    //cout<<endl<<address3<<endl;
-
                     int register1 = getTemporaryRegister(address1);
                     address1 = "$t" + to_string(register1);
                     register1 = checkTemporaryRegister(address2);
@@ -698,7 +695,6 @@ class AssemblyInstruction{
                     address3 = "$t" + to_string(register1);
 
                     string instruction = "and " + address1 + "," + address2 + "," +address3;
-                    //cout<<instruction<<endl;
                     return instruction;
                 }else if(line.find("||")!=string::npos){
                     int equalpos = line.find("=");
@@ -778,12 +774,18 @@ class AssemblyInstruction{
 };
 string variable_declaration(SymbolTableNode);
 
-int main(){
+int main(int argc,char *argv[]){
+    string fileName;
+    if(argc>1){
+        fileName = argv[2];
+    }else{
+        fileName = "file.tac";
+    }
     ifstream fin;                                           //This is for the input class
     string line_buffer;                                     //Stores each line in the file
     SymbolTable Symbol_Table;
     AssemblyInstruction Assembly_output;
-    fin.open("file.tac");
+    fin.open(fileName);
     getline(fin,line_buffer);
     int number_of_variables = stoi(line_buffer);
 
